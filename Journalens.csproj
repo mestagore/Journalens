@@ -98,10 +98,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Article.cs" />
-    <Compile Include="BD\AppliBD.cs" />
-    <Compile Include="Controller\Utilisateur.cs" />
-    <Compile Include="Controller\Rubrique.cs" />
+    <Compile Include="Model\Article.cs" />
+    <Compile Include="Controller\AppliBD.cs" />
+    <Compile Include="Model\Utilisateur.cs" />
+    <Compile Include="Model\Rubrique.cs" />
     <Compile Include="View\FormDetailsArticle.cs">
       <SubType>Form</SubType>
     </Compile>
