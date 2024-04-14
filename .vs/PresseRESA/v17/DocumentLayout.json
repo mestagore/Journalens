@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|PresseRESA.csproj|c:\\users\\mesta\\giovanni\\presseresa\\bd\\applibd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|PresseRESA.csproj|solutionrelative:bd\\applibd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|PresseRESA.csproj|C:\\Users\\mesta\\Giovanni\\PresseRESA\\view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|PresseRESA.csproj|solutionrelative:view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|PresseRESA.csproj|C:\\Users\\mesta\\Giovanni\\PresseRESA\\view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|PresseRESA.csproj|solutionrelative:view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|PresseRESA.csproj|C:\\Users\\mesta\\Giovanni\\PresseRESA\\controller\\rubrique.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|PresseRESA.csproj|solutionrelative:controller\\rubrique.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Rubrique.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\Controller\\Rubrique.cs",
+              "RelativeDocumentMoniker": "Controller\\Rubrique.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\Controller\\Rubrique.cs",
+              "RelativeToolTip": "Controller\\Rubrique.cs",
+              "ViewState": "AQIAACQAAAAAAAAAAAAowDAAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-12T20:28:04.251Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AppliBD.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\BD\\AppliBD.cs",
+              "RelativeDocumentMoniker": "BD\\AppliBD.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\BD\\AppliBD.cs",
+              "RelativeToolTip": "BD\\AppliBD.cs",
+              "ViewState": "AQIAAPEBAAAAAAAAAAAgwPgAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-12T20:20:24.453Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FormPresseAdmin.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\View\\FormPresseAdmin.cs",
+              "RelativeDocumentMoniker": "View\\FormPresseAdmin.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\View\\FormPresseAdmin.cs",
+              "RelativeToolTip": "View\\FormPresseAdmin.cs",
+              "ViewState": "AQIAACkAAAAAAAAAAAAQwDoAAABYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-12T20:11:34.25Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FormPresseAdmin.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\View\\FormPresseAdmin.cs",
+              "RelativeDocumentMoniker": "View\\FormPresseAdmin.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\PresseRESA\\View\\FormPresseAdmin.cs [Design]",
+              "RelativeToolTip": "View\\FormPresseAdmin.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-12T20:08:38.915Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
