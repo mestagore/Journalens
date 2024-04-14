@@ -9,15 +9,15 @@ namespace PresseRESA
 {
     public class Utilisateur {
         // Déclaration des variables
-        private string email;
-        private string nom;
-        private string prenom;
-        private DateTime dateInscription;
+        private readonly string email;
+        private readonly string nom;
+        private readonly string prenom;
+        private readonly DateTime dateInscription;
         private DateTime? dateFermeture;
-        private int nbAvertissement; 
+        private int nbAvertissement;
         private string telephone;
         private string portable;
-        private string typeCpte;
+        private readonly string typeCpte;
 
         // --------------------------------------------------------- PARTIE CONSTRUCTEUR ---------------------------------------------------------
 

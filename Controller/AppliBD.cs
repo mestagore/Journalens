@@ -454,7 +454,8 @@ namespace PresseRESA
         /// <summary>
         /// Fonction utilisée pour récupérer l'ensemble des rubriques.
         /// </summary>
-        // CG0008 - Récupération de toutes les rubriques.
+        /// <returns>Une liste de rubriques.</returns>
+        // CG0008A - Récupération de toutes les rubriques.
         public static List<Rubrique> GetLesRubriques()
         {
             List<Rubrique> lesRubriques = new List<Rubrique>();
@@ -490,7 +491,14 @@ namespace PresseRESA
             return lesRubriques;
         }
 
-        public static bool UpdateRubriqueArticle(Article article, Rubrique rubrique)
+        /// <summary>
+        /// Fonction utilisée pour associée une rubrique à un article.
+        /// </summary>
+        /// <param name="article">L'article concerné.</param>
+        /// <param name="rubrique">La rubrique concernée.</param>
+        /// <returns>Un booléen.</returns>
+        // CG0008F - Association d'une rubrique à un article
+        public static bool InsertionRubriquePourArticle(Article article, Rubrique rubrique)
         {
             bool connValidBD = AppliBD.ConnexionBD(); // Connexion à la base de donnée
             bool verifUpdate = false; // Pour vérifier si la mise à jour a été réussie
@@ -513,6 +521,12 @@ namespace PresseRESA
             return verifUpdate;
         }
 
+        /// <summary>
+        /// Fonction utilisée pour supprimer toutes les rubriques d'un article donné.
+        /// </summary>
+        /// <param name="article">L'article concerné.</param>
+        /// <returns>Un booléen.</returns>
+        // CG0008D - Suppression des rubriques pour un article donné
         public static bool ResetRubriquesArticle(Article article)
         {
             bool connValidBD = AppliBD.ConnexionBD(); // Connexion à la base de donnée
@@ -535,6 +549,12 @@ namespace PresseRESA
             return verifUpdate;
         }
 
+        /// <summary>
+        /// Fonction utilisée pour récupérer les rubriques d'un article donné.
+        /// </summary>
+        /// <param name="idArticle">L'identifiant de l'article concerné.</param>
+        /// <returns>Une liste de rubriques.</returns>
+        // CG0008A - Récupération des rubriques d'un article
         public static List<Rubrique> GetRubriquesParArticle(int idArticle)
         {
             List<Rubrique> lesRubriques = new List<Rubrique>();
@@ -582,7 +602,13 @@ namespace PresseRESA
             return "@VVA - " + DateTime.Today.Year;
         }
 
-        public static int AddRubrique(string nomRubrique)
+        /// <summary>
+        /// Fonction utilisée pour ajouter une rubrique.
+        /// </summary>
+        /// <param name="nomRubrique">Le nom de la Rubrique à ajouter.</param>
+        /// <returns>Un entier.</returns>
+        // CG0008B - Ajout d'une nouvelle rubrique
+        public static int AddRubrique(string newRubrique)
         {
             bool connValidBD = AppliBD.ConnexionBD(); // Connexion à la base de donnée
             bool existeRubrique = false;
@@ -595,7 +621,7 @@ namespace PresseRESA
                 string reqSelect = "SELECT nomRubrique FROM RUBRIQUE WHERE nomRubrique = @nom;";
 
                 cmd.CommandText = reqSelect;
-                cmd.Parameters.AddWithValue("@nom", nomRubrique);
+                cmd.Parameters.AddWithValue("@nom", newRubrique);
                 cmd.Prepare();
 
                 using (MySqlDataReader rdr = cmd.ExecuteReader())
@@ -615,15 +641,110 @@ namespace PresseRESA
                     // Exécution de la requête tout en récupérant l'ID
                     int idNewRubrique = Convert.ToInt32(cmd.ExecuteScalar());
 
-                    _ = new Rubrique(idNewRubrique, nomRubrique);
+                    _ = new Rubrique(idNewRubrique, newRubrique);
                     return 1; // Le chiffre 1 désigne le succès de l'insertion.
                 }
                 else
                 {
-                    return 2; // Le chiffre 2 désigne l'erreur "Une rubrique du même nom existe déjà."
+                    return -1; // Le chiffre -1 désigne l'erreur "Une rubrique du même nom existe déjà."
                 }
             }
             return 0; // Le chiffre 0 désigne l'échec' de l'insertion.
         }
+
+        /// <summary>
+        /// Fonction utilisée pour mettre à jour le nom de la rubrique donné
+        /// </summary>
+        /// <param name="rubrique">La rubrique concernée.</param>
+        /// <returns>Un entier.</returns>
+        // CG0008C - Mise à jour d'une rubrique déjà existante
+        public static int UpdateRubrique(Rubrique rubrique, string newName)
+        {
+            bool connValidBD = AppliBD.ConnexionBD(); // Connexion à la base de données
+            bool existeRubrique = false;
+
+            // Si la connexion avec la base de données a réussi, on exécute les étapes pour mettre à jour la rubrique.
+            if (connValidBD)
+            {
+                // Nous allons d'abord vérifier que l'adresse mail est bel et bien utiliser une seule fois.
+                MySqlCommand cmd = conn.CreateCommand();
+                string reqSelect = "SELECT nomRubrique FROM RUBRIQUE WHERE nomRubrique = @nom;";
+
+                cmd.CommandText = reqSelect;
+                cmd.Parameters.AddWithValue("@nom", newName);
+                cmd.Prepare();
+
+                using (MySqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.Read()) { existeRubrique = true; }
+                    rdr.Close();
+                }
+
+                // Si le nom de la rubrique n'existe pas, alors on l'ajoute
+                if (!existeRubrique)
+                {
+                    // Requête préparée pour mettre à jour le nom de la rubrique
+                    string req = "UPDATE RUBRIQUE SET nomRubrique = @nom WHERE idRubrique = @idRubrique;";
+
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@idRubrique", rubrique.GetId());
+                    cmd.Prepare();
+                    int lignesAffectées = cmd.ExecuteNonQuery();
+
+                    if (lignesAffectées > 0)
+                    {
+                        // Mise à jour réussie
+                        rubrique.SetNom(newName); // Mettre à jour le nom de la rubrique dans l'objet Rubrique
+                        return 1; // Le chiffre 1 indique le succès de la mise à jour.
+                    }
+                    else
+                    {
+                        // Aucune ligne mise à jour, peut-être que la rubrique avec l'ID spécifié n'existe pas
+                        return 0; // Le chiffre 0 indique que la mise à jour a échoué.
+                    }
+                }
+                else
+                {
+                    return -1; // Le chiffre -1 désigne l'erreur "Une rubrique du même nom existe déjà."
+                }
+            }
+            // La connexion à la base de données a échoué
+            return 0; // Le chiffre 0 désigne l'échec' de l'insertion.
+        }
+
+        /// <summary>
+        /// Fonction utilisée pour supprimer une rubrique donné
+        /// </summary>
+        /// <param name="rubrique">La rubrique concernée.</param>
+        /// <returns>Un booléen.</returns>
+        // CG0008D - Suppression d'une rubrique déjà existante
+        public static bool DeleteRubrique(Rubrique rubrique)
+        {
+            bool connValidBD = AppliBD.ConnexionBD(); // Connexion à la base de données
+
+            // Si la connexion avec la base de données a réussi, on exécute les étapes pour supprimer la rubrique.
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+
+                // Requête préparée pour supprimer la rubrique
+                string req = "DELETE FROM RUBRIQUE WHERE idRubrique = @idRubrique;";
+
+                cmd.CommandText = req;
+                cmd.Parameters.AddWithValue("@idRubrique", rubrique.GetId()); // Supposons que vous avez une propriété Id dans la classe Rubrique
+                cmd.Prepare();
+                int lignesAffectées = cmd.ExecuteNonQuery();
+
+                // Si au moins une ligne a été affectée, cela signifie que la rubrique a été supprimée avec succès
+                if (lignesAffectées > 0)
+                {
+                    return true;
+                }
+            }
+
+            // Si quelque chose s'est mal passé, ou si aucune ligne n'a été affectée, retournez false
+            return false;
+        }
+
     }
 }

@@ -8,7 +8,7 @@ namespace PresseRESA
 {
     public class Rubrique {
         // Déclaration des variables
-        private int id;
+        private readonly int id;
         private string nom;
 
         // --------------------------------------------------------- PARTIE CONSTRUCTEUR ---------------------------------------------------------
@@ -16,6 +16,8 @@ namespace PresseRESA
         /// <summary>
         /// Constructeur d'une rubrique.
         /// </summary>
+        /// <param name="idRubrique">L'identifiant de la rubrique.</param>
+        /// <param name="nomRubrique">Le nom de la rubrique.</param>
         public Rubrique(int idRubrique, string nomRubrique)
         {
             this.id = idRubrique;
@@ -40,6 +42,17 @@ namespace PresseRESA
         public string GetNom()
         {
             return this.nom;
+        }
+
+        // --------------------------------------------------------- PARTIE SETTER ---------------------------------------------------------
+
+        /// <summary>
+        /// Setter utilisé pour valoriser le nom de la rubrique.
+        /// </summary>
+        /// <param name="newName">Le nouveau nom de la rubrique.</param>
+        public void SetNom(string newName)
+        {
+            this.nom = newName;
         }
 
         // --------------------------------------------------------- AUTRE(S) METHODE(S) ---------------------------------------------------------

@@ -1,7 +1,28 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\mesta\\Giovanni\\Journalens\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formconnexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formconnexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\controller\\applibd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:controller\\applibd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\model\\utilisateur.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:model\\utilisateur.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +30,79 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FormConnexion.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormConnexion.cs",
+              "RelativeDocumentMoniker": "View\\FormConnexion.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormConnexion.cs",
+              "RelativeToolTip": "View\\FormConnexion.cs",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAgwDMAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-14T23:03:02.023Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Utilisateur.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\Model\\Utilisateur.cs",
+              "RelativeDocumentMoniker": "Model\\Utilisateur.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\Model\\Utilisateur.cs",
+              "RelativeToolTip": "Model\\Utilisateur.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-14T22:14:38.275Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FormPresseAdmin.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs",
+              "RelativeDocumentMoniker": "View\\FormPresseAdmin.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs",
+              "RelativeToolTip": "View\\FormPresseAdmin.cs",
+              "ViewState": "AQIAADYBAAAAAAAAAAD4v54BAAA8AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-14T21:42:24.456Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FormPresseAdmin.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs",
+              "RelativeDocumentMoniker": "View\\FormPresseAdmin.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs [Design]",
+              "RelativeToolTip": "View\\FormPresseAdmin.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-14T21:42:20.494Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AppliBD.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\Controller\\AppliBD.cs",
+              "RelativeDocumentMoniker": "Controller\\AppliBD.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\Controller\\AppliBD.cs",
+              "RelativeToolTip": "Controller\\AppliBD.cs",
+              "ViewState": "AQIAANwBAAAAAAAAAAAYwPMBAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-14T16:30:16.547Z",
+              "EditorCaption": ""
             }
           ]
         }

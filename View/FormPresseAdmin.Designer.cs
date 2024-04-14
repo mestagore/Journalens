@@ -33,7 +33,6 @@
             this.comboBOnglet = new System.Windows.Forms.ComboBox();
             this.tabControlAdmin = new System.Windows.Forms.TabControl();
             this.tabPUtilisateur = new System.Windows.Forms.TabPage();
-            this.btnActualisationAdmin = new System.Windows.Forms.Button();
             this.btnAffichageUserMal = new System.Windows.Forms.Button();
             this.groupBModifUser = new System.Windows.Forms.GroupBox();
             this.btnAddAvertissement = new System.Windows.Forms.Button();
@@ -78,18 +77,18 @@
             this.tabPAvis = new System.Windows.Forms.TabPage();
             this.tabPRubrique = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.txtBNomRubrique = new System.Windows.Forms.TextBox();
+            this.btnRechercheRubrique = new System.Windows.Forms.Button();
             this.labNomRubrique = new System.Windows.Forms.Label();
             this.btnAddRubrique = new System.Windows.Forms.Button();
             this.labRubriques = new System.Windows.Forms.Label();
             this.listBRubriques = new System.Windows.Forms.ListBox();
             this.labCopyright = new System.Windows.Forms.Label();
             this.btnDecoAdmin = new System.Windows.Forms.Button();
-            this.btnRechercheRubrique = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.tabControlAdmin.SuspendLayout();
             this.tabPUtilisateur.SuspendLayout();
             this.groupBModifUser.SuspendLayout();
@@ -141,7 +140,6 @@
             // 
             // tabPUtilisateur
             // 
-            this.tabPUtilisateur.Controls.Add(this.btnActualisationAdmin);
             this.tabPUtilisateur.Controls.Add(this.btnAffichageUserMal);
             this.tabPUtilisateur.Controls.Add(this.groupBModifUser);
             this.tabPUtilisateur.Controls.Add(this.groupBAjoutUser);
@@ -154,16 +152,6 @@
             this.tabPUtilisateur.TabIndex = 0;
             this.tabPUtilisateur.Text = "Utilisateurs";
             this.tabPUtilisateur.UseVisualStyleBackColor = true;
-            // 
-            // btnActualisationAdmin
-            // 
-            this.btnActualisationAdmin.Location = new System.Drawing.Point(289, 4);
-            this.btnActualisationAdmin.Name = "btnActualisationAdmin";
-            this.btnActualisationAdmin.Size = new System.Drawing.Size(109, 23);
-            this.btnActualisationAdmin.TabIndex = 9;
-            this.btnActualisationAdmin.Text = "Actualiser la liste";
-            this.btnActualisationAdmin.UseVisualStyleBackColor = true;
-            this.btnActualisationAdmin.Click += new System.EventHandler(this.btnActualisationAdmin_Click);
             // 
             // btnAffichageUserMal
             // 
@@ -628,7 +616,7 @@
             this.groupBox1.Controls.Add(this.btnRechercheRubrique);
             this.groupBox1.Controls.Add(this.labNomRubrique);
             this.groupBox1.Controls.Add(this.btnAddRubrique);
-            this.groupBox1.Location = new System.Drawing.Point(160, 21);
+            this.groupBox1.Location = new System.Drawing.Point(160, 15);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(698, 97);
             this.groupBox1.TabIndex = 5;
@@ -636,12 +624,61 @@
             this.groupBox1.Text = "Gestion des rubriques";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter_1);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(564, 27);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(122, 23);
+            this.button3.TabIndex = 16;
+            this.button3.Text = "Supprimer";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(484, 54);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(202, 23);
+            this.button2.TabIndex = 15;
+            this.button2.Text = "Afficher toutes les rubriques";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(420, 27);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(122, 23);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "Modifier";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_4);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Constantia", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(134)))), ((int)(((byte)(89)))));
+            this.label3.Location = new System.Drawing.Point(120, 22);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 23);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Rubrique";
+            // 
             // txtBNomRubrique
             // 
             this.txtBNomRubrique.Location = new System.Drawing.Point(100, 48);
             this.txtBNomRubrique.Name = "txtBNomRubrique";
             this.txtBNomRubrique.Size = new System.Drawing.Size(154, 22);
             this.txtBNomRubrique.TabIndex = 9;
+            // 
+            // btnRechercheRubrique
+            // 
+            this.btnRechercheRubrique.Location = new System.Drawing.Point(276, 56);
+            this.btnRechercheRubrique.Name = "btnRechercheRubrique";
+            this.btnRechercheRubrique.Size = new System.Drawing.Size(202, 23);
+            this.btnRechercheRubrique.TabIndex = 0;
+            this.btnRechercheRubrique.Text = "Rechercher";
+            this.btnRechercheRubrique.UseVisualStyleBackColor = true;
             // 
             // labNomRubrique
             // 
@@ -679,6 +716,7 @@
             this.listBRubriques.Name = "listBRubriques";
             this.listBRubriques.Size = new System.Drawing.Size(1021, 284);
             this.listBRubriques.TabIndex = 3;
+            this.listBRubriques.SelectedIndexChanged += new System.EventHandler(this.listBRubriques_SelectedIndexChanged);
             // 
             // labCopyright
             // 
@@ -700,53 +738,6 @@
             this.btnDecoAdmin.Text = "Déconnexion";
             this.btnDecoAdmin.UseVisualStyleBackColor = true;
             this.btnDecoAdmin.Click += new System.EventHandler(this.btnDecoAdmin_Click);
-            // 
-            // btnRechercheRubrique
-            // 
-            this.btnRechercheRubrique.Location = new System.Drawing.Point(276, 56);
-            this.btnRechercheRubrique.Name = "btnRechercheRubrique";
-            this.btnRechercheRubrique.Size = new System.Drawing.Size(202, 23);
-            this.btnRechercheRubrique.TabIndex = 0;
-            this.btnRechercheRubrique.Text = "Rechercher";
-            this.btnRechercheRubrique.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(420, 27);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(122, 23);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "Modifier";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Constantia", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(134)))), ((int)(((byte)(89)))));
-            this.label3.Location = new System.Drawing.Point(120, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(95, 23);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "Rubrique";
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(484, 54);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(202, 23);
-            this.button2.TabIndex = 15;
-            this.button2.Text = "Afficher toutes les rubriques";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(564, 27);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(122, 23);
-            this.button3.TabIndex = 16;
-            this.button3.Text = "Supprimer";
-            this.button3.UseVisualStyleBackColor = true;
             // 
             // FormPresseAdmin
             // 
@@ -821,7 +812,6 @@
         private System.Windows.Forms.Label labTypeCpteUser;
         private System.Windows.Forms.ComboBox comboBTypeCpte;
         private System.Windows.Forms.Button btnDecoAdmin;
-        private System.Windows.Forms.Button btnActualisationAdmin;
         private System.Windows.Forms.Button btnAffichageUserMal;
         private System.Windows.Forms.Label labArticles;
         private System.Windows.Forms.ListBox listBArticles;

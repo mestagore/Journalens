@@ -13,6 +13,8 @@ namespace PresseRESA
 {
     public partial class FormPresseAdmin : Form
     {
+        public bool viewUsers = false;
+        
         public FormPresseAdmin()
         {
             InitializeComponent();
@@ -41,7 +43,7 @@ namespace PresseRESA
 
                     // CG0004 - Initialisation de la listeBox des utilisateurs
                     listBUsers.Items.Clear();
-                    List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(false);
+                    List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(viewUsers);
                     listBUsers.Items.AddRange(lesUsers.ToArray());
                     break;
 
@@ -205,6 +207,9 @@ namespace PresseRESA
                     break;
 
                 case 1: // Cas : Insertion réussie
+                    listBUsers.Items.Clear();
+                    List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(viewUsers);
+                    listBUsers.Items.AddRange(lesUsers.ToArray());
                     MessageBox.Show("Succès de l'Insertion.", "Succès de l'Insertion", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
 
@@ -258,7 +263,7 @@ namespace PresseRESA
         private void btnActualisationAdmin_Click(object sender, EventArgs e)
         {
             listBUsers.Items.Clear();
-            List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(false);
+            List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(viewUsers);
             listBUsers.Items.AddRange(lesUsers.ToArray());
         }
 
@@ -269,18 +274,22 @@ namespace PresseRESA
             {
                 case "Voir les utilisateurs malveillants":
                     {
+                        viewUsers = true;
+
                         btnAffichageUserMal.Text = "Enlever les utilisateurs malveillants";
                         listBUsers.Items.Clear();
-                        List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(true);
+                        List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(viewUsers);
                         listBUsers.Items.AddRange(lesUsers.ToArray());
                         break;
                     }
 
                 default:
                     {
+                        viewUsers = false;
+
                         btnAffichageUserMal.Text = "Voir les utilisateurs malveillants";
                         listBUsers.Items.Clear();
-                        List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(false);
+                        List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(viewUsers);
                         listBUsers.Items.AddRange(lesUsers.ToArray());
                         break;
                     }
@@ -354,7 +363,7 @@ namespace PresseRESA
         {
             if (listBArticles.SelectedItem != null && listBRubriquesDispo.SelectedItem != null)
             {
-                bool verif = AppliBD.UpdateRubriqueArticle((Article)listBArticles.SelectedItem, (Rubrique)listBRubriquesDispo.SelectedItem);
+                bool verif = AppliBD.InsertionRubriquesDeArticle((Article)listBArticles.SelectedItem, (Rubrique)listBRubriquesDispo.SelectedItem);
                 Rubrique rubrique = (Rubrique)listBRubriquesDispo.SelectedItem;
 
                 if (verif)
@@ -403,7 +412,7 @@ namespace PresseRESA
 
         }
 
-        // CG000 ...
+        // CG0008F - Association d'une rubrique à un article
         private void listBArticles_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (listBArticles.SelectedItem != null)
@@ -437,37 +446,104 @@ namespace PresseRESA
         /// </summary>
         /// <param name="nbInsertion">Le nombre d'insertion effectué.</param>
         // CG0005G - Vérification de l'étât de notre insertion
-        private void verifInsertRubrique(int nbInsertion)
+        private void verifRubrique(int nbInsertion)
         {
             switch (nbInsertion)
             {
-                case 0: // Cas : Insertion échouée
-                    MessageBox.Show("Echec de l'Insertion, veuillez réessayez. Si le problème persiste, contactez l'administrateur.", "Echec de l'Insertion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                case 0: // Cas : Opération échouée
+                    MessageBox.Show("Echec de la manoeuvre, veuillez réessayez. Si le problème persiste, contactez l'administrateur.", "Echec de l'opération", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
 
-                case 1: // Cas : Insertion réussie
-                    MessageBox.Show("Succès de l'Insertion.", "Succès de l'Insertion", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                case 1: // Cas : Opération réussie
+                    listBRubriques.Items.Clear();
+                    List<Rubrique> lesRubriques = AppliBD.GetLesRubriques();
+                    listBRubriques.Items.AddRange(lesRubriques.ToArray());
+                    MessageBox.Show("Succès de la manoeuvre.", "Succès de l'opération", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
 
-                case 2: // Cas : Adresse Mail déjà utilisée
+                case -1: // Cas : Nom déjà existant
                     MessageBox.Show("Une rubrique du même nom existe déjà.", "Rubrique redondante", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
         }
 
+        // CG0008B - Ajout d'une nouvelle rubrique
         private void button1_Click_3(object sender, EventArgs e)
         {
             string saisieNom = txtBNomRubrique.Text.ToUpper();
 
             if (saisieNom != "")
             {
-                int etatInsertion;
-                etatInsertion = AppliBD.AddRubrique(saisieNom);
-                verifInsertRubrique(etatInsertion);
+                int etatInsertion = AppliBD.AddRubrique(saisieNom);
+                verifRubrique(etatInsertion);
             }
             else
             {
                 MessageBox.Show("Veuillez renseigner un nom pour la rubrique.", "Absence de nom", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // CG0008C - Mise à jour d'une rubrique déjà existante
+        private void button1_Click_4(object sender, EventArgs e)
+        {
+            if (listBRubriques.SelectedItem != null)
+            {
+                string saisieNom = txtBNomRubrique.Text.ToUpper();
+
+                if (saisieNom != "")
+                {
+                    Rubrique rubriqueSelectionne = (Rubrique)listBRubriques.SelectedItem;
+
+                    int etatInsertion = AppliBD.UpdateRubrique(rubriqueSelectionne, saisieNom);
+                    verifRubrique(etatInsertion);
+                }
+                else
+                {
+                    MessageBox.Show("Vous ne pouvez pas modifier le nom de la rubrique par aucun caractère.", "Absence de caractères", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Veuillez choisir une rubrique à modifier dans la liste.", "Absence de nom", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // CG0008A - Consultation de toutes les rubriques.
+        private void listBRubriques_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBRubriques.SelectedItem != null)
+            {
+                Rubrique rubriqueSelectionne = (Rubrique)listBRubriques.SelectedItem;
+                txtBNomRubrique.Text = rubriqueSelectionne.GetNom().ToUpper();
+            }
+        }
+
+        // CG0008D - Suppression d'une rubrique déjà existante
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (listBRubriques.SelectedItem != null)
+            {
+                Rubrique rubriqueSelectionne = (Rubrique)listBRubriques.SelectedItem;
+
+                DialogResult dr = MessageBox.Show(" Voulez-vous vraiment supprimer la rubrique n°" + rubriqueSelectionne.GetId() + " ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (dr == DialogResult.Yes)
+                {
+                    bool verif = AppliBD.DeleteRubrique(rubriqueSelectionne);
+                    if (!verif)
+                    {
+                        MessageBox.Show("Erreur lors de la réinitialisation des rubriques de cette article, veuillez réessayez.", "Echec de l'Update", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        listBRubriques.Items.Clear();
+                        List<Rubrique> lesRubriques = AppliBD.GetLesRubriques();
+                        listBRubriques.Items.AddRange(lesRubriques.ToArray());
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Aucun article n'est selectionné.", "Absence de sélection", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
