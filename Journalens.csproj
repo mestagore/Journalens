@@ -98,6 +98,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="View\FormDetailsAvis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\FormDetailsAvis.Designer.cs">
+      <DependentUpon>FormDetailsAvis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Avis.cs" />
     <Compile Include="Model\Article.cs" />
     <Compile Include="Controller\AppliBD.cs" />
     <Compile Include="Model\Utilisateur.cs" />
@@ -138,6 +145,9 @@
     <EmbeddedResource Include="View\FormDetailsArticle.resx">
       <DependentUpon>FormDetailsArticle.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\FormDetailsAvis.resx">
+      <DependentUpon>FormDetailsAvis.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\FormDetailsUtilisateur.resx">
       <DependentUpon>FormDetailsUtilisateur.cs</DependentUpon>

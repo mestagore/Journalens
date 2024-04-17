@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDetailsArticle));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnAddAvertissement = new System.Windows.Forms.Button();
             this.comboBEtatArticle = new System.Windows.Forms.ComboBox();
             this.labAuteurArticle = new System.Windows.Forms.Label();
             this.labDescriptionArticle = new System.Windows.Forms.Label();
@@ -47,6 +48,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnAddAvertissement);
             this.groupBox1.Controls.Add(this.comboBEtatArticle);
             this.groupBox1.Controls.Add(this.labAuteurArticle);
             this.groupBox1.Controls.Add(this.labDescriptionArticle);
@@ -65,6 +67,17 @@
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // btnAddAvertissement
+            // 
+            this.btnAddAvertissement.Location = new System.Drawing.Point(573, 335);
+            this.btnAddAvertissement.Name = "btnAddAvertissement";
+            this.btnAddAvertissement.Size = new System.Drawing.Size(165, 23);
+            this.btnAddAvertissement.TabIndex = 25;
+            this.btnAddAvertissement.Text = "Ajouter un avertissement";
+            this.btnAddAvertissement.UseVisualStyleBackColor = true;
+            this.btnAddAvertissement.Click += new System.EventHandler(this.btnAddAvertissement_Click);
             // 
             // comboBEtatArticle
             // 
@@ -96,6 +109,7 @@
             this.labDescriptionArticle.Size = new System.Drawing.Size(644, 232);
             this.labDescriptionArticle.TabIndex = 18;
             this.labDescriptionArticle.Text = "Non renseigné";
+            this.labDescriptionArticle.Click += new System.EventHandler(this.labDescriptionArticle_Click);
             // 
             // labCreaArticle
             // 
@@ -206,6 +220,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormDetailsArticle";
             this.Text = "Détails de l\'article";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormDetailsArticle_FormClosed);
             this.Load += new System.EventHandler(this.FormDetailsArticle_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -228,5 +243,6 @@
         private System.Windows.Forms.ComboBox comboBEtatArticle;
         private System.Windows.Forms.Label labAuteurArticle;
         private System.Windows.Forms.Label labAuteur;
+        private System.Windows.Forms.Button btnAddAvertissement;
     }
 }

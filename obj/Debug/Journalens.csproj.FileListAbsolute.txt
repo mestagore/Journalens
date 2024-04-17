@@ -44,3 +44,4 @@ C:\Users\mesta\Giovanni\Journalens\obj\Debug\Journalens.csproj.CoreCompileInputs
 C:\Users\mesta\Giovanni\Journalens\obj\Debug\Journalens.csproj.Up2Date
 C:\Users\mesta\Giovanni\Journalens\obj\Debug\PresseRESA.exe
 C:\Users\mesta\Giovanni\Journalens\obj\Debug\PresseRESA.pdb
+C:\Users\mesta\Giovanni\Journalens\obj\Debug\PresseRESA.FormDetailsAvis.resources

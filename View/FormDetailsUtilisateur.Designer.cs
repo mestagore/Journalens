@@ -48,6 +48,8 @@
             this.labDateInscription = new System.Windows.Forms.Label();
             this.labDateFermeture = new System.Windows.Forms.Label();
             this.labNom = new System.Windows.Forms.Label();
+            this.btnFermetureCpte = new System.Windows.Forms.Button();
+            this.btnAddAvertissement = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -277,16 +279,39 @@
             this.labNom.TabIndex = 7;
             this.labNom.Text = "Nom :";
             // 
+            // btnFermetureCpte
+            // 
+            this.btnFermetureCpte.Location = new System.Drawing.Point(14, 210);
+            this.btnFermetureCpte.Name = "btnFermetureCpte";
+            this.btnFermetureCpte.Size = new System.Drawing.Size(173, 24);
+            this.btnFermetureCpte.TabIndex = 8;
+            this.btnFermetureCpte.Text = "Clôturer son compte";
+            this.btnFermetureCpte.UseVisualStyleBackColor = true;
+            this.btnFermetureCpte.Click += new System.EventHandler(this.btnFermetureCpte_Click);
+            // 
+            // btnAddAvertissement
+            // 
+            this.btnAddAvertissement.Location = new System.Drawing.Point(193, 209);
+            this.btnAddAvertissement.Name = "btnAddAvertissement";
+            this.btnAddAvertissement.Size = new System.Drawing.Size(165, 23);
+            this.btnAddAvertissement.TabIndex = 9;
+            this.btnAddAvertissement.Text = "Ajouter un avertissement";
+            this.btnAddAvertissement.UseVisualStyleBackColor = true;
+            this.btnAddAvertissement.Click += new System.EventHandler(this.btnAddAvertissement_Click);
+            // 
             // FormDetailsUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(134)))), ((int)(((byte)(89)))));
-            this.ClientSize = new System.Drawing.Size(372, 218);
+            this.ClientSize = new System.Drawing.Size(372, 244);
+            this.Controls.Add(this.btnAddAvertissement);
+            this.Controls.Add(this.btnFermetureCpte);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormDetailsUser";
             this.Text = "Détails de l\'utilisateur";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormDetailsUser_FormClosed);
             this.Load += new System.EventHandler(this.FormDetailsUser_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -315,5 +340,7 @@
         private System.Windows.Forms.Label labDateInscriptionUser;
         private System.Windows.Forms.Label labPrenomUser;
         private System.Windows.Forms.Label labNomUser;
+        private System.Windows.Forms.Button btnFermetureCpte;
+        private System.Windows.Forms.Button btnAddAvertissement;
     }
 }

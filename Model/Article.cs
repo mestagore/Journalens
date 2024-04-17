@@ -119,7 +119,7 @@ namespace PresseRESA
 
         public override string ToString()
         {
-            return "Article n°" + GetId() + " - Auteur : " + GetAuteur() + " - Etât : " + GetEtat();
+            return "Article n°" + GetId() + " - Etât : " + GetEtat();
         }
     }
 }

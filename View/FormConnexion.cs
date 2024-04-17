@@ -50,7 +50,7 @@ namespace PresseRESA
                     // On verifie son nombre d'avertissement.
                     if (AppliBD.VerifAvertissement(saisieAdresseMel) < 3)
                     {
-                        foreach (Utilisateur user in AppliBD.GetLesUtilisateurs(true))
+                        foreach (Utilisateur user in AppliBD.GetLesUtilisateurs("ALL"))
                         {
                             // On compare avec chaque compte l'utilisateur qui nous intéresse.
                             if (user.GetEmail() == saisieAdresseMel)

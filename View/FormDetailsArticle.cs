@@ -76,5 +76,38 @@ namespace PresseRESA
             }
             AppliBD.UpdateEtatArticle(article, newEtat);
         }
+
+        private void FormDetailsArticle_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ((FormPresseAdmin)this.Owner).InitializeArticleList();
+        }
+
+        private void btnAddAvertissement_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show(" Voulez-vous vraiment ajouter un avertissement à l'auteur de cet article : " + article.GetAuteur(), "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dr == DialogResult.Yes)
+            {
+                _ = AppliBD.UpdateAvertissmentCpteUser(article.GetAuteur());
+                bool verif = AppliBD.UpdateAvertissmentCpteUser(article.GetAuteur());
+                if (verif)
+                {
+                    MessageBox.Show("Avertissement ajouté avec succès.", "Update réussi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Erreur lors de l'ajout de l'avertissement, veuillez réessayez. Si le problème persiste, contactez l'administrateur.", "Echec de l'Update", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labDescriptionArticle_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
