@@ -119,6 +119,7 @@
             this.label1.Size = new System.Drawing.Size(69, 18);
             this.label1.TabIndex = 6;
             this.label1.Text = "Onglet : ";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // comboBOnglet
             // 
@@ -845,8 +846,11 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBOnglet);
             this.Controls.Add(this.tabControlAdmin);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FormPresseAdmin";
             this.Text = "Journal - Tableau de bord";
             this.tabPRubrique.ResumeLayout(false);

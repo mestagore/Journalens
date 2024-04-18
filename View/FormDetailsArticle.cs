@@ -20,19 +20,14 @@ namespace PresseRESA
             InitializeComponent();
             article = articleSelectionne;
 
-            // CG0006E - Initialisation de la listeBox des états
+            // CG0006D - Initialisation de la listeBox des états
             comboBEtatArticle.Items.Clear();
             List<string> lesEtats = new List<string> { "EN ATTENTE", "VALIDE", "REJET" };
             comboBEtatArticle.Items.AddRange(lesEtats.ToArray());
         }
 
-        private void FormDetailsArticle_Load(object sender, EventArgs e)
-        {
-
-        }
-
         /// <summary>
-        /// Fonction utilisée pour afficher les informations d'un article sur le formulaire.
+        /// Méthode utilisée pour afficher les informations d'un article sur le formulaire.
         /// </summary>
         /// <param name="article">L'article selectionné.</param>
         // CG0006F - Afficher les informations d'un article
@@ -77,11 +72,13 @@ namespace PresseRESA
             AppliBD.UpdateEtatArticle(article, newEtat);
         }
 
+        // CG0006E - Préserver l'intégrité des informations liés à l'article    
         private void FormDetailsArticle_FormClosed(object sender, FormClosedEventArgs e)
         {
             ((FormPresseAdmin)this.Owner).InitializeArticleList();
         }
 
+        // CG0005D - Ajout d'un avertissement si l'article est frauduleux
         private void btnAddAvertissement_Click(object sender, EventArgs e)
         {
             DialogResult dr = MessageBox.Show(" Voulez-vous vraiment ajouter un avertissement à l'auteur de cet article : " + article.GetAuteur(), "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -106,6 +103,11 @@ namespace PresseRESA
         }
 
         private void labDescriptionArticle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormDetailsArticle_Load(object sender, EventArgs e)
         {
 
         }

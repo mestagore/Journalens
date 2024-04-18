@@ -309,6 +309,7 @@
             this.Controls.Add(this.btnFermetureCpte);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FormDetailsUser";
             this.Text = "Détails de l\'utilisateur";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormDetailsUser_FormClosed);

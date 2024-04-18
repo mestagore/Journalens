@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDetailsAvis));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnAddAvertissement = new System.Windows.Forms.Button();
             this.labAuteurAvis = new System.Windows.Forms.Label();
             this.labCommentaireAvis = new System.Windows.Forms.Label();
             this.labCreaAvis = new System.Windows.Forms.Label();
@@ -38,7 +39,6 @@
             this.labCrea = new System.Windows.Forms.Label();
             this.labCommentaire = new System.Windows.Forms.Label();
             this.labId = new System.Windows.Forms.Label();
-            this.btnAddAvertissement = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,6 +59,16 @@
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
+            // 
+            // btnAddAvertissement
+            // 
+            this.btnAddAvertissement.Location = new System.Drawing.Point(593, 321);
+            this.btnAddAvertissement.Name = "btnAddAvertissement";
+            this.btnAddAvertissement.Size = new System.Drawing.Size(141, 23);
+            this.btnAddAvertissement.TabIndex = 21;
+            this.btnAddAvertissement.Text = "Supprimer l\'avis";
+            this.btnAddAvertissement.UseVisualStyleBackColor = true;
+            this.btnAddAvertissement.Click += new System.EventHandler(this.btnAddAvertissement_Click);
             // 
             // labAuteurAvis
             // 
@@ -150,16 +160,6 @@
             this.labId.TabIndex = 6;
             this.labId.Text = "Identifiant de l\'avis :";
             // 
-            // btnAddAvertissement
-            // 
-            this.btnAddAvertissement.Location = new System.Drawing.Point(593, 321);
-            this.btnAddAvertissement.Name = "btnAddAvertissement";
-            this.btnAddAvertissement.Size = new System.Drawing.Size(141, 23);
-            this.btnAddAvertissement.TabIndex = 21;
-            this.btnAddAvertissement.Text = "Supprimer l\'avis";
-            this.btnAddAvertissement.UseVisualStyleBackColor = true;
-            this.btnAddAvertissement.Click += new System.EventHandler(this.btnAddAvertissement_Click);
-            // 
             // FormDetailsAvis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -168,6 +168,7 @@
             this.ClientSize = new System.Drawing.Size(770, 380);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FormDetailsAvis";
             this.Text = "Détails de l\'avis";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormDetailsAvis_FormClosed);

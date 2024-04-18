@@ -8,6 +8,7 @@ namespace PresseRESA
 {
     public partial class FormPresseAdmin : Form
     {
+        // Déclaration des variables
         public string viewUsers;
         public string viewArticles;
         
@@ -28,6 +29,7 @@ namespace PresseRESA
 
         // --------------------------------------------------------- PARTIE CONNEXION ET DECONNEXION ---------------------------------------------------------
 
+        // CG0004 - Gestion des choix de l'utilisateur
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             tabControlAdmin.Show();
@@ -48,6 +50,7 @@ namespace PresseRESA
             }
         }
 
+        // CG0004 - Choix : Gestion des utilisateurs
         private void AfficherOngletUtilisateurs()
         {
             tabControlAdmin.TabPages.Clear();
@@ -56,6 +59,7 @@ namespace PresseRESA
             InitializeUserList();
         }
 
+        // CG0004 - Choix : Gestion des articles
         private void AfficherOngletArticles()
         {
             tabControlAdmin.TabPages.Clear();
@@ -63,11 +67,12 @@ namespace PresseRESA
 
             InitializeArticleList();
 
-            InitializeRubriqueList();
+            InitializeRubriqueDispoList();
 
             listBAvis.Items.Clear();
         }
 
+        // CG0004 - Choix : Gestion des rubriques
         private void AfficherOngletRubriques()
         {
             tabControlAdmin.TabPages.Clear();
@@ -76,7 +81,7 @@ namespace PresseRESA
             InitializeRubriqueList();
         }
 
-        // A VERIFIER
+        // CG0007A - Permettre l'intégrité des avis dans la liste
         public void ResetListeAvis()
         {
             if (listBArticles.SelectedItem != null)
@@ -89,7 +94,7 @@ namespace PresseRESA
             }
         }
 
-        // CG0002D - Déconnexion de l'utilisateur
+        // CG0002C - Déconnexion de l'utilisateur
         private void btnDecoAdmin_Click(object sender, EventArgs e)
         {
             DialogResult dr = MessageBox.Show(" Voulez-vous vraiment vous déconnecter  ? ", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -97,13 +102,13 @@ namespace PresseRESA
             {
                 Session.GetFormConnexion().Show();
                 Session.GetFormConnexion().Focus();
-                Close(); // Fermer le formulaire actuel
+                Close();
             }
         }
 
         // --------------------------------------------------------- PARTIE GESTION DES UTILISATEURS ---------------------------------------------------------
 
-        // Initialisation de la listeBox des utilisateurs
+        // CG0005A - Permettre l'intégrité des informations des utilisateurs dans la liste
         public void InitializeUserList()
         {
             listBUsers.Items.Clear();
@@ -111,7 +116,7 @@ namespace PresseRESA
             listBUsers.Items.AddRange(lesUsers.ToArray());
         }
 
-        // CG0005C - Vérification des informations saisies pour ajouter l'utilisateur
+        // CG0005B - Vérification des informations saisies pour ajouter l'utilisateur
         private void button2_Click(object sender, EventArgs e)
         {
             string saisieAdresseMel = txtBAdrMailUser.Text.ToLower();
@@ -161,6 +166,7 @@ namespace PresseRESA
             }
         }
 
+        // CG0005B - Vérification des numéros saisies
         private bool EstComposeUniquementDeChiffres(string maChaine)
         {
             return Regex.IsMatch(maChaine, @"^[0-9]+$");
@@ -170,7 +176,7 @@ namespace PresseRESA
         /// Méthode utilisée pour vérifier l'étât de l'ajout de notre utilisateur.
         /// </summary>
         /// <param name="nbInsertion">Le nombre d'insertion effectué.</param>
-        // CG0005G - Vérification de l'étât de notre insertion
+        // CG0005F - Vérification de l'étât de notre insertion
         private void verifInsertUser(int nbInsertion) {
             switch (nbInsertion)
             {
@@ -190,6 +196,7 @@ namespace PresseRESA
         }
 
         // Événement déclenché lorsque l'utilisateur sélectionne l'option "Tous les utilisateurs"
+        // CG0004 - Gestion des choix de l'utilisateur
         private void radioBAllUsers_CheckedChanged(object sender, EventArgs e)
         {
             if (radioBAllUsers.Checked)
@@ -200,6 +207,7 @@ namespace PresseRESA
         }
 
         // Événement déclenché lorsque l'utilisateur sélectionne l'option "Utilisateurs conformes"
+        // CG0004 - Gestion des choix de l'utilisateur
         private void radioBGoodUsers_CheckedChanged(object sender, EventArgs e)
         {
             if (radioBGoodUsers.Checked)
@@ -210,6 +218,7 @@ namespace PresseRESA
         }
 
         // Événement déclenché lorsque l'utilisateur sélectionne l'option "Utilisateurs ayant un nombre d'avertissement égal à 3"
+        // CG0004 - Gestion des choix de l'utilisateur
         private void radioBUsersAvertissement_CheckedChanged(object sender, EventArgs e)
         {
             if (radioBUsersAvertissement.Checked)
@@ -220,6 +229,7 @@ namespace PresseRESA
         }
 
         // Événement déclenché lorsque l'utilisateur sélectionne l'option "Utilisateurs ayant un compte fermé"
+        // CG0004 - Gestion des choix de l'utilisateur
         private void radioButton2_CheckedChanged_1(object sender, EventArgs e)
         {
             if (radioBUsersBloque.Checked)
@@ -229,7 +239,7 @@ namespace PresseRESA
             }
         }
 
-        // CG0005H - Affichage des informations d'un utilisateur dans un nouveau formulaire (FormDetailsUtilisateur)
+        // CG0005G - Affichage des informations d'un utilisateur dans un nouveau formulaire (FormDetailsUtilisateur)
         private void ListBUsers_DoubleClick(object sender, EventArgs e)
         {
             if (listBUsers.SelectedItem != null)
@@ -247,12 +257,20 @@ namespace PresseRESA
 
         // --------------------------------------------------------- PARTIE GESTION DES ARTICLES ---------------------------------------------------------
 
-        // CG0006A - Initialisation de la listeBox des articles
+        // CG0006A - Permettre l'intégrité des informations des articles de la liste
         public void InitializeArticleList()
         {
             listBArticles.Items.Clear();
             List<Article> lesArticles = AppliBD.GetLesArticles(viewArticles);
             listBArticles.Items.AddRange(lesArticles.ToArray());
+        }
+
+        // CG0008A - Permettre l'intégrité des rubriques de notre base de données
+        public void InitializeRubriqueDispoList()
+        {
+            listBRubriquesDispo.Items.Clear();
+            List<Rubrique> lesRubriquesDispo = AppliBD.GetLesRubriques();
+            listBRubriquesDispo.Items.AddRange(lesRubriquesDispo.ToArray());
         }
 
         // CG0006A - Événement déclenché lorsque l'utilisateur sélectionne l'option "Tous les articles"
@@ -295,7 +313,7 @@ namespace PresseRESA
             }
         }
 
-        // CG0006F - Affichage des informations d'un article dans un nouveau formulaire (FormDetailsArticle)
+        // CG0006G - Affichage des informations d'un article dans un nouveau formulaire (FormDetailsArticle)
         private void listBArticles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBArticles.SelectedItem != null)
@@ -311,7 +329,7 @@ namespace PresseRESA
             }
         }
 
-        // CG0008F - Affichage des rubriques déjà ssociées à l'article
+        // CG0006G - Affichage des rubriques déjà ssociées à l'article
         private void listBArticles_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (listBArticles.SelectedItem != null)
@@ -386,9 +404,9 @@ namespace PresseRESA
             }
         }
 
+        // CG0006A - Consulter l'ensemble des articles en fonction du type de filtrage
         private void button2_Click_1(object sender, EventArgs e)
         {
-            listBArticles.Items.Clear();
             listBAvis.Items.Clear();
             switch (btnFiltrageArticle.Text)
             {
@@ -397,6 +415,7 @@ namespace PresseRESA
                         string saisieIdArticle = txtBIdArticle.Text;
                         string saisieAuteurArticle = txtBAuteurArticle.Text;
 
+                        listBArticles.Items.Clear();
                         List<Article> lesArticles = AppliBD.GetRechercheArticle(saisieIdArticle, saisieAuteurArticle);
                         listBArticles.Items.AddRange(lesArticles.ToArray());
 
@@ -407,8 +426,7 @@ namespace PresseRESA
                 default:
                     {
 
-                        List<Article> lesArticles = AppliBD.GetLesArticles("");
-                        listBArticles.Items.AddRange(lesArticles.ToArray());
+                        InitializeArticleList();
 
                         btnFiltrageArticle.Text = "Filtrer";
                         break;
@@ -416,14 +434,15 @@ namespace PresseRESA
             }
         }
 
+        // CG0008A - Consulter l'ensemble des rubriques en fonction du type de filtrage
         private void btnRecherche_Click(object sender, EventArgs e)
         {
-            listBRubriquesDispo.Items.Clear();
             switch (btnRecherche.Text)
             {
                 case "Rechercher":
                     {
                         string saisieNom = txtBNomRechercheRubrique.Text.ToUpper();
+                        listBRubriquesDispo.Items.Clear();
                         List<Rubrique> lesRubriques = AppliBD.GetRechercheRubrique(saisieNom);
                         listBRubriquesDispo.Items.AddRange(lesRubriques.ToArray());
 
@@ -433,8 +452,7 @@ namespace PresseRESA
 
                 default:
                     {
-                        List<Rubrique> lesRubriques = AppliBD.GetLesRubriques();
-                        listBRubriquesDispo.Items.AddRange(lesRubriques.ToArray());
+                        InitializeRubriqueList();
 
                         btnRecherche.Text = "Rechercher";
                         break;
@@ -442,6 +460,7 @@ namespace PresseRESA
             }
         }
 
+        // CG0007B - Consulter les informations d'un avis dans une nouvelle fenêtre
         private void listBAvis_DoubleClick(object sender, EventArgs e)
         {
             if (listBAvis.SelectedItem != null)
@@ -459,12 +478,12 @@ namespace PresseRESA
 
         // --------------------------------------------------------- PARTIE GESTION DES RUBRIQUES ---------------------------------------------------------
 
-        // Initialisation de la listeBox des utilisateurs
+        // CG0008A - Initialisation de la listeBox des rubriques
         public void InitializeRubriqueList()
         {
-            listBRubriquesDispo.Items.Clear();
-            List<Rubrique> lesRubriquesDispo = AppliBD.GetLesRubriques();
-            listBRubriquesDispo.Items.AddRange(lesRubriquesDispo.ToArray());
+            listBRubriques.Items.Clear();
+            List<Rubrique> lesRubriques = AppliBD.GetLesRubriques();
+            listBRubriques.Items.AddRange(lesRubriques.ToArray());
         }
 
         // CG0008B - Ajout d'une nouvelle rubrique
@@ -487,7 +506,7 @@ namespace PresseRESA
         /// Méthode utilisée pour vérifier si l'ajout de notre rubrique à bien été effectué.
         /// </summary>
         /// <param name="nbInsertion">Le nombre d'insertion effectué.</param>
-        // CG0005G - Vérification de l'étât de notre insertion
+        // CG0005F - Vérification de l'étât de notre insertion
         private void verifRubrique(int nbInsertion)
         {
             switch (nbInsertion)
@@ -569,7 +588,7 @@ namespace PresseRESA
             }
         }
 
-        // CG0008E - Filtrage des rubriques
+        // CG0008A - Filtrage des rubriques en fonction du nom recherché
         private void btnRechercheRubrique_Click(object sender, EventArgs e)
         {
             switch (btnRechercheRubrique.Text)
@@ -620,6 +639,11 @@ namespace PresseRESA
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

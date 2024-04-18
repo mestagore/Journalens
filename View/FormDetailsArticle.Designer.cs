@@ -218,6 +218,7 @@
             this.ClientSize = new System.Drawing.Size(773, 396);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FormDetailsArticle";
             this.Text = "Détails de l\'article";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormDetailsArticle_FormClosed);

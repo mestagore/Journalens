@@ -41,7 +41,7 @@ namespace PresseRESA
         /// <summary>
         /// Constructeur d'un utilisateur avec toutes ses informations (sauf la date de fermeture).
         /// </summary>
-        // CG0002D - Connexion d'un utilisateur en règle
+        // CG0002C - Connexion d'un utilisateur en règle
         public Utilisateur(string email, string nom, string prenom, DateTime dateInscrit, int nbAvertissement, string telephone, string mobile, string typeCpte)
         {
             this.email = email;
@@ -141,6 +141,7 @@ namespace PresseRESA
         /// <summary>
         /// Setter utilisé pour valoriser la date d'inscription de l'utilisateur.
         /// </summary>
+        /// <param name="dateFermeture">La date de fermeture du compte (date du jour).</param>
         public void SetDateFermeture(DateTime dateFermeture) {
             this.dateFermeture = dateFermeture;
         }
@@ -155,6 +156,7 @@ namespace PresseRESA
         /// <summary>
         /// Setter utilisé pour valoriser le numéro de téléphone de l'utilisateur.
         /// </summary>
+        /// <param name="telephone">Le nouveau numéro de téléphone de l'utilisateur.</param>
         public void SetTelephone(string telephone)
         {
             this.telephone = telephone;
@@ -163,6 +165,7 @@ namespace PresseRESA
         /// <summary>
         /// Setter utilisé pour valoriser le numéro de portable de l'utilisateur.
         /// </summary>
+        /// <param name="newName">Le nouveau numéro de mobile de l'utilisateur.</param>
         public void SetMobile(string mobile)
         {
             this.portable = mobile;

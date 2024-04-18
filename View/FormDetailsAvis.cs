@@ -19,6 +19,7 @@ namespace PresseRESA
             InitializeComponent();
         }
 
+        // CG0007B - Consulter les informations d'un avis
         public void AfficherInfosAvis(Avis avis)
         {
             this.avis = avis;
@@ -30,21 +31,7 @@ namespace PresseRESA
             labCommentaireAvis.Text = avis.GetCommentaire();
         }
 
-        private void FormDetailsAvis_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labDescription_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labDescriptionArticle_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        // CG0005D - Ajouter un avertissement en fonction de l'avis frauduleux
         private void btnAddAvertissement_Click(object sender, EventArgs e)
         {
             DialogResult dr = MessageBox.Show("Voulez-vous vraiment supprimer l'avis ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -64,9 +51,25 @@ namespace PresseRESA
             }
         }
 
+        // CG0007A - Préserver l'intégrité des avis d'un article
         private void FormDetailsAvis_FormClosed(object sender, FormClosedEventArgs e)
         {
             ((FormPresseAdmin)this.Owner).ResetListeAvis();
+        }
+
+        private void FormDetailsAvis_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labDescription_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labDescriptionArticle_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

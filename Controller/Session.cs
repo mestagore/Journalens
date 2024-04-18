@@ -10,7 +10,6 @@ namespace PresseRESA
     {
         // Déclaration des variables
         private static int idUtilisateur;
-
         private static FormConnexion fcon;
         private static FormPresseUser fuser;
         private static FormPresseAdmin fadmin;

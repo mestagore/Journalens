@@ -30,54 +30,54 @@ namespace PresseRESA
             //              MDP : mal - HASH : 5655f26ec0c36c0b19a8a0ee219e9a70
         }
 
-        private void FormConnexion_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        // CG0002C - Vérification d'accès à l'application
+        // CG0002B / CG0002C - Vérification et Connexion à l'application
         private void btnConnexion_Click(object sender, EventArgs e)
         {
             string saisieAdresseMel = txtBoxMel.Text;
             if (saisieAdresseMel.Contains("@"))
             {
+                
                 string typeU = AppliBD.ConnexionUser(saisieAdresseMel, txtBoxMDP.Text);
 
                 // Vérification de l'existance du compte dans la BDD
-                if (typeU == "I") {
+                if (typeU == "I")
+                {
                     MessageBox.Show("L'identification semble avoir échoué. Veuillez vérifier vos identifiants et réessayer.", "Identifiants incorrects", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                } else {
-                    // On verifie son nombre d'avertissement.
-                    if (AppliBD.VerifAvertissement(saisieAdresseMel) < 3)
+                }
+                else
+                {
+                    Utilisateur user = AppliBD.GetUtilisateurParEmail(saisieAdresseMel);
+
+                    // Vérification de l'existence de l'utilisateur et de la non-existence de la date de fermeture du compte
+                    if (user != null)
                     {
-                        foreach (Utilisateur user in AppliBD.GetLesUtilisateurs("ALL"))
+                        if (user.GetDateFermeture() != null)
                         {
-                            // On compare avec chaque compte l'utilisateur qui nous intéresse.
-                            if (user.GetEmail() == saisieAdresseMel)
+                            MessageBox.Show("Accès refusé. Votre compte a été fermé.Veuillez contacter l'administrateur pour plus d'informations.", "Compte bloqué", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            // On verifie son nombre d'avertissement.
+                            if (user.GetNbAvertissement() < 3)
                             {
-                                // Vérification de la non existante de la date de fermeture.
-                                if (user.GetDateFermeture() != null)
+                                // Affichage de la forme appropriée en fonction du type de compte de l'utilisateur
+                                if (typeU == "USER")
                                 {
-                                    MessageBox.Show("Accès refusé. Votre compte a été fermé.Veuillez contacter l'administrateur pour plus d'informations.", "Compte bloqué", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    new FormPresseUser().Show();
                                 }
                                 else
                                 {
-                                    // Vérification du type du compte de l'utilisateur
-                                    if (typeU == "USER")
-                                    {
-                                        new FormPresseUser().Show();
-                                    } else {
-                                        new FormPresseAdmin().Show();
-                                    }
-                                    Session.SetformConnexion(this);
-                                    this.Hide();
+                                    new FormPresseAdmin().Show();
                                 }
+                                txtBoxMDP.Clear();
+                                Session.SetformConnexion(this);
+                                this.Hide();
                             }
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Accès refusé. Votre compte possède trop d'avertissements. Veuillez contacter l'administrateur si cela s'agit d'une erreur.", "Nombre d'avertissement trop élevés", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            else
+                            {
+                                MessageBox.Show("Accès refusé. Votre compte possède trop d'avertissements. Veuillez contacter l'administrateur si cela s'agit d'une erreur.", "Nombre d'avertissement trop élevés", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }   
                     }
                 }
             }
@@ -85,6 +85,11 @@ namespace PresseRESA
             {
                 MessageBox.Show("L'adresse saisie est syntaxiquement incorrect. Veuillez essayer avec une autre adresse.", "Synthaxe incorrecte", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void FormConnexion_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

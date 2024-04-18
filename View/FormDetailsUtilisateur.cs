@@ -19,7 +19,7 @@ namespace PresseRESA
             InitializeComponent();
         }
 
-        // CG0005H - Affichage des informations de l'utilisateur
+        // CG0005G - Affichage des informations de l'utilisateur
         public void AfficherInfosUtilisateur(Utilisateur user)
         {
             this.user = user;
@@ -36,7 +36,7 @@ namespace PresseRESA
             labTypeUser.Text = user.GetTypeCpte();
         }
 
-        // CG0005G - Ajouter un avertissement à l'utilisateur
+        // CG0005D - Ajouter un avertissement à l'utilisateur
         private void btnAddAvertissement_Click(object sender, EventArgs e)
         {
             if (user.GetNbAvertissement() < 3)
@@ -89,6 +89,7 @@ namespace PresseRESA
             }
         }
 
+        // CG0005A - Préserver l'intégrité des données de l'utilisateur
         private void FormDetailsUser_FormClosed(object sender, FormClosedEventArgs e)
         {
             ((FormPresseAdmin)this.Owner).InitializeUserList();

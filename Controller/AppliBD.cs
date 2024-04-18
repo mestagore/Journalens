@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
+using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Ocsp;
 using System;
@@ -7,10 +8,12 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PresseRESA
 {
@@ -93,38 +96,56 @@ namespace PresseRESA
         /// </summary>
         /// <param name="mail">L'adresse email de l'utilisateur.</param>
         /// <returns>Un entier, soit le nombre d'avertissement du compte de l'utilisateur</returns>
-        // CG0002B - Vérification du nombre d'avertissement de l'utilisateur
-        public static int VerifAvertissement(string mail) {
-            int nbAvertissement = 0;
+        // CG0002B - Récupération de l'ensemble des informations pour vérifier la conformité du compte
+        public static Utilisateur GetUtilisateurParEmail(string saisieAdresseMel)
+        {
+            Utilisateur user = null;
             bool connValidBD = AppliBD.ConnexionBD();
 
-            // Si la connexion avec la base de donnée à réussi, on exécute les étapes de recherche du nombre d'avertissement du compte de l'utilisateur
-            if (connValidBD) {
-
+            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour récupérer l'ensemble des utilisateurs
+            if (connValidBD)
+            {
                 MySqlCommand cmd = conn.CreateCommand();
 
-                // Requête préparé permettant de récupérer le nombre d'avertissement de l'utilisateur
-                string req = "SELECT nbAvertissement FROM COMPTE " +
-                             "WHERE adrMailCompte = @mail";
+                // Requête préparé pour récupérer les informations de l'utilisateur concerné
+                string req = "SELECT adrMailCompte, nomCompte, prenomCompte, dateInscription, dateFermeture, nbAvertissement, noTelCompte, noPortableCompte, TYPE_CPTE.nomTypeCpte " +
+                             "FROM COMPTE INNER JOIN TYPE_CPTE ON COMPTE.typeCpte = TYPE_CPTE.idTypeCpte WHERE adrMailCompte = @adresseEmail;";
 
                 cmd.CommandText = req;
-                cmd.Parameters.AddWithValue("@mail", mail);
+                cmd.Parameters.AddWithValue("@adresseEmail", saisieAdresseMel);
                 cmd.Prepare();
 
                 using (MySqlDataReader rdr = cmd.ExecuteReader())
                 {
-                    // Si on peux lire un résultat, on valorise nbAvertissement avec la valeur renvoyé par la BDD
-                    if (rdr.Read()) {
-                        nbAvertissement = rdr.GetInt16("nbAvertissement");
+                    // Tant qu'on peux lire un résultat, on crée un utilisateur et on l'ajoute à la liste
+                    if (rdr.Read())
+                    {
+                        string mail = rdr.GetString("adrMailCompte");
+                        string nom = rdr.GetString("nomCompte");
+                        string prenom = rdr.GetString("prenomCompte");
+                        DateTime dateInscrit = rdr.GetDateTime("dateInscription");
+                        int nbAvertissement = rdr.GetInt32("nbAvertissement");
+                        string telephone = rdr.IsDBNull(rdr.GetOrdinal("noTelCompte")) ? null : rdr.GetString("noTelCompte");
+                        string portable = rdr.IsDBNull(rdr.GetOrdinal("noPortableCompte")) ? null : rdr.GetString("noPortableCompte");
+                        string typeCompte = rdr.GetString("nomTypeCpte");
+                        if (rdr.IsDBNull(rdr.GetOrdinal("dateFermeture")))
+                        {
+                            user = new Utilisateur(mail, nom, prenom, dateInscrit, nbAvertissement, telephone, portable, typeCompte);
+                        }
+                        else
+                        {
+                            DateTime dateFermeture = rdr.GetDateTime("dateFermeture");
+                            user = new Utilisateur(mail, nom, prenom, dateInscrit, dateFermeture, nbAvertissement, telephone, portable, typeCompte);
+                        }
                     }
                     rdr.Close();
                 }
             }
-
-            // On retourne le nombre d'avertissement de l'utilisateur
-            return nbAvertissement;
+            // On retourne l'utilisateur
+            return user;
         }
 
+        // ================================================================== ADMINISTRATION =================================================================
         // --------------------------------------------------------- PARTIE GESTION DES UTILISATEURS ---------------------------------------------------------
 
         /// <summary>
@@ -145,24 +166,25 @@ namespace PresseRESA
 
                 // Requête préparé pour récupérer les utilisateurs de la BDD
                 string req = "SELECT adrMailCompte, nomCompte, prenomCompte, dateInscription, dateFermeture, nbAvertissement, noTelCompte, noPortableCompte, TYPE_CPTE.nomTypeCpte " +
-                             "FROM COMPTE INNER JOIN TYPE_CPTE ON COMPTE.typeCpte = TYPE_CPTE.idTypeCpte";
-                
+                             "FROM COMPTE INNER JOIN TYPE_CPTE ON COMPTE.typeCpte = TYPE_CPTE.idTypeCpte ";
+
+
                 // En fonction du bouton radio selectionné, le status sera différent (par défaut, c'est All)
                 switch (status)
                 {
                     case "GOOD":
-                        req += " WHERE nbAvertissement < 3 AND dateFermeture IS NULL;";
+                        req += "WHERE nbAvertissement < 3 AND dateFermeture IS NULL ";
                         break;
                     case "AVERTISSEMENT":
-                        req += " WHERE nbAvertissement >= 3";
+                        req += "WHERE nbAvertissement >= 3 ";
                         break;
                     case "BLOQUE":
-                        req += " WHERE dateFermeture IS NOT NULL;";
+                        req += "WHERE dateFermeture IS NOT NULL ";
                         break;
                     default:
-                        req = req + ";";
                         break;
-                }            
+                }
+                req += "ORDER BY adrMailCompte;";
 
                 cmd.CommandText = req;
 
@@ -201,6 +223,143 @@ namespace PresseRESA
         }
 
         /// <summary>
+        /// Fonction utilisée pour ajouter un nouvel utilisateur dans la BDD.
+        /// </summary>
+        /// <param name="mail">L'adresse mail de l'utilisateur.</param>
+        /// <param name="nom">Le nom de l'utilisateur.</param>
+        /// <param name="prenom">Le prénom de l'utilisateur.</param>
+        /// <param name="numTelephone">Le numéro de téléphone de l'utilisateur.</param>
+        /// <param name="numPortable">Le numéro de portable de l'utilisateur.</param>
+        /// <param name="typeCpte">Le type du compte de l'utilisateur.</param>
+        /// <returns>Un entier, soit le nombre d'insertion</returns>
+        // CG0005B - Ajout d'un nouvel utilisateur
+        public static int AddUtilisateur(string mail, string nom, string prenom, string numTelephone, string numPortable, int typeCpte)
+        {
+            bool connValidBD = AppliBD.ConnexionBD(); // Connexion à la base de donnée
+            int nbInsert = 0;
+            bool existeMail = false;
+
+            // Nous allons d'abord vérifier que l'adresse mail est bel et bien utiliser une seule fois.
+            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour ajouter notre nouvel utilisateur.
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+
+                // Requête préparé pour récupérer l'adresse mail de notre utilisateur dans la BDD
+                string reqSelect = "SELECT adrMailCompte FROM COMPTE WHERE adrMailCompte = @mail;";
+
+                cmd.CommandText = reqSelect;
+                cmd.Parameters.AddWithValue("@mail", mail);
+                cmd.Prepare();
+
+                using (MySqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    // Si on peux lire un résultat, on valorise notre variable existeMail en Vrai (il existe déjà une adresse mail dans la BDD)
+                    if (rdr.Read()) { existeMail = true; }
+                    rdr.Close();
+                }
+
+                // S'il n'existe pas déjà un compte associé à ce mail, alors on l'ajoute
+                if (!existeMail)
+                {
+                    string chHash = CreateMdpAleatoire(mail); // Chaîne de caractère haché, mot de passe provisoire.
+                    string dateDuJour = DateTime.Now.ToString("yyyy-MM-dd"); // Date du jour
+                    string numTel = numTelephone != "" ? numTelephone : null; // Si un numéro de téléphone est renseignée, on l'ajoute.
+                    string numPort = numPortable != "" ? numPortable : null; // Si un numéro de portable est renseignée, on l'ajoute.
+
+                    // Requête préparé pour insérer un nouvel utilisateur
+                    string reqInsert = "INSERT INTO COMPTE (adrMailCompte, passeHash, nomCompte, prenomCompte, dateInscription, dateFermeture, nbAvertissement, noTelCompte, noPortableCompte, typeCpte) " +
+                                       "VALUES(@adrMail, MD5(@chHash), @nom, @prenom, @dateInscription, NULL, 0, @numTel, @numPort, @numType);";
+
+                    cmd.CommandText = reqInsert;
+                    cmd.Parameters.AddWithValue("@adrMail", mail);
+                    cmd.Parameters.AddWithValue("@chHash", chHash);
+                    cmd.Parameters.AddWithValue("@nom", nom);
+                    cmd.Parameters.AddWithValue("@prenom", prenom);
+                    cmd.Parameters.AddWithValue("@dateInscription", dateDuJour);
+                    cmd.Parameters.AddWithValue("@numTel", numTel);
+                    cmd.Parameters.AddWithValue("@numPort", numPort);
+                    cmd.Parameters.AddWithValue("@numType", typeCpte);
+                    cmd.Prepare();
+
+                    // Si le typeCpte est égal à 2, alors instancier le type en "ADMIN", sinon en "USER"
+                    string type = typeCpte == 2 ? "ADMIN" : "USER";
+
+                    // L'utilisation de "_" est simplement une variable non utilisé.
+                    _ = new Utilisateur(mail, nom, prenom, Convert.ToDateTime(dateDuJour), 0, numTel, numPort, type);
+
+                    nbInsert = cmd.ExecuteNonQuery();
+                }
+                else
+                {
+                    return -1; // Le chiffre -1 désigne l'erreur "Une adresse mail est déjà associé à un compte."
+                }
+            }
+            // On retourne le nombre de ligne insérée (soit 1, soit 0)
+            return nbInsert;
+        }
+
+        /// <summary>
+        /// Fonction utilisée pour créer un mot de passe provisoire.
+        /// </summary>
+        /// <param name="mail">L'adresse email de l'utilisateur.</param>
+        /// <returns>Une chaîne de caractères, soit le mot de passe haché.</returns>
+        // CG0005C - Création d'un mot de passe provisoire pour l'ajout d'un utilisateur
+        public static string CreateMdpAleatoire(string mail)
+        {
+            string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            char[] Charsarr = new char[12];
+            Random random = new Random();
+
+            // On ajoute des caractères aléatoires à la suite
+            for (int i = 0; i < Charsarr.Length; i++)
+            {
+                Charsarr[i] = characters[random.Next(characters.Length)];
+            }
+
+            string pass = new string(Charsarr);
+            string mdpProvisoire = mail + pass;
+
+            Console.WriteLine("Mot de passe de " + mail + " : " + pass);
+            MessageBox.Show("Le mot de passe provisoire de l'utilisateur " + mail + " est " + pass, "Mot de passe Provisoire", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return mdpProvisoire; // On retourne le mot de passe provisoire, haché.
+        }
+
+        /// <summary>
+        /// Fonction utilisée pour incrémenter un avertissement à l'utilisateur selectionné.
+        /// </summary>
+        /// <param name="userMail">L'adresse mail de l'utilisateur.</param>
+        /// <returns>Un booléen, soit la vérification de l'éxection de la requête.</returns>
+        // CG0005D - Incrémentation d'un avertissement
+        public static bool UpdateAvertissmentCpteUser(string userMail)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+            bool verification = false; // Pour vérifier si l'incrémentation à bien été effectuée
+            Utilisateur user = AppliBD.GetUtilisateurParEmail(userMail);
+
+            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour incrémenter un avertissement à notre utilisateur.
+            if (connValidBD)
+            {
+                // Si le compte possède en dessous de 3 avertissements, on peux lui en rajouter un.
+                if (user.GetNbAvertissement() < 3)
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    // Requête préparé pour mettre à jour le nombre d'avertissement de notre utilisateur
+                    string req = "UPDATE COMPTE SET nbAvertissement = nbAvertissement + 1 WHERE adrMailCompte = @mail";
+
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@mail", userMail);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
+                verification = true;
+            }
+            // On retourne notre vérification
+            return verification;
+        }
+
+        /// <summary>
         /// Fonction utilisée pour fermer le compte de l'utilisateur selectionné.
         /// </summary>
         /// <param name="mail">L'adresse mail de l'utilisateur.</param>
@@ -236,141 +395,6 @@ namespace PresseRESA
             return verification;
         }
 
-        /// <summary>
-        /// Fonction utilisée pour incrémenter un avertissement à l'utilisateur selectionné.
-        /// </summary>
-        /// <param name="userMail">L'adresse mail de l'utilisateur.</param>
-        /// <returns>Un booléen, soit la vérification de l'éxection de la requête.</returns>
-        // CG0005F - Incrémentation d'un avertissement
-        public static bool UpdateAvertissmentCpteUser(string userMail)
-        {
-            bool connValidBD = AppliBD.ConnexionBD();
-            bool verification = false; // Pour vérifier si l'incrémentation à bien été effectuée
-            int nbAvertissement = 0;
-
-            nbAvertissement = VerifAvertissement(userMail); // Fonction qui renvoie directement le nombre d'avertissement de l'utilisateur
-            
-            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour incrémenter un avertissement à notre utilisateur.
-            if (connValidBD)
-            {
-                // Si le compte possède en dessous de 3 avertissements, on peux lui en rajouter un.
-                if (nbAvertissement < 3)
-                {
-                    MySqlCommand cmd = conn.CreateCommand();
-
-                    // Requête préparé pour mettre à jour le nombre d'avertissement de notre utilisateur
-                    string req = "UPDATE COMPTE SET nbAvertissement = nbAvertissement + 1 WHERE adrMailCompte = @mail";
-
-                    cmd.CommandText = req;
-                    cmd.Parameters.AddWithValue("@mail", userMail);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
-                }
-                verification = true;
-            }
-            // On retourne notre vérification
-            return verification;
-        }
-
-        /// <summary>
-        /// Fonction utilisée pour ajouter un nouvel utilisateur dans la BDD.
-        /// </summary>
-        /// <param name="mail">L'adresse mail de l'utilisateur.</param>
-        /// <param name="nom">Le nom de l'utilisateur.</param>
-        /// <param name="prenom">Le prénom de l'utilisateur.</param>
-        /// <param name="numTelephone">Le numéro de téléphone de l'utilisateur.</param>
-        /// <param name="numPortable">Le numéro de portable de l'utilisateur.</param>
-        /// <param name="typeCpte">Le type du compte de l'utilisateur.</param>
-        /// <returns>Un entier, soit le nombre d'insertion</returns>
-        // CG0005C - Ajout d'un nouvel adhérent (utilisateur) 
-        public static int AddUtilisateur(string mail, string nom, string prenom, string numTelephone, string numPortable, int typeCpte) {
-            bool connValidBD = AppliBD.ConnexionBD(); // Connexion à la base de donnée
-            int nbInsert = 0;
-            bool existeMail = false;
-
-            // Nous allons d'abord vérifier que l'adresse mail est bel et bien utiliser une seule fois.
-            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour ajouter notre nouvel utilisateur.
-            if (connValidBD)
-            {
-                MySqlCommand cmd = conn.CreateCommand();
-
-                // Requête préparé pour récupérer l'adresse mail de notre utilisateur dans la BDD
-                string reqSelect = "SELECT adrMailCompte FROM COMPTE WHERE adrMailCompte = @mail;";
-
-                cmd.CommandText = reqSelect;
-                cmd.Parameters.AddWithValue("@mail", mail);
-                cmd.Prepare();
-
-                using (MySqlDataReader rdr = cmd.ExecuteReader())
-                {
-                    // Si on peux lire un résultat, on valorise notre variable existeMail en Vrai (il existe déjà une adresse mail dans la BDD)
-                    if (rdr.Read()) { existeMail = true; }
-                    rdr.Close();
-                }
-
-                // S'il n'existe pas déjà un compte associé à ce mail, alors on l'ajoute
-                if (!existeMail)
-                {
-                    string chHash = CreateMdpAleatoire(mail); // Chaîne de caractère haché, mot de passe provisoire.
-                    string dateDuJour = DateTime.Now.ToString("yyyy-MM-dd"); // Date du jour
-                    string numTel = numTelephone != "" ? numTelephone : null; // Si un numéro de téléphone est renseignée, on l'ajoute.
-                    string numPort = numPortable != "" ? numPortable : null; // Si un numéro de portable est renseignée, on l'ajoute.
-
-                    // Requête préparé pour insérer un nouvel utilisateur
-                    string reqInsert = "INSERT INTO COMPTE (adrMailCompte, passeHash, nomCompte, prenomCompte, dateInscription, dateFermeture, nbAvertissement, noTelCompte, noPortableCompte, typeCpte) " +
-                                 "VALUES(@adrMail, MD5(@chHash), @nom, @prenom, @dateInscription, NULL, 0, @numTel, @numPort, @numType);";
-
-                    cmd.CommandText = reqInsert;
-                    cmd.Parameters.AddWithValue("@adrMail", mail);
-                    cmd.Parameters.AddWithValue("@chHash", chHash);
-                    cmd.Parameters.AddWithValue("@nom", nom);
-                    cmd.Parameters.AddWithValue("@prenom", prenom);
-                    cmd.Parameters.AddWithValue("@dateInscription", dateDuJour);
-                    cmd.Parameters.AddWithValue("@numTel", numTel);
-                    cmd.Parameters.AddWithValue("@numPort", numPort);
-                    cmd.Parameters.AddWithValue("@numType", typeCpte);
-                    cmd.Prepare();
-
-                    // Si le typeCpte est égal à 2, alors instancier le type en "ADMIN", sinon en "USER"
-                    string type = typeCpte == 2 ? "ADMIN" : "USER";
-
-                    // L'utilisation de "_" est simplement une variable non utilisé.
-                    _ = new Utilisateur(mail, nom, prenom, Convert.ToDateTime(dateDuJour), 0, numTel, numPort, type);
-
-                    nbInsert = cmd.ExecuteNonQuery();
-                }
-                else {
-                    return -1; // Le chiffre -1 désigne l'erreur "Une adresse mail est déjà associé à un compte."
-                }
-            }
-            // On retourne le nombre de ligne insérée (soit 1, soit 0)
-            return nbInsert;
-        }
-
-        /// <summary>
-        /// Fonction utilisée pour créer un mot de passe provisoire.
-        /// </summary>
-        /// <param name="mail">L'adresse email de l'utilisateur.</param>
-        /// <returns>Une chaîne de caractères, soit le mot de passe haché.</returns>
-        // CG0005D - Création d'un mot de passe provisoire pour l'ajout d'un utilisateur
-        public static string CreateMdpAleatoire(string mail) {
-            string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            char[] Charsarr = new char[12];
-            Random random = new Random();
-
-            // On ajoute des caractères aléatoires à la suite
-            for (int i = 0; i < Charsarr.Length; i++) {
-                Charsarr[i] = characters[random.Next(characters.Length)];
-            }
-
-            string pass = new string(Charsarr);
-            string mdpProvisoire = mail + pass;
-
-            Console.WriteLine("Mot de passe de " + mail + " : " + pass);
-            MessageBox.Show("Le mot de passe provisoire de l'utilisateur " + mail + " est " + pass, "Mot de passe Provisoire", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return mdpProvisoire; // On retourne le mot de passe provisoire, haché.
-        }
-
         // --------------------------------------------------------- PARTIE GESTION DES ARTICLES ---------------------------------------------------------
 
         /// <summary>
@@ -378,7 +402,7 @@ namespace PresseRESA
         /// </summary>
         /// <param name="status">Option choisie par l'utilisateur.</param>
         /// <returns>Une liste d'articles, soit la liste des articles de la base de données.</returns>
-        // CG0006A - Récupération des articles
+        // CG0006A - Récupération des articles en fonction du type de filtrage choisi
         public static List<Article> GetLesArticles(string status)
         {
             List<Article> lesArticles = new List<Article>();
@@ -392,24 +416,26 @@ namespace PresseRESA
                 // Requête préparé pour récupérer les articles de la BDD
                 string req = "SELECT idArticle, titreArticle, descriptionArticle, dateArticleCreation, COMPTE.adrMailCompte, ETAT_VALID.nomValid " +
                              "FROM ARTICLE INNER JOIN ETAT_VALID ON ARTICLE.idValid = ETAT_VALID.idValid " +
-                             "INNER JOIN COMPTE ON ARTICLE.auteurArticle = COMPTE.numAdherent";
-                
+                             "INNER JOIN COMPTE ON ARTICLE.auteurArticle = COMPTE.numAdherent ";
+
+
                 // En fonction du bouton radio selectionné, le status sera différent (par défaut, c'est All)
                 switch (status)
                 {
                     case "EN_ATTENTE":
-                        req = req + " WHERE ARTICLE.idValid = 1;";
+                        req += " WHERE ARTICLE.idValid = 1 ";
                         break;
                     case "VALIDE":
-                        req = req + " WHERE ARTICLE.idValid = 2;";
+                        req += " WHERE ARTICLE.idValid = 2 ";
                         break;
                     case "REJET":
-                        req = req + " WHERE ARTICLE.idValid = 3;";
+                        req += " WHERE ARTICLE.idValid = 3 ";
                         break;
                     default:
-                        req = req + ";";
                         break;
                 }
+
+                req += "ORDER BY dateArticleCreation DESC;";
 
                 cmd.CommandText = req;
 
@@ -434,6 +460,67 @@ namespace PresseRESA
             }
             // On retourne la liste des articles de la BDD
             return lesArticles;
+        }
+
+        /// <summary>
+        /// Fonction utilisée pour associée une rubrique à un article.
+        /// </summary>
+        /// <param name="article">L'article concerné.</param>
+        /// <param name="rubrique">La rubrique concernée.</param>
+        /// <returns>Un booléen, soit la vérification de l'éxecution de la requête.</returns>
+        // CG0006B - Association d'une rubrique à un article
+        public static bool AddRubriquePourArticle(Article article, Rubrique rubrique)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+            bool verification = false; // Pour vérifier si l'association entre une rubrique et un article a été effectuée
+
+            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour associer une rubrique à un article.
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+
+                // Requête préparé pour ajouter une nouvelle association entre une rubrique et un article
+                string req = "INSERT INTO ARTICLE_RUBRIQUE (idArticle, idRubrique) VALUES (@idArticle, @idRubrique);";
+
+                cmd.CommandText = req;
+                cmd.Parameters.AddWithValue("@idArticle", article.GetId());
+                cmd.Parameters.AddWithValue("@idRubrique", rubrique.GetId());
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+
+                verification = true;
+            }
+            // On retourne la vérification
+            return verification;
+        }
+
+        /// <summary>
+        /// Fonction utilisée pour supprimer toutes les rubriques pour un article donné.
+        /// </summary>
+        /// <param name="article">L'article concerné.</param>
+        /// <returns>Un booléen, soit la vérification de l'execution de la requête.</returns>
+        // CG0006C - Suppression des rubriques pour un article donné
+        public static bool ResetRubriquesArticle(Article article)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+            bool verification = false; // Pour vérifier si la suppression des associations de notre article a été effectué
+
+            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour supprimer toutes les associations entre les rubriques et notre article.
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+
+                // Requête préparé pour supprimer toutes les associations entre notre article et les rubriques
+                string req = "DELETE FROM ARTICLE_RUBRIQUE WHERE idArticle = @idArticle;";
+
+                cmd.CommandText = req;
+                cmd.Parameters.AddWithValue("@idArticle", article.GetId());
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                verification = true;
+            }
+            // On retourne la verification
+            return verification;
         }
 
         /// <summary>
@@ -486,72 +573,11 @@ namespace PresseRESA
         }
 
         /// <summary>
-        /// Fonction utilisée pour associée une rubrique à un article.
-        /// </summary>
-        /// <param name="article">L'article concerné.</param>
-        /// <param name="rubrique">La rubrique concernée.</param>
-        /// <returns>Un booléen, soit la vérification de l'éxecution de la requête.</returns>
-        // CG0008F - Association d'une rubrique à un article
-        public static bool AddRubriquePourArticle(Article article, Rubrique rubrique)
-        {
-            bool connValidBD = AppliBD.ConnexionBD();
-            bool verification = false; // Pour vérifier si l'association entre une rubrique et un article a été effectuée
-
-            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour associer une rubrique à un article.
-            if (connValidBD)
-            {
-                MySqlCommand cmd = conn.CreateCommand();
-
-                // Requête préparé pour ajouter une nouvelle association entre une rubrique et un article
-                string req = "INSERT INTO ARTICLE_RUBRIQUE (idArticle, idRubrique) VALUES (@idArticle, @idRubrique);";
-
-                cmd.CommandText = req;
-                cmd.Parameters.AddWithValue("@idArticle", article.GetId());
-                cmd.Parameters.AddWithValue("@idRubrique", rubrique.GetId());
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
-
-                verification = true;
-            }
-            // On retourne la vérification
-            return verification;
-        }
-
-        /// <summary>
-        /// Fonction utilisée pour supprimer toutes les rubriques pour un article donné.
-        /// </summary>
-        /// <param name="article">L'article concerné.</param>
-        /// <returns>Un booléen, soit la vérification de l'execution de la requête.</returns>
-        // CG0008D - Suppression des rubriques pour un article donné
-        public static bool ResetRubriquesArticle(Article article)
-        {
-            bool connValidBD = AppliBD.ConnexionBD();
-            bool verification = false; // Pour vérifier si la suppression des associations de notre article a été effectué
-
-            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour supprimer toutes les associations entre les rubriques et notre article.
-            if (connValidBD)
-            {
-                MySqlCommand cmd = conn.CreateCommand();
-
-                // Requête préparé pour supprimer toutes les associations entre notre article et les rubriques
-                string req = "DELETE FROM ARTICLE_RUBRIQUE WHERE idArticle = @idArticle;";
-
-                cmd.CommandText = req;
-                cmd.Parameters.AddWithValue("@idArticle", article.GetId());
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
-                verification = true;
-            }
-            // On retourne la verification
-            return verification;
-        }
-
-        /// <summary>
         /// Fonction utilisée pour récupérer les rubriques d'un article donné.
         /// </summary>
         /// <param name="idArticle">L'identifiant de l'article concerné.</param>
         /// <returns>Une liste de rubriques, soit les rubriques associées à l'article.</returns>
-        // CG0008A - Récupération des rubriques d'un article
+        // CG0006G - Récupération des rubriques d'un article
         public static List<Rubrique> GetRubriquesParArticle(int idArticle)
         {
             List<Rubrique> lesRubriques = new List<Rubrique>();
@@ -566,7 +592,8 @@ namespace PresseRESA
                 string req = "SELECT RUBRIQUE.idRubrique, RUBRIQUE.nomRubrique " +
                              "FROM RUBRIQUE " +
                              "INNER JOIN ARTICLE_RUBRIQUE ON RUBRIQUE.idRubrique = ARTICLE_RUBRIQUE.idRubrique " +
-                             "WHERE ARTICLE_RUBRIQUE.idArticle = @idArticle;";
+                             "WHERE ARTICLE_RUBRIQUE.idArticle = @idArticle " +
+                             "ORDER BY RUBRIQUE.nomRubrique;";
 
                 cmd.CommandText = req;
                 cmd.Parameters.AddWithValue("@idArticle", idArticle);
@@ -596,6 +623,7 @@ namespace PresseRESA
         /// <param name="saisieIdArticle">L'identifiant de l'article recherché.</param>
         /// <param name="saisieAuteurArticle">L'auteur de l'article recherché.</param>
         /// <returns>Une liste d'articles, soit les articles recherchés.</returns>
+        // CG0006A - Récupération des articles en fonction de la saisie de l'utilisateur
         public static List<Article> GetRechercheArticle(string saisieIdArticle, string saisieAuteurArticle)
         {
             List<Article> articlesTrouves = new List<Article>();
@@ -610,14 +638,17 @@ namespace PresseRESA
                 string req = "SELECT idArticle, titreArticle, descriptionArticle, dateArticleCreation, COMPTE.adrMailCompte, ETAT_VALID.nomValid " +
                              "FROM ARTICLE INNER JOIN ETAT_VALID ON ARTICLE.idValid = ETAT_VALID.idValid " +
                              "INNER JOIN COMPTE ON ARTICLE.auteurArticle = COMPTE.numAdherent " +
-                             "WHERE ARTICLE.idArticle = @idArticle";
+                             "WHERE ARTICLE.idArticle = @idArticle ";
+
 
                 // On vérifie si l'utilisateur a fourni un auteur dans sa recherche
                 if (!string.IsNullOrEmpty(saisieAuteurArticle))
                 {
                     // Si oui, on ajoute la condition sur l'auteur
-                    req += " OR COMPTE.adrMailCompte LIKE @auteurArticle";
+                    req += " OR COMPTE.adrMailCompte LIKE @auteurArticle ";
                 }
+
+                req += "ORDER BY dateArticleCreation DESC;";
 
                 cmd.CommandText = req;
                 cmd.Parameters.AddWithValue("@idArticle", saisieIdArticle);
@@ -652,6 +683,7 @@ namespace PresseRESA
         /// </summary>
         /// <param name="idArticle">L'identifiant de l'article concerné.</param>
         /// <returns>Une liste d'avis, soit les avis sur l'article.</returns>
+        // CG0007A - Récupération de l'ensemble des avis de l'article
         public static List<Avis> GetAvisParArticle(int idArticle)
         {
             List<Avis> avisParArticle = new List<Avis>();
@@ -665,7 +697,9 @@ namespace PresseRESA
                 // Requête préparée pour récupérer tous les avis sur l'article
                 string req = "SELECT idAvis, dateAvisCreation, commentaire, idArticle, COMPTE.adrMailCompte FROM AVIS " +
                              "INNER JOIN COMPTE ON AVIS.idAdherent = COMPTE.numAdherent " +
-                             "WHERE idArticle = @idArticle";
+                             "WHERE idArticle = @idArticle " +
+                             "ORDER BY dateAvisCreation DESC;";
+
 
                 cmd.CommandText = req;
                 cmd.Parameters.AddWithValue("@idArticle", idArticle);
@@ -697,6 +731,7 @@ namespace PresseRESA
         /// </summary>
         /// <param name="saisieIdArticle">L'identifiant de l'avis concerné.</param>
         /// <returns>Un booléen, soit la vérification de l'execution de la requête.</returns>
+        // CG0007C - Suppression de l'avis
         public static bool DeleteAvis(int idAvis) {
             bool connValidBD = AppliBD.ConnexionBD();
             bool verification = false; // Pour vérifier si la suppression de l'avis a été effectuée.
@@ -738,7 +773,8 @@ namespace PresseRESA
 
                 // Requête préparé pour récupérer les rubriques de la BDD
                 string req = "SELECT RUBRIQUE.idRubrique, RUBRIQUE.nomRubrique " +
-                             "FROM RUBRIQUE;";
+                             "FROM RUBRIQUE " +
+                             "ORDER BY RUBRIQUE.idRubrique;";
 
                 cmd.CommandText = req;
 
@@ -907,6 +943,7 @@ namespace PresseRESA
         /// </summary>
         /// <param name="motCle">Le nom approximatif de la rubrique.</param>
         /// <returns>Une liste de rubriques, soit la liste des rubriques attendues.</returns>
+        // CG0008A - Récupération des rubriques en fonction du motCle (nom de la rubrique).
         public static List<Rubrique> GetRechercheRubrique(string motCle)
         {
             List<Rubrique> rubriquesTrouvees = new List<Rubrique>();
@@ -918,8 +955,9 @@ namespace PresseRESA
                 MySqlCommand cmd = conn.CreateCommand();
 
                 // Requête préparée pour récupérer les rubriques contenant le mot clé
-                string reqSelect = "SELECT idRubrique, nomRubrique FROM RUBRIQUE WHERE nomRubrique LIKE @motCle;";
-                cmd.CommandText = reqSelect;
+                string req = "SELECT RUBRIQUE.idRubrique, RUBRIQUE.nomRubrique FROM RUBRIQUE " +
+                                   "WHERE RUBRIQUE.nomRubrique LIKE @motCle;";
+                cmd.CommandText = req;
                 cmd.Parameters.AddWithValue("@motCle", "%" + motCle + "%");
                 cmd.Prepare();
 
@@ -939,6 +977,171 @@ namespace PresseRESA
             }
             // On retourne la liste des rubriques trouvées.
             return rubriquesTrouvees;
+        }
+
+        // ================================================================== UTILISATEUR ==================================================================
+        // --------------------------------------------------------- PARTIE CONSULTATION DU PROFIL ---------------------------------------------------------
+
+        /// <summary>
+        /// Fonction utilisée pour vérifier le nombre d'avertissement de l'utilisateur qui tente d'accéder à l'application.
+        /// </summary>
+        /// <param name="mail">L'adresse email de l'utilisateur.</param>
+        /// <returns>Un entier, soit le nombre d'avertissement du compte de l'utilisateur</returns>
+        // CG0012 - Récupération de l'ensemble des informations de l'utilisateur
+        public static Utilisateur GetUtilisateurParId(int idUser)
+        {
+            Utilisateur user = null;
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour récupérer l'ensemble des utilisateurs
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+
+                // Requête préparé pour récupérer les informations de l'utilisateur concerné
+                string req = "SELECT adrMailCompte, nomCompte, prenomCompte, dateInscription, nbAvertissement, noTelCompte, noPortableCompte " +
+                             "FROM COMPTE WHERE numAdherent = @id;";
+
+                cmd.CommandText = req;
+                cmd.Parameters.AddWithValue("@id", idUser);
+                cmd.Prepare();
+
+                using (MySqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    // Tant qu'on peux lire un résultat, on crée un utilisateur et on l'ajoute à la liste
+                    if (rdr.Read())
+                    {
+                        string mail = rdr.GetString("adrMailCompte");
+                        string nom = rdr.GetString("nomCompte");
+                        string prenom = rdr.GetString("prenomCompte");
+                        DateTime dateInscrit = rdr.GetDateTime("dateInscription");
+                        int nbAvertissement = rdr.GetInt32("nbAvertissement");
+                        string telephone = rdr.IsDBNull(rdr.GetOrdinal("noTelCompte")) ? null : rdr.GetString("noTelCompte");
+                        string portable = rdr.IsDBNull(rdr.GetOrdinal("noPortableCompte")) ? null : rdr.GetString("noPortableCompte");
+                        user = new Utilisateur(mail, nom, prenom, dateInscrit, nbAvertissement, telephone, portable, "USER");
+                    }
+                    rdr.Close();
+                }
+            }
+            // On retourne l'utilisateur
+            return user;
+        }
+
+        public static int UpdateProfil(int idUtilisateur, string saisieTelephone, string saisiePortable)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Nous allons d'abord vérifier que le nom de cette rubrique n'existe pas déjà dans la base de données.
+            // Si la connexion avec la base de données a réussi, on exécute les étapes pour mettre à jour la rubrique.
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+
+                // Requête préparée pour mettre à jour le numéro de portable et de téléphone de l'utilisateur
+                string req = "UPDATE COMPTE " +
+                             "SET noTelCompte = @Telephone, noPortableCompte = @Portable " +
+                             "WHERE numAdherent = @idUtilisateur";
+
+                cmd.CommandText = req;
+                cmd.Parameters.AddWithValue("@Telephone", saisieTelephone);
+                cmd.Parameters.AddWithValue("@Portable", saisiePortable);
+                cmd.Parameters.AddWithValue("@idUtilisateur", idUtilisateur);
+                cmd.Prepare();
+                int lignesAffectées = cmd.ExecuteNonQuery();
+
+                if (lignesAffectées > 0)
+                {
+                    return 1; // Le chiffre 1 indique le succès de la mise à jour.
+                }
+                else
+                {
+                    return 0; // Le chiffre 0 indique que la mise à jour a échoué.
+                }
+            }
+            return 0; // Le chiffre 0 désigne une erreur avec la base de données.
+        }
+
+        // --------------------------------------------------------- PARTIE TABLEAU DE BORD ---------------------------------------------------------
+
+        public static List<Article> GetSesArticles(int idUtilisateur)
+        {
+            List<Article> lesArticles = new List<Article>();
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour récupérer l'ensemble des utilisateurs
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+
+                // Requête SQL pour sélectionner les articles de l'utilisateur spécifié
+                string req = "SELECT idArticle, titreArticle, descriptionArticle, dateArticleCreation, COMPTE.adrMailCompte, ETAT_VALID.nomValid " +
+                             "FROM ARTICLE INNER JOIN ETAT_VALID ON ARTICLE.idValid = ETAT_VALID.idValid " +
+                             "INNER JOIN COMPTE ON ARTICLE.auteurArticle = COMPTE.numAdherent " +
+                             "WHERE auteurArticle = @idUtilisateur";
+
+                cmd.CommandText = req;
+                cmd.Parameters.AddWithValue("@idUtilisateur", idUtilisateur);
+                cmd.Prepare();
+
+                using (MySqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    // Tant qu'on peux lire un résultat, on crée un utilisateur et on l'ajoute à la liste
+                    while (rdr.Read())
+                    {
+                        int id = rdr.GetInt32("idArticle");
+                        string titre = rdr.IsDBNull(rdr.GetOrdinal("titreArticle")) ? "Titre" : rdr.GetString("titreArticle");
+                        string description = rdr.IsDBNull(rdr.GetOrdinal("descriptionArticle")) ? "Description de l'article" : rdr.GetString("descriptionArticle");
+                        string auteur = rdr.GetString("adrMailCompte");
+                        DateTime dateCreation = rdr.GetDateTime("dateArticleCreation");
+                        string etat = rdr.GetString("nomValid");
+
+                        Article article = new Article(id, titre, description, auteur, dateCreation, etat);
+                        lesArticles.Add(article);
+                    }
+                    rdr.Close();
+                }
+            }
+            return lesArticles;
+        }
+
+        public static List<Avis> GetSesAvis(int idUtilisateur)
+        {
+            List<Avis> lesAvis = new List<Avis>();
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour récupérer l'ensemble des utilisateurs
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+
+                // Requête préparée pour récupérer tous les avis sur l'article
+                string req = "SELECT idAvis, dateAvisCreation, commentaire, idArticle, COMPTE.adrMailCompte FROM AVIS " +
+                             "INNER JOIN COMPTE ON AVIS.idAdherent = COMPTE.numAdherent " +
+                             "WHERE idAdherent = @idUtilisateur " +
+                             "ORDER BY dateAvisCreation DESC;";
+
+                cmd.CommandText = req;
+                cmd.Parameters.AddWithValue("@idUtilisateur", idUtilisateur);
+                cmd.Prepare();
+
+                using (MySqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    // Tant qu'on peux lire un résultat, on crée un utilisateur et on l'ajoute à la liste
+                    while (rdr.Read())
+                    {
+                        int idAvis = rdr.GetInt32("idAvis");
+                        DateTime dateCreation = rdr.GetDateTime("dateAvisCreation");
+                        string commentaireAvis = rdr.GetString("commentaire");
+                        int numArticle = rdr.GetInt32("idArticle");
+                        string auteur = rdr.GetString("adrMailCompte");
+
+                        Avis avis = new Avis(idAvis, dateCreation, commentaireAvis, numArticle, auteur);
+                        lesAvis.Add(avis);
+                    }
+                    rdr.Close();
+                }
+            }
+            return lesAvis;
         }
 
         // --------------------------------------------------------- AUTRE(S) METHODE(S) ---------------------------------------------------------
