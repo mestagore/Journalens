@@ -49,7 +49,6 @@
             this.labDateFermeture = new System.Windows.Forms.Label();
             this.labNom = new System.Windows.Forms.Label();
             this.btnFermetureCpte = new System.Windows.Forms.Button();
-            this.btnAddAvertissement = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -289,23 +288,12 @@
             this.btnFermetureCpte.UseVisualStyleBackColor = true;
             this.btnFermetureCpte.Click += new System.EventHandler(this.btnFermetureCpte_Click);
             // 
-            // btnAddAvertissement
-            // 
-            this.btnAddAvertissement.Location = new System.Drawing.Point(193, 209);
-            this.btnAddAvertissement.Name = "btnAddAvertissement";
-            this.btnAddAvertissement.Size = new System.Drawing.Size(165, 23);
-            this.btnAddAvertissement.TabIndex = 9;
-            this.btnAddAvertissement.Text = "Ajouter un avertissement";
-            this.btnAddAvertissement.UseVisualStyleBackColor = true;
-            this.btnAddAvertissement.Click += new System.EventHandler(this.btnAddAvertissement_Click);
-            // 
             // FormDetailsUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(134)))), ((int)(((byte)(89)))));
             this.ClientSize = new System.Drawing.Size(372, 244);
-            this.Controls.Add(this.btnAddAvertissement);
             this.Controls.Add(this.btnFermetureCpte);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -342,6 +330,5 @@
         private System.Windows.Forms.Label labPrenomUser;
         private System.Windows.Forms.Label labNomUser;
         private System.Windows.Forms.Button btnFermetureCpte;
-        private System.Windows.Forms.Button btnAddAvertissement;
     }
 }

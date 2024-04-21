@@ -12,50 +12,56 @@ namespace PresseRESA
         private static int idUtilisateur;
         private static string typeUtilisateur;
         private static FormConnexion fcon;
-        private static FormPresseUtilisateur fuser;
-        private static FormPresseAdmin fadmin;
 
-        public static FormConnexion GetFormConnexion() {
-            return fcon;
-        }
+        // --------------------------------------------------------- PARTIE GETTER ---------------------------------------------------------
 
-        public static void SetformConnexion(FormConnexion f) {
-            fcon = f;
-        }
-
-        public static FormPresseUtilisateur GetFormUser() {
-            return fuser;
-        }
-
-        public static void SetFormUser(FormPresseUtilisateur f) {
-            fuser = f;
-        }
-
-        public static FormPresseAdmin GetFormAdmin() {
-            return fadmin;
-        }
-
-        public static void SetFormAdmin(FormPresseAdmin f) {
-            fadmin = f;
-        }
-
+        /// <summary>
+        /// Getter utilisé pour récupérer l'identifiant de l'utilisateur.
+        /// </summary>
+        /// <returns>Un entier</returns>
         public static int GetIdUtilisateur()
         {
             return idUtilisateur;
         }
 
+        /// <summary>
+        /// Getter utilisé pour récupérer le type du compte de l'utilisateur.
+        /// </summary>
+        /// <returns>Une chaîne de caractère</returns>
         public static string GetTypeUtilisateur()
         {
             return typeUtilisateur;
         }
 
+        // --------------------------------------------------------- PARTIE SETTER ---------------------------------------------------------
+
+        /// <summary>
+        /// Setter utilisé pour valoriser l'identifiant du compte de l'utilisateur.
+        /// </summary>
+        /// <param name="type">L'identifiant du compte de l'utilisateur connecté.</param>
         public static void SetIdUtilisateur(int id) {
             idUtilisateur = id;
         }
 
+        /// <summary>
+        /// Setter utilisé pour valoriser le type du compte de l'utilisateur.
+        /// </summary>
+        /// <param name="type">Le type du compte de l'utilisateur connecté.</param>
         public static void SetTypeCpteUtilisateur(string type)
         {
             typeUtilisateur = type;
+        }
+
+        // --------------------------------------------------------- AUTRE(S) METHODE(S) ---------------------------------------------------------
+
+        public static FormConnexion GetFormConnexion()
+        {
+            return fcon;
+        }
+
+        public static void SetformConnexion(FormConnexion f)
+        {
+            fcon = f;
         }
     }
 }

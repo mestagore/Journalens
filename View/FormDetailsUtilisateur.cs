@@ -36,33 +36,6 @@ namespace PresseRESA
             labTypeUser.Text = user.GetTypeCpte();
         }
 
-        // CG0005D - Ajouter un avertissement à l'utilisateur
-        private void btnAddAvertissement_Click(object sender, EventArgs e)
-        {
-            if (user.GetNbAvertissement() < 3)
-            {
-                DialogResult dr = MessageBox.Show(" Voulez-vous vraiment ajouter un avertissement à cet utilisateur : " + user.GetEmail(), "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (dr == DialogResult.Yes)
-                {
-                    bool verif = AppliBD.UpdateAvertissmentCpteUser(user.GetEmail());
-                    if (verif)
-                    {
-                        user.SetNbAvertissement();
-                        AfficherInfosUtilisateur(user);
-                        MessageBox.Show("Avertissement ajouté avec succès.", "Update réussi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Erreur lors de l'ajout de l'avertissement, veuillez réessayez. Si le problème persiste, contactez l'administrateur.", "Echec de l'Update", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("L'utilisateur possède déjà le nombre maximale d'avertissement, c'est-à-dire 3 avertissements.", "Avertissement trop élevé", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         // CG0005E - Fermeture d'un compte utilisateur
         private void btnFermetureCpte_Click(object sender, EventArgs e)
         {

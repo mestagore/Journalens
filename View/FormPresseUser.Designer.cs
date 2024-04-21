@@ -31,6 +31,25 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPresseUtilisateur));
             this.tabControlUser = new System.Windows.Forms.TabControl();
             this.tabPAccueil = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labLesAvis = new System.Windows.Forms.Label();
+            this.listBLesAvis = new System.Windows.Forms.ListBox();
+            this.groupBFiltrage = new System.Windows.Forms.GroupBox();
+            this.btnResetFiltrage = new System.Windows.Forms.Button();
+            this.btnFiltrage = new System.Windows.Forms.Button();
+            this.labMotif2 = new System.Windows.Forms.Label();
+            this.radioBArticleSansAvis = new System.Windows.Forms.RadioButton();
+            this.txtBAuteurArticle = new System.Windows.Forms.TextBox();
+            this.labAuteurArticle = new System.Windows.Forms.Label();
+            this.radioBArticleAvecAvis = new System.Windows.Forms.RadioButton();
+            this.labMotif1 = new System.Windows.Forms.Label();
+            this.labRubrique = new System.Windows.Forms.Label();
+            this.comboBRubriques = new System.Windows.Forms.ComboBox();
+            this.labArticlesSemaine = new System.Windows.Forms.Label();
+            this.listBArticles = new System.Windows.Forms.ListBox();
             this.tabPDashboard = new System.Windows.Forms.TabPage();
             this.groupBGestionContributions = new System.Windows.Forms.GroupBox();
             this.radioBDeleteAvis = new System.Windows.Forms.RadioButton();
@@ -47,6 +66,7 @@
             this.labArticles = new System.Windows.Forms.Label();
             this.listBMesArticles = new System.Windows.Forms.ListBox();
             this.tabPProfil = new System.Windows.Forms.TabPage();
+            this.labTitleProfil = new System.Windows.Forms.Label();
             this.groupBModifInfosProfil = new System.Windows.Forms.GroupBox();
             this.txtBPortableUser = new System.Windows.Forms.TextBox();
             this.labWarning1 = new System.Windows.Forms.Label();
@@ -76,35 +96,23 @@
             this.btnDecoAdmin = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBOnglet = new System.Windows.Forms.ComboBox();
-            this.labTitleProfil = new System.Windows.Forms.Label();
-            this.comboBRubriques = new System.Windows.Forms.ComboBox();
-            this.labArticlesSemaine = new System.Windows.Forms.Label();
-            this.listBArticles = new System.Windows.Forms.ListBox();
-            this.groupBFiltrage = new System.Windows.Forms.GroupBox();
-            this.labLesAvis = new System.Windows.Forms.Label();
-            this.listBLesAvis = new System.Windows.Forms.ListBox();
-            this.labRubrique = new System.Windows.Forms.Label();
-            this.labMotif1 = new System.Windows.Forms.Label();
-            this.radioBArticleAvecAvis = new System.Windows.Forms.RadioButton();
-            this.txtBAuteurArticle = new System.Windows.Forms.TextBox();
-            this.labAuteurArticle = new System.Windows.Forms.Label();
-            this.radioBArticleSansAvis = new System.Windows.Forms.RadioButton();
-            this.labMotif2 = new System.Windows.Forms.Label();
-            this.btnFiltrage = new System.Windows.Forms.Button();
-            this.btnResetFiltrage = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.groupBModifMDPProfil = new System.Windows.Forms.GroupBox();
+            this.txtBMDP = new System.Windows.Forms.TextBox();
+            this.txtBNewMDP = new System.Windows.Forms.TextBox();
+            this.labMDP = new System.Windows.Forms.Label();
+            this.labNewMDP = new System.Windows.Forms.Label();
+            this.btnModifMDP = new System.Windows.Forms.Button();
+            this.btnModifMDPProfil = new System.Windows.Forms.Button();
             this.tabControlUser.SuspendLayout();
             this.tabPAccueil.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBFiltrage.SuspendLayout();
             this.tabPDashboard.SuspendLayout();
             this.groupBGestionContributions.SuspendLayout();
             this.tabPProfil.SuspendLayout();
             this.groupBModifInfosProfil.SuspendLayout();
             this.groupBInfoProfil.SuspendLayout();
-            this.groupBFiltrage.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBModifMDPProfil.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlUser
@@ -133,6 +141,203 @@
             this.tabPAccueil.TabIndex = 1;
             this.tabPAccueil.Text = "Accueil";
             this.tabPAccueil.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.radioButton5);
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Location = new System.Drawing.Point(662, 261);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(276, 108);
+            this.groupBox1.TabIndex = 17;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Gestion de mes contributions";
+            // 
+            // radioButton5
+            // 
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.Checked = true;
+            this.radioButton5.Location = new System.Drawing.Point(119, 25);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(122, 17);
+            this.radioButton5.TabIndex = 1;
+            this.radioButton5.TabStop = true;
+            this.radioButton5.Text = "Créer un nouvel avis";
+            this.radioButton5.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(87, 48);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(121, 23);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "Confirmer";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(46, 27);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "Je souhaite :";
+            // 
+            // labLesAvis
+            // 
+            this.labLesAvis.AutoSize = true;
+            this.labLesAvis.Location = new System.Drawing.Point(16, 245);
+            this.labLesAvis.Name = "labLesAvis";
+            this.labLesAvis.Size = new System.Drawing.Size(159, 13);
+            this.labLesAvis.TabIndex = 10;
+            this.labLesAvis.Text = "Les avis de l\'article selectionné :";
+            // 
+            // listBLesAvis
+            // 
+            this.listBLesAvis.FormattingEnabled = true;
+            this.listBLesAvis.Location = new System.Drawing.Point(19, 261);
+            this.listBLesAvis.Name = "listBLesAvis";
+            this.listBLesAvis.Size = new System.Drawing.Size(612, 108);
+            this.listBLesAvis.TabIndex = 9;
+            this.listBLesAvis.DoubleClick += new System.EventHandler(this.listBLesAvis_DoubleClick);
+            // 
+            // groupBFiltrage
+            // 
+            this.groupBFiltrage.Controls.Add(this.btnResetFiltrage);
+            this.groupBFiltrage.Controls.Add(this.btnFiltrage);
+            this.groupBFiltrage.Controls.Add(this.labMotif2);
+            this.groupBFiltrage.Controls.Add(this.radioBArticleSansAvis);
+            this.groupBFiltrage.Controls.Add(this.txtBAuteurArticle);
+            this.groupBFiltrage.Controls.Add(this.labAuteurArticle);
+            this.groupBFiltrage.Controls.Add(this.radioBArticleAvecAvis);
+            this.groupBFiltrage.Controls.Add(this.labMotif1);
+            this.groupBFiltrage.Controls.Add(this.labRubrique);
+            this.groupBFiltrage.Controls.Add(this.comboBRubriques);
+            this.groupBFiltrage.Location = new System.Drawing.Point(662, 32);
+            this.groupBFiltrage.Name = "groupBFiltrage";
+            this.groupBFiltrage.Size = new System.Drawing.Size(276, 199);
+            this.groupBFiltrage.TabIndex = 8;
+            this.groupBFiltrage.TabStop = false;
+            this.groupBFiltrage.Text = "Filtrage";
+            // 
+            // btnResetFiltrage
+            // 
+            this.btnResetFiltrage.Location = new System.Drawing.Point(28, 163);
+            this.btnResetFiltrage.Name = "btnResetFiltrage";
+            this.btnResetFiltrage.Size = new System.Drawing.Size(110, 23);
+            this.btnResetFiltrage.TabIndex = 15;
+            this.btnResetFiltrage.Text = "Réinitialiser";
+            this.btnResetFiltrage.UseVisualStyleBackColor = true;
+            this.btnResetFiltrage.Click += new System.EventHandler(this.btnResetFiltrage_Click);
+            // 
+            // btnFiltrage
+            // 
+            this.btnFiltrage.Location = new System.Drawing.Point(144, 163);
+            this.btnFiltrage.Name = "btnFiltrage";
+            this.btnFiltrage.Size = new System.Drawing.Size(110, 23);
+            this.btnFiltrage.TabIndex = 21;
+            this.btnFiltrage.Text = "Filtrer";
+            this.btnFiltrage.UseVisualStyleBackColor = true;
+            this.btnFiltrage.Click += new System.EventHandler(this.btnFiltrage_Click);
+            // 
+            // labMotif2
+            // 
+            this.labMotif2.AutoSize = true;
+            this.labMotif2.Location = new System.Drawing.Point(28, 116);
+            this.labMotif2.Name = "labMotif2";
+            this.labMotif2.Size = new System.Drawing.Size(226, 13);
+            this.labMotif2.TabIndex = 16;
+            this.labMotif2.Text = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
+            // 
+            // radioBArticleSansAvis
+            // 
+            this.radioBArticleSansAvis.AutoSize = true;
+            this.radioBArticleSansAvis.Location = new System.Drawing.Point(140, 132);
+            this.radioBArticleSansAvis.Name = "radioBArticleSansAvis";
+            this.radioBArticleSansAvis.Size = new System.Drawing.Size(101, 17);
+            this.radioBArticleSansAvis.TabIndex = 15;
+            this.radioBArticleSansAvis.TabStop = true;
+            this.radioBArticleSansAvis.Text = "Article sans avis";
+            this.radioBArticleSansAvis.UseVisualStyleBackColor = true;
+            // 
+            // txtBAuteurArticle
+            // 
+            this.txtBAuteurArticle.Location = new System.Drawing.Point(87, 86);
+            this.txtBAuteurArticle.Name = "txtBAuteurArticle";
+            this.txtBAuteurArticle.Size = new System.Drawing.Size(154, 20);
+            this.txtBAuteurArticle.TabIndex = 14;
+            // 
+            // labAuteurArticle
+            // 
+            this.labAuteurArticle.AutoSize = true;
+            this.labAuteurArticle.Location = new System.Drawing.Point(31, 90);
+            this.labAuteurArticle.Name = "labAuteurArticle";
+            this.labAuteurArticle.Size = new System.Drawing.Size(44, 13);
+            this.labAuteurArticle.TabIndex = 13;
+            this.labAuteurArticle.Text = "Auteur :";
+            // 
+            // radioBArticleAvecAvis
+            // 
+            this.radioBArticleAvecAvis.AutoSize = true;
+            this.radioBArticleAvecAvis.Location = new System.Drawing.Point(31, 132);
+            this.radioBArticleAvecAvis.Name = "radioBArticleAvecAvis";
+            this.radioBArticleAvecAvis.Size = new System.Drawing.Size(103, 17);
+            this.radioBArticleAvecAvis.TabIndex = 13;
+            this.radioBArticleAvecAvis.TabStop = true;
+            this.radioBArticleAvecAvis.Text = "Article avec avis";
+            this.radioBArticleAvecAvis.UseVisualStyleBackColor = true;
+            // 
+            // labMotif1
+            // 
+            this.labMotif1.AutoSize = true;
+            this.labMotif1.Location = new System.Drawing.Point(28, 65);
+            this.labMotif1.Name = "labMotif1";
+            this.labMotif1.Size = new System.Drawing.Size(226, 13);
+            this.labMotif1.TabIndex = 12;
+            this.labMotif1.Text = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
+            this.labMotif1.Click += new System.EventHandler(this.label10_Click);
+            // 
+            // labRubrique
+            // 
+            this.labRubrique.AutoSize = true;
+            this.labRubrique.Location = new System.Drawing.Point(13, 16);
+            this.labRubrique.Name = "labRubrique";
+            this.labRubrique.Size = new System.Drawing.Size(115, 13);
+            this.labRubrique.TabIndex = 11;
+            this.labRubrique.Text = "La rubrique souhaitée :";
+            // 
+            // comboBRubriques
+            // 
+            this.comboBRubriques.FormattingEnabled = true;
+            this.comboBRubriques.Items.AddRange(new object[] {
+            "Gestion des utilisateurs",
+            "Gestion des articles",
+            "Gestion des rubriques"});
+            this.comboBRubriques.Location = new System.Drawing.Point(16, 34);
+            this.comboBRubriques.Name = "comboBRubriques";
+            this.comboBRubriques.Size = new System.Drawing.Size(245, 21);
+            this.comboBRubriques.TabIndex = 7;
+            // 
+            // labArticlesSemaine
+            // 
+            this.labArticlesSemaine.AutoSize = true;
+            this.labArticlesSemaine.Location = new System.Drawing.Point(16, 16);
+            this.labArticlesSemaine.Name = "labArticlesSemaine";
+            this.labArticlesSemaine.Size = new System.Drawing.Size(142, 13);
+            this.labArticlesSemaine.TabIndex = 8;
+            this.labArticlesSemaine.Text = "Les articles les plus récents :";
+            // 
+            // listBArticles
+            // 
+            this.listBArticles.FormattingEnabled = true;
+            this.listBArticles.Location = new System.Drawing.Point(19, 32);
+            this.listBArticles.Name = "listBArticles";
+            this.listBArticles.Size = new System.Drawing.Size(612, 199);
+            this.listBArticles.TabIndex = 7;
+            this.listBArticles.SelectedIndexChanged += new System.EventHandler(this.listBArticles_SelectedIndexChanged);
+            this.listBArticles.DoubleClick += new System.EventHandler(this.listBArticles_DoubleClick_1);
             // 
             // tabPDashboard
             // 
@@ -297,6 +502,8 @@
             // tabPProfil
             // 
             this.tabPProfil.BackColor = System.Drawing.Color.White;
+            this.tabPProfil.Controls.Add(this.btnModifMDPProfil);
+            this.tabPProfil.Controls.Add(this.groupBModifMDPProfil);
             this.tabPProfil.Controls.Add(this.labTitleProfil);
             this.tabPProfil.Controls.Add(this.groupBModifInfosProfil);
             this.tabPProfil.Controls.Add(this.labWarning2);
@@ -310,6 +517,18 @@
             this.tabPProfil.Text = "Profil";
             this.tabPProfil.Click += new System.EventHandler(this.tabPProfil_Click);
             // 
+            // labTitleProfil
+            // 
+            this.labTitleProfil.AutoSize = true;
+            this.labTitleProfil.Font = new System.Drawing.Font("Constantia", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labTitleProfil.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(134)))), ((int)(((byte)(89)))));
+            this.labTitleProfil.Location = new System.Drawing.Point(401, 15);
+            this.labTitleProfil.Name = "labTitleProfil";
+            this.labTitleProfil.Size = new System.Drawing.Size(150, 33);
+            this.labTitleProfil.TabIndex = 19;
+            this.labTitleProfil.Text = "Mon profil";
+            this.labTitleProfil.Click += new System.EventHandler(this.labTitleProfil_Click);
+            // 
             // groupBModifInfosProfil
             // 
             this.groupBModifInfosProfil.BackColor = System.Drawing.Color.White;
@@ -319,7 +538,7 @@
             this.groupBModifInfosProfil.Controls.Add(this.labNumPortable);
             this.groupBModifInfosProfil.Controls.Add(this.labNumTelephone);
             this.groupBModifInfosProfil.Controls.Add(this.btnModifProfil);
-            this.groupBModifInfosProfil.Location = new System.Drawing.Point(505, 100);
+            this.groupBModifInfosProfil.Location = new System.Drawing.Point(499, 61);
             this.groupBModifInfosProfil.Name = "groupBModifInfosProfil";
             this.groupBModifInfosProfil.Size = new System.Drawing.Size(387, 183);
             this.groupBModifInfosProfil.TabIndex = 18;
@@ -389,7 +608,7 @@
             this.labWarning2.AutoSize = true;
             this.labWarning2.Font = new System.Drawing.Font("Constantia", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labWarning2.ForeColor = System.Drawing.Color.Gray;
-            this.labWarning2.Location = new System.Drawing.Point(58, 260);
+            this.labWarning2.Location = new System.Drawing.Point(42, 221);
             this.labWarning2.MaximumSize = new System.Drawing.Size(250, 0);
             this.labWarning2.Name = "labWarning2";
             this.labWarning2.Size = new System.Drawing.Size(243, 42);
@@ -401,7 +620,7 @@
             // 
             // btnModifInfosProfil
             // 
-            this.btnModifInfosProfil.Location = new System.Drawing.Point(307, 260);
+            this.btnModifInfosProfil.Location = new System.Drawing.Point(317, 232);
             this.btnModifInfosProfil.Name = "btnModifInfosProfil";
             this.btnModifInfosProfil.Size = new System.Drawing.Size(154, 23);
             this.btnModifInfosProfil.TabIndex = 15;
@@ -411,7 +630,7 @@
             // 
             // groupBInfoProfil
             // 
-            this.groupBInfoProfil.BackColor = System.Drawing.Color.Transparent;
+            this.groupBInfoProfil.BackColor = System.Drawing.Color.LightGray;
             this.groupBInfoProfil.Controls.Add(this.labStatusAvertissement);
             this.groupBInfoProfil.Controls.Add(this.labNumPortUser);
             this.groupBInfoProfil.Controls.Add(this.labNumTelUser);
@@ -428,7 +647,7 @@
             this.groupBInfoProfil.Controls.Add(this.labNom);
             this.groupBInfoProfil.Controls.Add(this.labMel);
             this.groupBInfoProfil.ForeColor = System.Drawing.Color.Black;
-            this.groupBInfoProfil.Location = new System.Drawing.Point(52, 100);
+            this.groupBInfoProfil.Location = new System.Drawing.Point(62, 61);
             this.groupBInfoProfil.Name = "groupBInfoProfil";
             this.groupBInfoProfil.Size = new System.Drawing.Size(409, 152);
             this.groupBInfoProfil.TabIndex = 8;
@@ -647,213 +866,74 @@
             this.comboBOnglet.TabIndex = 13;
             this.comboBOnglet.SelectedIndexChanged += new System.EventHandler(this.comboBOnglet_SelectedIndexChanged);
             // 
-            // labTitleProfil
+            // groupBModifMDPProfil
             // 
-            this.labTitleProfil.AutoSize = true;
-            this.labTitleProfil.Font = new System.Drawing.Font("Constantia", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labTitleProfil.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(134)))), ((int)(((byte)(89)))));
-            this.labTitleProfil.Location = new System.Drawing.Point(396, 35);
-            this.labTitleProfil.Name = "labTitleProfil";
-            this.labTitleProfil.Size = new System.Drawing.Size(150, 33);
-            this.labTitleProfil.TabIndex = 19;
-            this.labTitleProfil.Text = "Mon profil";
+            this.groupBModifMDPProfil.BackColor = System.Drawing.Color.White;
+            this.groupBModifMDPProfil.Controls.Add(this.txtBMDP);
+            this.groupBModifMDPProfil.Controls.Add(this.txtBNewMDP);
+            this.groupBModifMDPProfil.Controls.Add(this.labMDP);
+            this.groupBModifMDPProfil.Controls.Add(this.labNewMDP);
+            this.groupBModifMDPProfil.Controls.Add(this.btnModifMDP);
+            this.groupBModifMDPProfil.Location = new System.Drawing.Point(499, 262);
+            this.groupBModifMDPProfil.Name = "groupBModifMDPProfil";
+            this.groupBModifMDPProfil.Size = new System.Drawing.Size(387, 119);
+            this.groupBModifMDPProfil.TabIndex = 19;
+            this.groupBModifMDPProfil.TabStop = false;
+            this.groupBModifMDPProfil.Text = "Modification de mon mot de passe";
             // 
-            // comboBRubriques
+            // txtBMDP
             // 
-            this.comboBRubriques.FormattingEnabled = true;
-            this.comboBRubriques.Items.AddRange(new object[] {
-            "Gestion des utilisateurs",
-            "Gestion des articles",
-            "Gestion des rubriques"});
-            this.comboBRubriques.Location = new System.Drawing.Point(16, 34);
-            this.comboBRubriques.Name = "comboBRubriques";
-            this.comboBRubriques.Size = new System.Drawing.Size(245, 21);
-            this.comboBRubriques.TabIndex = 7;
+            this.txtBMDP.Location = new System.Drawing.Point(199, 55);
+            this.txtBMDP.Name = "txtBMDP";
+            this.txtBMDP.PasswordChar = '*';
+            this.txtBMDP.Size = new System.Drawing.Size(154, 20);
+            this.txtBMDP.TabIndex = 12;
             // 
-            // labArticlesSemaine
+            // txtBNewMDP
             // 
-            this.labArticlesSemaine.AutoSize = true;
-            this.labArticlesSemaine.Location = new System.Drawing.Point(16, 16);
-            this.labArticlesSemaine.Name = "labArticlesSemaine";
-            this.labArticlesSemaine.Size = new System.Drawing.Size(142, 13);
-            this.labArticlesSemaine.TabIndex = 8;
-            this.labArticlesSemaine.Text = "Les articles les plus récents :";
+            this.txtBNewMDP.Location = new System.Drawing.Point(199, 26);
+            this.txtBNewMDP.Name = "txtBNewMDP";
+            this.txtBNewMDP.PasswordChar = '*';
+            this.txtBNewMDP.Size = new System.Drawing.Size(154, 20);
+            this.txtBNewMDP.TabIndex = 11;
             // 
-            // listBArticles
+            // labMDP
             // 
-            this.listBArticles.FormattingEnabled = true;
-            this.listBArticles.Location = new System.Drawing.Point(19, 32);
-            this.listBArticles.Name = "listBArticles";
-            this.listBArticles.Size = new System.Drawing.Size(612, 199);
-            this.listBArticles.TabIndex = 7;
-            this.listBArticles.SelectedIndexChanged += new System.EventHandler(this.listBArticles_SelectedIndexChanged);
-            this.listBArticles.DoubleClick += new System.EventHandler(this.listBArticles_DoubleClick_1);
+            this.labMDP.AutoSize = true;
+            this.labMDP.Location = new System.Drawing.Point(93, 58);
+            this.labMDP.Name = "labMDP";
+            this.labMDP.Size = new System.Drawing.Size(100, 13);
+            this.labMDP.TabIndex = 7;
+            this.labMDP.Text = "Mon mot de passe :";
             // 
-            // groupBFiltrage
+            // labNewMDP
             // 
-            this.groupBFiltrage.Controls.Add(this.btnResetFiltrage);
-            this.groupBFiltrage.Controls.Add(this.btnFiltrage);
-            this.groupBFiltrage.Controls.Add(this.labMotif2);
-            this.groupBFiltrage.Controls.Add(this.radioBArticleSansAvis);
-            this.groupBFiltrage.Controls.Add(this.txtBAuteurArticle);
-            this.groupBFiltrage.Controls.Add(this.labAuteurArticle);
-            this.groupBFiltrage.Controls.Add(this.radioBArticleAvecAvis);
-            this.groupBFiltrage.Controls.Add(this.labMotif1);
-            this.groupBFiltrage.Controls.Add(this.labRubrique);
-            this.groupBFiltrage.Controls.Add(this.comboBRubriques);
-            this.groupBFiltrage.Location = new System.Drawing.Point(662, 32);
-            this.groupBFiltrage.Name = "groupBFiltrage";
-            this.groupBFiltrage.Size = new System.Drawing.Size(276, 199);
-            this.groupBFiltrage.TabIndex = 8;
-            this.groupBFiltrage.TabStop = false;
-            this.groupBFiltrage.Text = "Filtrage";
+            this.labNewMDP.AutoSize = true;
+            this.labNewMDP.Location = new System.Drawing.Point(48, 31);
+            this.labNewMDP.Name = "labNewMDP";
+            this.labNewMDP.Size = new System.Drawing.Size(145, 13);
+            this.labNewMDP.TabIndex = 6;
+            this.labNewMDP.Text = "Mon nouveau mot de passe :";
             // 
-            // labLesAvis
+            // btnModifMDP
             // 
-            this.labLesAvis.AutoSize = true;
-            this.labLesAvis.Location = new System.Drawing.Point(16, 245);
-            this.labLesAvis.Name = "labLesAvis";
-            this.labLesAvis.Size = new System.Drawing.Size(159, 13);
-            this.labLesAvis.TabIndex = 10;
-            this.labLesAvis.Text = "Les avis de l\'article selectionné :";
+            this.btnModifMDP.Location = new System.Drawing.Point(137, 85);
+            this.btnModifMDP.Name = "btnModifMDP";
+            this.btnModifMDP.Size = new System.Drawing.Size(122, 23);
+            this.btnModifMDP.TabIndex = 0;
+            this.btnModifMDP.Text = "Modifier";
+            this.btnModifMDP.UseVisualStyleBackColor = true;
+            this.btnModifMDP.Click += new System.EventHandler(this.btnModifMDP_Click);
             // 
-            // listBLesAvis
+            // btnModifMDPProfil
             // 
-            this.listBLesAvis.FormattingEnabled = true;
-            this.listBLesAvis.Location = new System.Drawing.Point(19, 261);
-            this.listBLesAvis.Name = "listBLesAvis";
-            this.listBLesAvis.Size = new System.Drawing.Size(612, 108);
-            this.listBLesAvis.TabIndex = 9;
-            this.listBLesAvis.DoubleClick += new System.EventHandler(this.listBLesAvis_DoubleClick);
-            // 
-            // labRubrique
-            // 
-            this.labRubrique.AutoSize = true;
-            this.labRubrique.Location = new System.Drawing.Point(13, 16);
-            this.labRubrique.Name = "labRubrique";
-            this.labRubrique.Size = new System.Drawing.Size(115, 13);
-            this.labRubrique.TabIndex = 11;
-            this.labRubrique.Text = "La rubrique souhaitée :";
-            // 
-            // labMotif1
-            // 
-            this.labMotif1.AutoSize = true;
-            this.labMotif1.Location = new System.Drawing.Point(28, 65);
-            this.labMotif1.Name = "labMotif1";
-            this.labMotif1.Size = new System.Drawing.Size(226, 13);
-            this.labMotif1.TabIndex = 12;
-            this.labMotif1.Text = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
-            this.labMotif1.Click += new System.EventHandler(this.label10_Click);
-            // 
-            // radioBArticleAvecAvis
-            // 
-            this.radioBArticleAvecAvis.AutoSize = true;
-            this.radioBArticleAvecAvis.Location = new System.Drawing.Point(31, 132);
-            this.radioBArticleAvecAvis.Name = "radioBArticleAvecAvis";
-            this.radioBArticleAvecAvis.Size = new System.Drawing.Size(103, 17);
-            this.radioBArticleAvecAvis.TabIndex = 13;
-            this.radioBArticleAvecAvis.TabStop = true;
-            this.radioBArticleAvecAvis.Text = "Article avec avis";
-            this.radioBArticleAvecAvis.UseVisualStyleBackColor = true;
-            // 
-            // txtBAuteurArticle
-            // 
-            this.txtBAuteurArticle.Location = new System.Drawing.Point(87, 86);
-            this.txtBAuteurArticle.Name = "txtBAuteurArticle";
-            this.txtBAuteurArticle.Size = new System.Drawing.Size(154, 20);
-            this.txtBAuteurArticle.TabIndex = 14;
-            // 
-            // labAuteurArticle
-            // 
-            this.labAuteurArticle.AutoSize = true;
-            this.labAuteurArticle.Location = new System.Drawing.Point(31, 90);
-            this.labAuteurArticle.Name = "labAuteurArticle";
-            this.labAuteurArticle.Size = new System.Drawing.Size(44, 13);
-            this.labAuteurArticle.TabIndex = 13;
-            this.labAuteurArticle.Text = "Auteur :";
-            // 
-            // radioBArticleSansAvis
-            // 
-            this.radioBArticleSansAvis.AutoSize = true;
-            this.radioBArticleSansAvis.Location = new System.Drawing.Point(140, 132);
-            this.radioBArticleSansAvis.Name = "radioBArticleSansAvis";
-            this.radioBArticleSansAvis.Size = new System.Drawing.Size(101, 17);
-            this.radioBArticleSansAvis.TabIndex = 15;
-            this.radioBArticleSansAvis.TabStop = true;
-            this.radioBArticleSansAvis.Text = "Article sans avis";
-            this.radioBArticleSansAvis.UseVisualStyleBackColor = true;
-            // 
-            // labMotif2
-            // 
-            this.labMotif2.AutoSize = true;
-            this.labMotif2.Location = new System.Drawing.Point(28, 116);
-            this.labMotif2.Name = "labMotif2";
-            this.labMotif2.Size = new System.Drawing.Size(226, 13);
-            this.labMotif2.TabIndex = 16;
-            this.labMotif2.Text = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
-            // 
-            // btnFiltrage
-            // 
-            this.btnFiltrage.Location = new System.Drawing.Point(144, 163);
-            this.btnFiltrage.Name = "btnFiltrage";
-            this.btnFiltrage.Size = new System.Drawing.Size(110, 23);
-            this.btnFiltrage.TabIndex = 21;
-            this.btnFiltrage.Text = "Filtrer";
-            this.btnFiltrage.UseVisualStyleBackColor = true;
-            this.btnFiltrage.Click += new System.EventHandler(this.btnFiltrage_Click);
-            // 
-            // btnResetFiltrage
-            // 
-            this.btnResetFiltrage.Location = new System.Drawing.Point(28, 163);
-            this.btnResetFiltrage.Name = "btnResetFiltrage";
-            this.btnResetFiltrage.Size = new System.Drawing.Size(110, 23);
-            this.btnResetFiltrage.TabIndex = 15;
-            this.btnResetFiltrage.Text = "Réinitialiser";
-            this.btnResetFiltrage.UseVisualStyleBackColor = true;
-            this.btnResetFiltrage.Click += new System.EventHandler(this.btnResetFiltrage_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.radioButton5);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Location = new System.Drawing.Point(662, 261);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(276, 108);
-            this.groupBox1.TabIndex = 17;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Gestion de mes contributions";
-            // 
-            // radioButton5
-            // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Checked = true;
-            this.radioButton5.Location = new System.Drawing.Point(119, 25);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(122, 17);
-            this.radioButton5.TabIndex = 1;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "Créer un nouvel avis";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(87, 48);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(121, 23);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "Confirmer";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(46, 27);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "Je souhaite :";
+            this.btnModifMDPProfil.Location = new System.Drawing.Point(318, 259);
+            this.btnModifMDPProfil.Name = "btnModifMDPProfil";
+            this.btnModifMDPProfil.Size = new System.Drawing.Size(154, 23);
+            this.btnModifMDPProfil.TabIndex = 20;
+            this.btnModifMDPProfil.Text = "Modifier mon mot de passe";
+            this.btnModifMDPProfil.UseVisualStyleBackColor = true;
+            this.btnModifMDPProfil.Click += new System.EventHandler(this.brnModifMDP_Click);
             // 
             // FormPresseUtilisateur
             // 
@@ -875,6 +955,10 @@
             this.tabControlUser.ResumeLayout(false);
             this.tabPAccueil.ResumeLayout(false);
             this.tabPAccueil.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBFiltrage.ResumeLayout(false);
+            this.groupBFiltrage.PerformLayout();
             this.tabPDashboard.ResumeLayout(false);
             this.tabPDashboard.PerformLayout();
             this.groupBGestionContributions.ResumeLayout(false);
@@ -885,10 +969,8 @@
             this.groupBModifInfosProfil.PerformLayout();
             this.groupBInfoProfil.ResumeLayout(false);
             this.groupBInfoProfil.PerformLayout();
-            this.groupBFiltrage.ResumeLayout(false);
-            this.groupBFiltrage.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBModifMDPProfil.ResumeLayout(false);
+            this.groupBModifMDPProfil.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -962,5 +1044,12 @@
         private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBModifMDPProfil;
+        private System.Windows.Forms.TextBox txtBMDP;
+        private System.Windows.Forms.TextBox txtBNewMDP;
+        private System.Windows.Forms.Label labMDP;
+        private System.Windows.Forms.Label labNewMDP;
+        private System.Windows.Forms.Button btnModifMDP;
+        private System.Windows.Forms.Button btnModifMDPProfil;
     }
 }

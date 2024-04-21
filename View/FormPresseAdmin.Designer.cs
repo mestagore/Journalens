@@ -46,8 +46,12 @@
             this.listBRubriques = new System.Windows.Forms.ListBox();
             this.tabPArticle = new System.Windows.Forms.TabPage();
             this.groupBFiltrageArticle = new System.Windows.Forms.GroupBox();
+            this.radioBArticleRefus = new System.Windows.Forms.RadioButton();
             this.btnFiltrageArticle = new System.Windows.Forms.Button();
+            this.radioBArticleValide = new System.Windows.Forms.RadioButton();
             this.txtBAuteurArticle = new System.Windows.Forms.TextBox();
+            this.radioBArticleEnAttente = new System.Windows.Forms.RadioButton();
+            this.radioBAllArticle = new System.Windows.Forms.RadioButton();
             this.labAuteurArticle = new System.Windows.Forms.Label();
             this.txtBIdArticle = new System.Windows.Forms.TextBox();
             this.labIdArticle = new System.Windows.Forms.Label();
@@ -64,18 +68,15 @@
             this.btnResetRubrique = new System.Windows.Forms.Button();
             this.labTitleUpdateRubriqueArticle = new System.Windows.Forms.Label();
             this.btnAttribuerRubrique = new System.Windows.Forms.Button();
-            this.groupBAffichageArticles = new System.Windows.Forms.GroupBox();
-            this.radioBArticleRefus = new System.Windows.Forms.RadioButton();
-            this.radioBArticleValide = new System.Windows.Forms.RadioButton();
-            this.radioBAllArticle = new System.Windows.Forms.RadioButton();
-            this.radioBArticleEnAttente = new System.Windows.Forms.RadioButton();
             this.labArticles = new System.Windows.Forms.Label();
             this.listBArticles = new System.Windows.Forms.ListBox();
             this.tabPUtilisateur = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnFiltrageUser = new System.Windows.Forms.Button();
+            this.txtBFiltreMelUser = new System.Windows.Forms.TextBox();
             this.radioBUsersAvertissement = new System.Windows.Forms.RadioButton();
+            this.labMelUser = new System.Windows.Forms.Label();
             this.radioBUsersBloque = new System.Windows.Forms.RadioButton();
-            this.radioBAllUsers = new System.Windows.Forms.RadioButton();
             this.radioBGoodUsers = new System.Windows.Forms.RadioButton();
             this.groupBAjoutUser = new System.Windows.Forms.GroupBox();
             this.labTypeCpteUser = new System.Windows.Forms.Label();
@@ -97,12 +98,12 @@
             this.labUsers = new System.Windows.Forms.Label();
             this.listBUsers = new System.Windows.Forms.ListBox();
             this.tabControlAdmin = new System.Windows.Forms.TabControl();
+            this.radioBAllUsers = new System.Windows.Forms.RadioButton();
             this.tabPRubrique.SuspendLayout();
             this.groupBRubriques.SuspendLayout();
             this.tabPArticle.SuspendLayout();
             this.groupBFiltrageArticle.SuspendLayout();
             this.groupBRubriqueArticle.SuspendLayout();
-            this.groupBAffichageArticles.SuspendLayout();
             this.tabPUtilisateur.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBAjoutUser.SuspendLayout();
@@ -277,7 +278,6 @@
             this.tabPArticle.Controls.Add(this.label4);
             this.tabPArticle.Controls.Add(this.listBAvis);
             this.tabPArticle.Controls.Add(this.groupBRubriqueArticle);
-            this.tabPArticle.Controls.Add(this.groupBAffichageArticles);
             this.tabPArticle.Controls.Add(this.labArticles);
             this.tabPArticle.Controls.Add(this.listBArticles);
             this.tabPArticle.Location = new System.Drawing.Point(4, 23);
@@ -290,21 +290,36 @@
             // 
             // groupBFiltrageArticle
             // 
+            this.groupBFiltrageArticle.Controls.Add(this.radioBArticleRefus);
             this.groupBFiltrageArticle.Controls.Add(this.btnFiltrageArticle);
+            this.groupBFiltrageArticle.Controls.Add(this.radioBArticleValide);
             this.groupBFiltrageArticle.Controls.Add(this.txtBAuteurArticle);
+            this.groupBFiltrageArticle.Controls.Add(this.radioBArticleEnAttente);
+            this.groupBFiltrageArticle.Controls.Add(this.radioBAllArticle);
             this.groupBFiltrageArticle.Controls.Add(this.labAuteurArticle);
             this.groupBFiltrageArticle.Controls.Add(this.txtBIdArticle);
             this.groupBFiltrageArticle.Controls.Add(this.labIdArticle);
-            this.groupBFiltrageArticle.Location = new System.Drawing.Point(383, 6);
+            this.groupBFiltrageArticle.Location = new System.Drawing.Point(16, 6);
             this.groupBFiltrageArticle.Name = "groupBFiltrageArticle";
-            this.groupBFiltrageArticle.Size = new System.Drawing.Size(669, 45);
+            this.groupBFiltrageArticle.Size = new System.Drawing.Size(908, 45);
             this.groupBFiltrageArticle.TabIndex = 4;
             this.groupBFiltrageArticle.TabStop = false;
             this.groupBFiltrageArticle.Text = "Filtrage des articles";
             // 
+            // radioBArticleRefus
+            // 
+            this.radioBArticleRefus.AutoSize = true;
+            this.radioBArticleRefus.Location = new System.Drawing.Point(221, 18);
+            this.radioBArticleRefus.Name = "radioBArticleRefus";
+            this.radioBArticleRefus.Size = new System.Drawing.Size(66, 18);
+            this.radioBArticleRefus.TabIndex = 3;
+            this.radioBArticleRefus.Text = "Réfusés";
+            this.radioBArticleRefus.UseVisualStyleBackColor = true;
+            this.radioBArticleRefus.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
             // btnFiltrageArticle
             // 
-            this.btnFiltrageArticle.Location = new System.Drawing.Point(527, 15);
+            this.btnFiltrageArticle.Location = new System.Drawing.Point(772, 16);
             this.btnFiltrageArticle.Name = "btnFiltrageArticle";
             this.btnFiltrageArticle.Size = new System.Drawing.Size(122, 23);
             this.btnFiltrageArticle.TabIndex = 20;
@@ -312,25 +327,62 @@
             this.btnFiltrageArticle.UseVisualStyleBackColor = true;
             this.btnFiltrageArticle.Click += new System.EventHandler(this.button2_Click_1);
             // 
+            // radioBArticleValide
+            // 
+            this.radioBArticleValide.AutoSize = true;
+            this.radioBArticleValide.Location = new System.Drawing.Point(153, 18);
+            this.radioBArticleValide.Name = "radioBArticleValide";
+            this.radioBArticleValide.Size = new System.Drawing.Size(62, 18);
+            this.radioBArticleValide.TabIndex = 2;
+            this.radioBArticleValide.Text = "Validés";
+            this.radioBArticleValide.UseVisualStyleBackColor = true;
+            this.radioBArticleValide.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            // 
             // txtBAuteurArticle
             // 
-            this.txtBAuteurArticle.Location = new System.Drawing.Point(304, 15);
+            this.txtBAuteurArticle.Location = new System.Drawing.Point(597, 16);
             this.txtBAuteurArticle.Name = "txtBAuteurArticle";
             this.txtBAuteurArticle.Size = new System.Drawing.Size(154, 22);
             this.txtBAuteurArticle.TabIndex = 12;
+            this.txtBAuteurArticle.TextChanged += new System.EventHandler(this.txtBAuteurArticle_TextChanged);
+            // 
+            // radioBArticleEnAttente
+            // 
+            this.radioBArticleEnAttente.AutoSize = true;
+            this.radioBArticleEnAttente.Location = new System.Drawing.Point(68, 18);
+            this.radioBArticleEnAttente.Name = "radioBArticleEnAttente";
+            this.radioBArticleEnAttente.Size = new System.Drawing.Size(79, 18);
+            this.radioBArticleEnAttente.TabIndex = 0;
+            this.radioBArticleEnAttente.Text = "En attente";
+            this.radioBArticleEnAttente.UseVisualStyleBackColor = true;
+            this.radioBArticleEnAttente.CheckedChanged += new System.EventHandler(this.radioBArticleEnAttente_CheckedChanged);
+            // 
+            // radioBAllArticle
+            // 
+            this.radioBAllArticle.AutoSize = true;
+            this.radioBAllArticle.Checked = true;
+            this.radioBAllArticle.Location = new System.Drawing.Point(12, 18);
+            this.radioBAllArticle.Name = "radioBAllArticle";
+            this.radioBAllArticle.Size = new System.Drawing.Size(49, 18);
+            this.radioBAllArticle.TabIndex = 1;
+            this.radioBAllArticle.TabStop = true;
+            this.radioBAllArticle.Text = "Tous";
+            this.radioBAllArticle.UseVisualStyleBackColor = true;
+            this.radioBAllArticle.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // labAuteurArticle
             // 
             this.labAuteurArticle.AutoSize = true;
-            this.labAuteurArticle.Location = new System.Drawing.Point(248, 19);
+            this.labAuteurArticle.Location = new System.Drawing.Point(541, 20);
             this.labAuteurArticle.Name = "labAuteurArticle";
             this.labAuteurArticle.Size = new System.Drawing.Size(50, 14);
             this.labAuteurArticle.TabIndex = 11;
             this.labAuteurArticle.Text = "Auteur :";
+            this.labAuteurArticle.Click += new System.EventHandler(this.labAuteurArticle_Click);
             // 
             // txtBIdArticle
             // 
-            this.txtBIdArticle.Location = new System.Drawing.Point(80, 15);
+            this.txtBIdArticle.Location = new System.Drawing.Point(367, 16);
             this.txtBIdArticle.Name = "txtBIdArticle";
             this.txtBIdArticle.Size = new System.Drawing.Size(154, 22);
             this.txtBIdArticle.TabIndex = 10;
@@ -338,7 +390,7 @@
             // labIdArticle
             // 
             this.labIdArticle.AutoSize = true;
-            this.labIdArticle.Location = new System.Drawing.Point(12, 21);
+            this.labIdArticle.Location = new System.Drawing.Point(299, 22);
             this.labIdArticle.Name = "labIdArticle";
             this.labIdArticle.Size = new System.Drawing.Size(62, 14);
             this.labIdArticle.TabIndex = 9;
@@ -478,65 +530,6 @@
             this.btnAttribuerRubrique.UseVisualStyleBackColor = true;
             this.btnAttribuerRubrique.Click += new System.EventHandler(this.button1_Click_2);
             // 
-            // groupBAffichageArticles
-            // 
-            this.groupBAffichageArticles.Controls.Add(this.radioBArticleRefus);
-            this.groupBAffichageArticles.Controls.Add(this.radioBArticleValide);
-            this.groupBAffichageArticles.Controls.Add(this.radioBAllArticle);
-            this.groupBAffichageArticles.Controls.Add(this.radioBArticleEnAttente);
-            this.groupBAffichageArticles.Location = new System.Drawing.Point(16, 6);
-            this.groupBAffichageArticles.Name = "groupBAffichageArticles";
-            this.groupBAffichageArticles.Size = new System.Drawing.Size(361, 45);
-            this.groupBAffichageArticles.TabIndex = 3;
-            this.groupBAffichageArticles.TabStop = false;
-            this.groupBAffichageArticles.Text = "Affichage des articles";
-            // 
-            // radioBArticleRefus
-            // 
-            this.radioBArticleRefus.AutoSize = true;
-            this.radioBArticleRefus.Location = new System.Drawing.Point(219, 19);
-            this.radioBArticleRefus.Name = "radioBArticleRefus";
-            this.radioBArticleRefus.Size = new System.Drawing.Size(66, 18);
-            this.radioBArticleRefus.TabIndex = 3;
-            this.radioBArticleRefus.Text = "Réfusés";
-            this.radioBArticleRefus.UseVisualStyleBackColor = true;
-            this.radioBArticleRefus.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // radioBArticleValide
-            // 
-            this.radioBArticleValide.AutoSize = true;
-            this.radioBArticleValide.Location = new System.Drawing.Point(149, 19);
-            this.radioBArticleValide.Name = "radioBArticleValide";
-            this.radioBArticleValide.Size = new System.Drawing.Size(62, 18);
-            this.radioBArticleValide.TabIndex = 2;
-            this.radioBArticleValide.Text = "Validés";
-            this.radioBArticleValide.UseVisualStyleBackColor = true;
-            this.radioBArticleValide.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
-            // 
-            // radioBAllArticle
-            // 
-            this.radioBAllArticle.AutoSize = true;
-            this.radioBAllArticle.Checked = true;
-            this.radioBAllArticle.Location = new System.Drawing.Point(6, 19);
-            this.radioBAllArticle.Name = "radioBAllArticle";
-            this.radioBAllArticle.Size = new System.Drawing.Size(49, 18);
-            this.radioBAllArticle.TabIndex = 1;
-            this.radioBAllArticle.TabStop = true;
-            this.radioBAllArticle.Text = "Tous";
-            this.radioBAllArticle.UseVisualStyleBackColor = true;
-            this.radioBAllArticle.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
-            // 
-            // radioBArticleEnAttente
-            // 
-            this.radioBArticleEnAttente.AutoSize = true;
-            this.radioBArticleEnAttente.Location = new System.Drawing.Point(65, 19);
-            this.radioBArticleEnAttente.Name = "radioBArticleEnAttente";
-            this.radioBArticleEnAttente.Size = new System.Drawing.Size(79, 18);
-            this.radioBArticleEnAttente.TabIndex = 0;
-            this.radioBArticleEnAttente.Text = "En attente";
-            this.radioBArticleEnAttente.UseVisualStyleBackColor = true;
-            this.radioBArticleEnAttente.CheckedChanged += new System.EventHandler(this.radioBArticleEnAttente_CheckedChanged);
-            // 
             // labArticles
             // 
             this.labArticles.AutoSize = true;
@@ -573,21 +566,42 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.radioBUsersAvertissement);
-            this.groupBox1.Controls.Add(this.radioBUsersBloque);
             this.groupBox1.Controls.Add(this.radioBAllUsers);
+            this.groupBox1.Controls.Add(this.btnFiltrageUser);
+            this.groupBox1.Controls.Add(this.txtBFiltreMelUser);
+            this.groupBox1.Controls.Add(this.radioBUsersAvertissement);
+            this.groupBox1.Controls.Add(this.labMelUser);
+            this.groupBox1.Controls.Add(this.radioBUsersBloque);
             this.groupBox1.Controls.Add(this.radioBGoodUsers);
             this.groupBox1.Location = new System.Drawing.Point(16, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(585, 45);
+            this.groupBox1.Size = new System.Drawing.Size(1012, 45);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Affichage des utilisateurs";
             // 
+            // btnFiltrageUser
+            // 
+            this.btnFiltrageUser.Location = new System.Drawing.Point(876, 14);
+            this.btnFiltrageUser.Name = "btnFiltrageUser";
+            this.btnFiltrageUser.Size = new System.Drawing.Size(122, 23);
+            this.btnFiltrageUser.TabIndex = 20;
+            this.btnFiltrageUser.Text = "Filtrer";
+            this.btnFiltrageUser.UseVisualStyleBackColor = true;
+            this.btnFiltrageUser.Click += new System.EventHandler(this.btnFiltrageUser_Click);
+            // 
+            // txtBFiltreMelUser
+            // 
+            this.txtBFiltreMelUser.Location = new System.Drawing.Point(701, 14);
+            this.txtBFiltreMelUser.Name = "txtBFiltreMelUser";
+            this.txtBFiltreMelUser.Size = new System.Drawing.Size(154, 22);
+            this.txtBFiltreMelUser.TabIndex = 12;
+            this.txtBFiltreMelUser.TextChanged += new System.EventHandler(this.txtBNameUser_TextChanged);
+            // 
             // radioBUsersAvertissement
             // 
             this.radioBUsersAvertissement.AutoSize = true;
-            this.radioBUsersAvertissement.Location = new System.Drawing.Point(217, 19);
+            this.radioBUsersAvertissement.Location = new System.Drawing.Point(227, 18);
             this.radioBUsersAvertissement.Name = "radioBUsersAvertissement";
             this.radioBUsersAvertissement.Size = new System.Drawing.Size(242, 18);
             this.radioBUsersAvertissement.TabIndex = 3;
@@ -595,10 +609,19 @@
             this.radioBUsersAvertissement.UseVisualStyleBackColor = true;
             this.radioBUsersAvertissement.CheckedChanged += new System.EventHandler(this.radioBUsersAvertissement_CheckedChanged);
             // 
+            // labMelUser
+            // 
+            this.labMelUser.AutoSize = true;
+            this.labMelUser.Location = new System.Drawing.Point(615, 20);
+            this.labMelUser.Name = "labMelUser";
+            this.labMelUser.Size = new System.Drawing.Size(80, 14);
+            this.labMelUser.TabIndex = 11;
+            this.labMelUser.Text = "Adresse mail :";
+            // 
             // radioBUsersBloque
             // 
             this.radioBUsersBloque.AutoSize = true;
-            this.radioBUsersBloque.Location = new System.Drawing.Point(465, 19);
+            this.radioBUsersBloque.Location = new System.Drawing.Point(475, 18);
             this.radioBUsersBloque.Name = "radioBUsersBloque";
             this.radioBUsersBloque.Size = new System.Drawing.Size(105, 18);
             this.radioBUsersBloque.TabIndex = 2;
@@ -606,23 +629,10 @@
             this.radioBUsersBloque.UseVisualStyleBackColor = true;
             this.radioBUsersBloque.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged_1);
             // 
-            // radioBAllUsers
-            // 
-            this.radioBAllUsers.AutoSize = true;
-            this.radioBAllUsers.Checked = true;
-            this.radioBAllUsers.Location = new System.Drawing.Point(6, 19);
-            this.radioBAllUsers.Name = "radioBAllUsers";
-            this.radioBAllUsers.Size = new System.Drawing.Size(49, 18);
-            this.radioBAllUsers.TabIndex = 1;
-            this.radioBAllUsers.TabStop = true;
-            this.radioBAllUsers.Text = "Tous";
-            this.radioBAllUsers.UseVisualStyleBackColor = true;
-            this.radioBAllUsers.CheckedChanged += new System.EventHandler(this.radioBAllUsers_CheckedChanged);
-            // 
             // radioBGoodUsers
             // 
             this.radioBGoodUsers.AutoSize = true;
-            this.radioBGoodUsers.Location = new System.Drawing.Point(61, 19);
+            this.radioBGoodUsers.Location = new System.Drawing.Point(71, 18);
             this.radioBGoodUsers.Name = "radioBGoodUsers";
             this.radioBGoodUsers.Size = new System.Drawing.Size(150, 18);
             this.radioBGoodUsers.TabIndex = 0;
@@ -648,7 +658,7 @@
             this.groupBAjoutUser.Controls.Add(this.labAdrMailUser);
             this.groupBAjoutUser.Controls.Add(this.labWarningAsterisque);
             this.groupBAjoutUser.Controls.Add(this.btnAjoutUser);
-            this.groupBAjoutUser.Location = new System.Drawing.Point(661, 76);
+            this.groupBAjoutUser.Location = new System.Drawing.Point(661, 78);
             this.groupBAjoutUser.Name = "groupBAjoutUser";
             this.groupBAjoutUser.Size = new System.Drawing.Size(387, 350);
             this.groupBAjoutUser.TabIndex = 2;
@@ -816,7 +826,7 @@
             // 
             this.listBUsers.FormattingEnabled = true;
             this.listBUsers.ItemHeight = 14;
-            this.listBUsers.Location = new System.Drawing.Point(16, 84);
+            this.listBUsers.Location = new System.Drawing.Point(16, 83);
             this.listBUsers.Name = "listBUsers";
             this.listBUsers.Size = new System.Drawing.Size(622, 340);
             this.listBUsers.TabIndex = 0;
@@ -833,6 +843,18 @@
             this.tabControlAdmin.SelectedIndex = 0;
             this.tabControlAdmin.Size = new System.Drawing.Size(1080, 476);
             this.tabControlAdmin.TabIndex = 4;
+            // 
+            // radioBAllUsers
+            // 
+            this.radioBAllUsers.AutoSize = true;
+            this.radioBAllUsers.Checked = true;
+            this.radioBAllUsers.Location = new System.Drawing.Point(16, 19);
+            this.radioBAllUsers.Name = "radioBAllUsers";
+            this.radioBAllUsers.Size = new System.Drawing.Size(49, 18);
+            this.radioBAllUsers.TabIndex = 12;
+            this.radioBAllUsers.TabStop = true;
+            this.radioBAllUsers.Text = "Tous";
+            this.radioBAllUsers.UseVisualStyleBackColor = true;
             // 
             // FormPresseAdmin
             // 
@@ -863,8 +885,6 @@
             this.groupBFiltrageArticle.PerformLayout();
             this.groupBRubriqueArticle.ResumeLayout(false);
             this.groupBRubriqueArticle.PerformLayout();
-            this.groupBAffichageArticles.ResumeLayout(false);
-            this.groupBAffichageArticles.PerformLayout();
             this.tabPUtilisateur.ResumeLayout(false);
             this.tabPUtilisateur.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -905,7 +925,6 @@
         private System.Windows.Forms.Button btnResetRubrique;
         private System.Windows.Forms.Label labTitleUpdateRubriqueArticle;
         private System.Windows.Forms.Button btnAttribuerRubrique;
-        private System.Windows.Forms.GroupBox groupBAffichageArticles;
         private System.Windows.Forms.RadioButton radioBArticleRefus;
         private System.Windows.Forms.RadioButton radioBArticleValide;
         private System.Windows.Forms.RadioButton radioBAllArticle;
@@ -945,7 +964,10 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radioBUsersAvertissement;
         private System.Windows.Forms.RadioButton radioBUsersBloque;
-        private System.Windows.Forms.RadioButton radioBAllUsers;
         private System.Windows.Forms.RadioButton radioBGoodUsers;
+        private System.Windows.Forms.Button btnFiltrageUser;
+        private System.Windows.Forms.TextBox txtBFiltreMelUser;
+        private System.Windows.Forms.Label labMelUser;
+        private System.Windows.Forms.RadioButton radioBAllUsers;
     }
 }

@@ -89,19 +89,19 @@ INSERT INTO rubrique (nomRubrique) VALUES
 
 -- Jeu d'essai : Utilisateurs
 INSERT INTO compte (adrMailCompte, passeHash, nomCompte, prenomCompte, dateInscription, dateFermeture, nbAvertissement, noTelCompte, noPortableCompte, typeCpte) VALUES 
-('giovanni.rumilly@gmail.com', 'e3c9a0f109ee9595af1dc2b5d5c1dc86', 'Rumilly', 'Giovanni', '2024-02-21', NULL, 0, NULL, NULL, 2), 
-('alice.smith@example.com', '814660ea649a08560f87c00a5f00d8da', 'Smith', 'Alice', '2024-02-23', '2024-03-26', 0, NULL, NULL, 1), 
-('bob.johnson@example.com', '5655f26ec0c36c0b19a8a0ee219e9a70', 'Johnson', 'Bob', '2024-02-24', NULL, 3, NULL, NULL, 1),
-('john.doe@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Doe', 'John', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('jane.doe@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Doe', 'Jane', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('jack.smith@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Smith', 'Jack', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('jill.smith@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Smith', 'Jill', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('michael.brown@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Brown', 'Michael', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('james.wilson@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Wilson', 'James', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('emma.johnson@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Johnson', 'Emma', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('olivia.brown@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Brown', 'Olivia', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('liam.taylor@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Taylor', 'Liam', '2024-04-12', NULL, 0, NULL, NULL, 1),
-('noah.martinez@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Martinez', 'Noah', '2024-04-12', NULL, 0, NULL, NULL, 1);
+('giovanni.rumilly@gmail.com', 'e3c9a0f109ee9595af1dc2b5d5c1dc86', 'RUMILLY', 'Giovanni', '2024-02-21', NULL, 0, NULL, NULL, 2), 
+('alice.smith@example.com', '814660ea649a08560f87c00a5f00d8da', 'SMITH', 'Alice', '2024-02-23', '2024-03-26', 0, NULL, NULL, 1), 
+('bob.johnson@example.com', '5655f26ec0c36c0b19a8a0ee219e9a70', 'JOHNSON', 'Bob', '2024-02-24', NULL, 3, NULL, NULL, 1),
+('john.doe@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'DOE', 'John', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('jane.doe@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'DOE', 'Jane', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('jack.smith@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'SMITH', 'Jack', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('jill.smith@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'SMITH', 'Jill', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('michael.brown@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'BROWN', 'Michael', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('james.wilson@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'WILSON', 'James', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('emma.johnson@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'JOHNSON', 'Emma', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('olivia.brown@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'BROWN', 'Olivia', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('liam.taylor@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'TAYLOR', 'Liam', '2024-04-12', NULL, 0, NULL, NULL, 1),
+('noah.martinez@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'MARTINEZ', 'Noah', '2024-04-12', NULL, 0, NULL, NULL, 1);
 
 -- Jeu d'essai : Articles
 INSERT INTO article (titreArticle, descriptionArticle, dateArticleCreation, auteurArticle, idValid) VALUES 

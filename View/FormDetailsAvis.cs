@@ -66,7 +66,7 @@ namespace PresseRESA
         {
             if (typeCpte == "ADMIN")
             {
-                ((FormPresseAdmin)this.Owner).ResetListeAvis();
+                ((FormPresseAdmin)this.Owner).InitializeAvisList();
             }
             else
             {

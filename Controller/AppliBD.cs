@@ -154,24 +154,24 @@ namespace PresseRESA
         /// Fonction utilisée pour récupérer tous les utilisateurs de la BDD.
         /// </summary>
         /// <param name="status">Option choisie par l'utilisateur.</param>
+        /// <param name="saisieMelUtilisateur">Mot clef pour le filtrage.</param>
         /// <returns>Une liste d'utilisateurs, soit la liste des utilisateurs de la base de données.</returns>
         // CG0005A - Récupération des utilisateurs en fonction du filtrage
-        public static List<Utilisateur> GetLesUtilisateurs(string status)
+        public static List<Utilisateur> GetLesUtilisateurs(string status, string saisieMelUtilisateur)
         {
             List<Utilisateur> lesUsers = new List<Utilisateur>();
             bool connValidBD = AppliBD.ConnexionBD();
 
-            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour récupérer l'ensemble des utilisateurs
+            // Si la connexion avec la base de données a réussi, on exécute les étapes pour récupérer l'ensemble des utilisateurs
             if (connValidBD)
             {
                 MySqlCommand cmd = conn.CreateCommand();
 
-                // Requête préparé pour récupérer les utilisateurs de la BDD
+                // Requête préparée pour récupérer les utilisateurs de la BDD
                 string req = "SELECT adrMailCompte, nomCompte, prenomCompte, dateInscription, dateFermeture, nbAvertissement, noTelCompte, noPortableCompte, TYPE_CPTE.nomTypeCpte " +
                              "FROM COMPTE INNER JOIN TYPE_CPTE ON COMPTE.typeCpte = TYPE_CPTE.idTypeCpte ";
 
-
-                // En fonction du bouton radio selectionné, le status sera différent (par défaut, c'est All)
+                // En fonction du bouton radio selectionné, le statut sera différent (par défaut, c'est All)
                 switch (status)
                 {
                     case "GOOD":
@@ -186,13 +186,21 @@ namespace PresseRESA
                     default:
                         break;
                 }
+
+                // Vérifier si le champ saisieNomUtilisateur est renseigné
+                if (!string.IsNullOrEmpty(saisieMelUtilisateur))
+                {
+                    req += (req.Contains("WHERE") ? "AND " : "WHERE ") + "COMPTE.adrMailCompte LIKE @melUtilisateur ";
+                    cmd.Parameters.AddWithValue("@melUtilisateur", "%" + saisieMelUtilisateur + "%");
+                }
+
                 req += "ORDER BY adrMailCompte;";
 
                 cmd.CommandText = req;
 
                 using (MySqlDataReader rdr = cmd.ExecuteReader())
                 {
-                    // Tant qu'on peux lire un résultat, on crée un utilisateur et on l'ajoute à la liste
+                    // Tant qu'on peut lire un résultat, on crée un utilisateur et on l'ajoute à la liste
                     while (rdr.Read())
                     {
                         Utilisateur user;
@@ -223,6 +231,7 @@ namespace PresseRESA
             // On retourne la liste des utilisateurs de la BDD
             return lesUsers;
         }
+
 
         /// <summary>
         /// Fonction utilisée pour ajouter un nouvel utilisateur dans la BDD.
@@ -400,28 +409,29 @@ namespace PresseRESA
         // --------------------------------------------------------- PARTIE GESTION DES ARTICLES ---------------------------------------------------------
 
         /// <summary>
-        /// Fonction utilisée pour récupérer tous les articles de la BDD.
+        /// Fonction utilisée pour récupérer les articles en fonction du statut et des critères de recherche spécifiés par l'utilisateur.
         /// </summary>
-        /// <param name="status">Option choisie par l'utilisateur.</param>
-        /// <returns>Une liste d'articles, soit la liste des articles de la base de données.</returns>
-        // CG0006A - Récupération des articles en fonction du type de filtrage choisi
-        public static List<Article> GetLesArticles(string status)
+        /// <param name="status">Le statut des articles à récupérer (EN_ATTENTE, VALIDE, REJET).</param>
+        /// <param name="saisieIdArticle">L'identifiant de l'article recherché.</param>
+        /// <param name="saisieAuteurArticle">L'auteur de l'article recherché.</param>
+        /// <returns>Une liste d'articles correspondant aux critères spécifiés.</returns>
+        // CG0006A / CG0011E - Récupération des articles en fonction du statut et des critères de recherche
+        public static List<Article> GetArticles(string status, string saisieIdArticle = null, string saisieAuteurArticle = null)
         {
             List<Article> lesArticles = new List<Article>();
             bool connValidBD = AppliBD.ConnexionBD();
 
-            // Si la connexion avec la base de donnée à réussi, on exécute les étapes pour récupérer l'ensemble des articles
+            // Si la connexion avec la base de données est valide, on procède à la récupération des articles
             if (connValidBD)
             {
                 MySqlCommand cmd = conn.CreateCommand();
 
-                // Requête préparé pour récupérer les articles de la BDD
+                // Requête de base pour récupérer les articles
                 string req = "SELECT idArticle, titreArticle, descriptionArticle, dateArticleCreation, COMPTE.adrMailCompte, ETAT_VALID.nomValid " +
                              "FROM ARTICLE INNER JOIN ETAT_VALID ON ARTICLE.idValid = ETAT_VALID.idValid " +
                              "INNER JOIN COMPTE ON ARTICLE.auteurArticle = COMPTE.numAdherent ";
 
-
-                // En fonction du bouton radio selectionné, le status sera différent (par défaut, c'est All)
+                // Gestion du statut des articles
                 switch (status)
                 {
                     case "EN_ATTENTE":
@@ -437,13 +447,28 @@ namespace PresseRESA
                         break;
                 }
 
-                req += "ORDER BY dateArticleCreation DESC;";
+                // Gestion des critères de recherche
+                if (!string.IsNullOrEmpty(saisieIdArticle))
+                {
+                    req += " AND ARTICLE.idArticle = @idArticle ";
+                }
+
+                if (!string.IsNullOrEmpty(saisieAuteurArticle))
+                {
+                    req += " AND COMPTE.adrMailCompte LIKE @auteurArticle ";
+                }
+
+                req += " ORDER BY dateArticleCreation DESC;";
 
                 cmd.CommandText = req;
 
+                // Paramètres de recherche
+                if (!string.IsNullOrEmpty(saisieIdArticle)) { cmd.Parameters.AddWithValue("@idArticle", saisieIdArticle); }
+                if (!string.IsNullOrEmpty(saisieAuteurArticle)) { cmd.Parameters.AddWithValue("@auteurArticle", "%" + saisieAuteurArticle + "%"); }
+
                 using (MySqlDataReader rdr = cmd.ExecuteReader())
                 {
-                    // Tant qu'on peux lire un résultat, on crée un article et on l'ajoute à la liste
+                    // Parcours des résultats et création des objets Article
                     while (rdr.Read())
                     {
                         Article article;
@@ -460,9 +485,11 @@ namespace PresseRESA
                     rdr.Close();
                 }
             }
-            // On retourne la liste des articles de la BDD
+
+            // Retourne la liste d'articles correspondant aux critères spécifiés
             return lesArticles;
         }
+
 
         /// <summary>
         /// Fonction utilisée pour associée une rubrique à un article.
@@ -617,67 +644,6 @@ namespace PresseRESA
             }
             // On retourne la liste des rubriques associées à l'article de la BDD
             return lesRubriques;
-        }
-
-        /// <summary>
-        /// Fonction utilisée pour rechercher des articles en fonction de la saisie de l'utilisateur
-        /// </summary>
-        /// <param name="saisieIdArticle">L'identifiant de l'article recherché.</param>
-        /// <param name="saisieAuteurArticle">L'auteur de l'article recherché.</param>
-        /// <returns>Une liste d'articles, soit les articles recherchés.</returns>
-        // CG0006A - Récupération des articles en fonction de la saisie de l'utilisateur
-        public static List<Article> GetRechercheArticle(string saisieIdArticle, string saisieAuteurArticle)
-        {
-            List<Article> articlesTrouves = new List<Article>();
-            bool connValidBD = AppliBD.ConnexionBD();
-
-            // Si la connexion avec la base de données a réussi, on exécute les étapes pour récupérer les articles recherchés.
-            if (connValidBD)
-            {
-                MySqlCommand cmd = conn.CreateCommand();
-
-                // Requête préparée pour récupérer les articles en fonction des critères de recherche
-                string req = "SELECT idArticle, titreArticle, descriptionArticle, dateArticleCreation, COMPTE.adrMailCompte, ETAT_VALID.nomValid " +
-                             "FROM ARTICLE INNER JOIN ETAT_VALID ON ARTICLE.idValid = ETAT_VALID.idValid " +
-                             "INNER JOIN COMPTE ON ARTICLE.auteurArticle = COMPTE.numAdherent " +
-                             "WHERE ARTICLE.idArticle = @idArticle ";
-
-
-                // On vérifie si l'utilisateur a fourni un auteur dans sa recherche
-                if (!string.IsNullOrEmpty(saisieAuteurArticle))
-                {
-                    // Si oui, on ajoute la condition sur l'auteur
-                    req += " OR COMPTE.adrMailCompte LIKE @auteurArticle ";
-                }
-
-                req += "ORDER BY dateArticleCreation DESC;";
-
-                cmd.CommandText = req;
-                cmd.Parameters.AddWithValue("@idArticle", saisieIdArticle);
-                if (!string.IsNullOrEmpty(saisieAuteurArticle)) { cmd.Parameters.AddWithValue("@auteurArticle", "%" + saisieAuteurArticle + "%");}
-                cmd.Prepare();
-
-                using (MySqlDataReader rdr = cmd.ExecuteReader())
-                {
-                    // Tant qu'on peut lire un résultat, on crée un article et on l'ajoute à la liste
-                    while (rdr.Read())
-                    {
-                        Article article;
-                        int id = rdr.GetInt32("idArticle");
-                        string titre = rdr.IsDBNull(rdr.GetOrdinal("titreArticle")) ? "Titre" : rdr.GetString("titreArticle");
-                        string description = rdr.IsDBNull(rdr.GetOrdinal("descriptionArticle")) ? "Description de l'article" : rdr.GetString("descriptionArticle");
-                        string auteur = rdr.GetString("adrMailCompte");
-                        DateTime dateCreation = rdr.GetDateTime("dateArticleCreation");
-                        string etat = rdr.GetString("nomValid");
-
-                        article = new Article(id, titre, description, auteur, dateCreation, etat);
-                        articlesTrouves.Add(article);
-                    }
-                    rdr.Close();
-                }
-            }
-            // On retourne la liste des articles trouvés dans la BDD
-            return articlesTrouves;
         }
 
         /// <summary>
@@ -985,11 +951,11 @@ namespace PresseRESA
         // --------------------------------------------------------- PARTIE CONSULTATION DU PROFIL ---------------------------------------------------------
 
         /// <summary>
-        /// Fonction utilisée pour vérifier le nombre d'avertissement de l'utilisateur qui tente d'accéder à l'application.
+        /// Fonction utilisée pour récupérer l'ensemble des informations personnelles de l'utilisateur.
         /// </summary>
-        /// <param name="mail">L'adresse email de l'utilisateur.</param>
-        /// <returns>Un entier, soit le nombre d'avertissement du compte de l'utilisateur</returns>
-        // CG0012 - Récupération de l'ensemble des informations de l'utilisateur
+        /// <param name="idUser">L'identifiant de l'utilisateur.</param>
+        /// <returns>Un Utilisateur, soit l'utilisateur avec ses informations personnelles</returns>
+        // CG0012A - Récupération de l'ensemble des informations de l'utilisateur
         public static Utilisateur GetUtilisateurParId(int idUser)
         {
             Utilisateur user = null;
@@ -1029,6 +995,14 @@ namespace PresseRESA
             return user;
         }
 
+        /// <summary>
+        /// Fonction utilisée pour mettre à jour les informations personnelles de l'utilisateur.
+        /// </summary>
+        /// <param name="idUtilisateur">L'identifiant de l'utilisateur concerné.</param>
+        /// <param name="saisieTelephone">Le nouveau numéro de téléphone de l'utilisateur.</param>
+        /// <param name="saisiePortable">Le nouveau numéro de portable de l'utilisateur.</param>
+        /// <returns>Un entier, soit le nombre d'insertion de lignes.</returns>
+        // CG0012B - Modification de l'ensemble des informations de l'utilisateur
         public static int UpdateProfil(int idUtilisateur, string saisieTelephone, string saisiePortable)
         {
             bool connValidBD = AppliBD.ConnexionBD();
@@ -1063,8 +1037,59 @@ namespace PresseRESA
             return 0; // Le chiffre 0 désigne une erreur avec la base de données.
         }
 
+        /// <summary>
+        /// Fonction utilisée pour mettre à jour le mot de passe de l'utilisateur.
+        /// </summary>
+        /// <param name="userId">L'identifiant de l'utilisateur concerné.</param>
+        /// <param name="newMotDePasse">Le nouveau mot de passe de l'utilisateur.</param>
+        /// <param name="motDePasseActuel">Le mot de passe actuel de l'utilisateur.</param>
+        /// <returns>Un entier, soit le nombre d'insertion de lignes.</returns>
+        // CG0012C - Modification du mot de passe de l'utilisateur
+        public static int UpdateMotDePasse(int userId, string newMotDePasse, string motDePasseActuel)
+        {
+            int lignesAffectees = 0;
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    Utilisateur user = AppliBD.GetUtilisateurParId(userId);
+                    string chHash = user.GetEmail() + motDePasseActuel; // Chaîne de caractère haché
+                    string newChHash = user.GetEmail() + newMotDePasse; // Nouvelle chaîne de caractère haché
+
+                    // Requête préparé pour mettre à jour le mot de passe de l'utilisateur
+                    string req = "UPDATE COMPTE SET passeHash = MD5(@newChHash) WHERE numAdherent = @userId AND passeHash = MD5(@chHash);";
+
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@newChHash", newChHash);
+                    cmd.Parameters.AddWithValue("@userId", userId);
+                    cmd.Parameters.AddWithValue("@chHash", chHash);
+                    cmd.Prepare();
+
+                    // Exécution de la commande
+                    lignesAffectees = cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                }
+            }
+
+            return lignesAffectees;
+        }
+
         // --------------------------------------------------------- PARTIE TABLEAU DE BORD ---------------------------------------------------------
 
+        /// <summary>
+        /// Fonction utilisée pour récupérer l'ensemble des articles crées par l'utilisateur.
+        /// </summary>
+        /// <param name="idUtilisateur">L'identifiant de l'utilisateur concerné.</param>
+        /// <returns>Une liste d'articles, soit les articles crées par l'utilisateur</returns>
+        // CG0010A - Récupération des articles de l'utilisateur
         public static List<Article> GetSesArticles(int idUtilisateur)
         {
             List<Article> lesArticles = new List<Article>();
@@ -1106,6 +1131,107 @@ namespace PresseRESA
             return lesArticles;
         }
 
+        /// <summary>
+        /// Fonction utilisée pour mettre à jour les informations d'un article.
+        /// </summary>
+        /// <param name="idArticle">L'identifiant de l'article.</param>
+        /// <param name="newTitle">Le nouveau titre de l'article.</param>
+        /// <param name="newDescription">La nouvelle description de l'article.</param>
+        /// <returns>Un booléen, soit la vérification de l'execution de la requête.</returns>
+        // CG0010B - Update d'un article donné
+        public static bool UpdateArticle(int idArticle, string newTitle, string newDescription)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    // Requête préparée pour mettre à jour un article
+                    string req = "UPDATE ARTICLE SET titreArticle = @newTitle, descriptionArticle = @newDescription, idValid = 1 WHERE idArticle = @idArticle;";
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@newTitle", newTitle);
+                    cmd.Parameters.AddWithValue("@newDescription", newDescription);
+                    cmd.Parameters.AddWithValue("@idArticle", idArticle);
+                    cmd.Prepare();
+
+                    // Exécution de la commande
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si au moins une ligne a été mise à jour avec succès
+                    if (rowsAffected > 0)
+                    {
+                        return true; // Retourner true si la mise à jour a réussi
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                    return false; // Retourner false en cas d'erreur
+                }
+            }
+
+            return false; // Retourner false si la connexion avec la base de données a échoué
+        }
+
+        /// <summary>
+        /// Fonction utilisée pour ajouter un nouvel article.
+        /// </summary>
+        /// <param name="titre">Le titre du nouvel article.</param>
+        /// <param name="description">La description du nouvel article.</param>
+        /// <returns>Un booléen, soit la vérification de l'execution de la requête.</returns>
+        // CG0010C - Ajout d'un nouvel article
+        public static bool AddArticle(string titre, string description)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+            string dateDuJour = DateTime.Now.ToString("yyyy-MM-dd"); // Date du jour sous format 'yyyy-MM-dd'
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    // Requête préparée pour insérer un nouvel article
+                    string req = "INSERT INTO ARTICLE (titreArticle, descriptionArticle, dateArticleCreation, auteurArticle, idValid) VALUES (@titre, @description, @dateCreation, @idAuteur, @idValid);";
+
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@titre", titre);
+                    cmd.Parameters.AddWithValue("@description", description);
+                    cmd.Parameters.AddWithValue("@dateCreation", dateDuJour); // Date du jour
+                    cmd.Parameters.AddWithValue("@idAuteur", Session.GetIdUtilisateur()); // Identifiant : Id de l'utilisateur de connecté
+                    cmd.Parameters.AddWithValue("@idValid", 1); // Etat : En attente
+                    cmd.Prepare();
+
+                    // Exécution de la commande
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si au moins une ligne a été insérée avec succès
+                    if (rowsAffected > 0)
+                    {
+                        return true; // Retourner true si l'ajout a réussi
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                    return false; // Retourner false en cas d'erreur
+                }
+            }
+
+            return false; // Retourner false si la connexion avec la base de données a échoué
+        }
+
+        /// <summary>
+        /// Fonction utilisée pour récupérer l'ensemble des avis crées par l'utilisateur.
+        /// </summary>
+        /// <param name="idUtilisateur">L'identifiant de l'utilisateur concerné.</param>
+        /// <returns>Une liste d'avis, soit les avis crées par l'utilisateur</returns>
+        // CG0011A - Récupération des avis de l'utilisateur
         public static List<Avis> GetSesAvis(int idUtilisateur)
         {
             List<Avis> lesAvis = new List<Avis>();
@@ -1146,7 +1272,56 @@ namespace PresseRESA
             return lesAvis;
         }
 
-        // Essayez de comprendre comment fonctionne cette méthode
+        /// <summary>
+        /// Fonction utilisée pour mettre à jour le contenu d'un avis.
+        /// </summary>
+        /// <param name="idAvis">L'identifiant de l'avis.</param>
+        /// <param name="newCommentaire">Le nouveau commentaire de l'vis.</param>
+        /// <returns>Un booléen, soit la vérification de l'execution de la requête.</returns>
+        // CG0011B - Update d'un avis donné
+        public static bool UpdateAvis(int idAvis, string newCommentaire)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    // Requête préparée pour mettre à jour un avis
+                    string req = "UPDATE AVIS SET commentaire = @newCommentaire WHERE idAvis = @idAvis;";
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@newCommentaire", newCommentaire);
+                    cmd.Parameters.AddWithValue("@idAvis", idAvis);
+                    cmd.Prepare();
+
+                    // Exécution de la commande
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si au moins une ligne a été mise à jour avec succès
+                    if (rowsAffected > 0)
+                    {
+                        return true; // Retourner true si la mise à jour a réussi
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                    return false; // Retourner false en cas d'erreur
+                }
+            }
+
+            return false; // Retourner false si la connexion avec la base de données a échoué
+        }
+
+        /// <summary>
+        /// Fonction utilisée pour supprimer un article et toutes ses informations qui lui sont associées.
+        /// </summary>
+        /// <param name="articleSelectionne">L'article selectionné.</param>
+        /// <returns>Un booléen, soit la vérification de l'execution de la requête.</returns>
+        // CG0011D - Suppression de l'article selectionné et de toutes les informations qui s'y réfèrent
         public static bool DeleteArticle(Article articleSelectionne)
         {
             bool connValidBD = AppliBD.ConnexionBD();
@@ -1193,89 +1368,16 @@ namespace PresseRESA
             return false; // Si quelque chose s'est mal passé avec la connexion à la base de données, retournez false.
         }
 
-        public static bool AddArticle(string titre, string description)
-        {
-            bool connValidBD = AppliBD.ConnexionBD();
-            string dateDuJour = DateTime.Now.ToString("yyyy-MM-dd"); // Date du jour sous format 'yyyy-MM-dd'
+        // --------------------------------------------------------- PARTIE CONSULTATION ---------------------------------------------------------
 
-            // Vérifier si la connexion avec la base de données est valide
-            if (connValidBD)
-            {
-                try
-                {
-                    MySqlCommand cmd = conn.CreateCommand();
-
-                    // Requête préparée pour insérer un nouvel article
-                    string req = "INSERT INTO ARTICLE (titreArticle, descriptionArticle, dateArticleCreation, auteurArticle, idValid) VALUES (@titre, @description, @dateCreation, @idAuteur, @idValid);";
-
-                    cmd.CommandText = req;
-                    cmd.Parameters.AddWithValue("@titre", titre);
-                    cmd.Parameters.AddWithValue("@description", description);
-                    cmd.Parameters.AddWithValue("@dateCreation", dateDuJour); // Date du jour
-                    cmd.Parameters.AddWithValue("@idAuteur", Session.GetIdUtilisateur()); // Identifiant : Id de l'utilisateur de connecté
-                    cmd.Parameters.AddWithValue("@idValid", 1); // Etat : En attente
-                    cmd.Prepare();
-
-                    // Exécution de la commande
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    // Vérifier si au moins une ligne a été insérée avec succès
-                    if (rowsAffected > 0)
-                    {
-                        return true; // Retourner true si l'ajout a réussi
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
-                    return false; // Retourner false en cas d'erreur
-                }
-            }
-
-            return false; // Retourner false si la connexion avec la base de données a échoué
-        }
-
-        public static bool UpdateArticle(int idArticle, string newTitle, string newDescription)
-        {
-            bool connValidBD = AppliBD.ConnexionBD();
-
-            // Vérifier si la connexion avec la base de données est valide
-            if (connValidBD)
-            {
-                try
-                {
-                    MySqlCommand cmd = conn.CreateCommand();
-
-                    // Requête préparée pour mettre à jour un article
-                    string req = "UPDATE ARTICLE SET titreArticle = @newTitle, descriptionArticle = @newDescription, idValid = 1 WHERE idArticle = @idArticle;";
-                    cmd.CommandText = req;
-                    cmd.Parameters.AddWithValue("@newTitle", newTitle);
-                    cmd.Parameters.AddWithValue("@newDescription", newDescription);
-                    cmd.Parameters.AddWithValue("@idArticle", idArticle);
-                    cmd.Prepare();
-
-                    // Exécution de la commande
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    // Vérifier si au moins une ligne a été mise à jour avec succès
-                    if (rowsAffected > 0)
-                    {
-                        return true; // Retourner true si la mise à jour a réussi
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
-                    return false; // Retourner false en cas d'erreur
-                }
-            }
-
-            return false; // Retourner false si la connexion avec la base de données a échoué
-        }
-
-        // --------------------------------------------------------- PARTIE CONSULTATION DES ARTICLES ---------------------------------------------------------
-
-        public static bool AddAvis(string commentaire, int idArticle)
+        /// <summary>
+        /// Fonction utilisée pour mettre à jour le contenu d'un avis.
+        /// </summary>
+        /// <param name="idAvis">L'identifiant de l'avis.</param>
+        /// <param name="newCommentaire">Le nouveau commentaire de l'vis.</param>
+        /// <returns>Un booléen, soit la vérification de l'execution de la requête.</returns>
+        // CG0011C - Ajoute d'un nouvel avis
+        public static bool AddAvis(int idArticle, string commentaire)
         {
             bool connValidBD = AppliBD.ConnexionBD();
             string dateDuJour = DateTime.Now.ToString("yyyy-MM-dd"); // Date du jour sous format 'yyyy-MM-dd'
@@ -1315,55 +1417,15 @@ namespace PresseRESA
             return false; // Retourner false si la connexion avec la base de données a échoué
         }
 
-        public static bool UpdateAvis(int idAvis, string newCommentaire)
-        {
-            bool connValidBD = AppliBD.ConnexionBD();
-
-            // Vérifier si la connexion avec la base de données est valide
-            if (connValidBD)
-            {
-                try
-                {
-                    MySqlCommand cmd = conn.CreateCommand();
-
-                    // Requête préparée pour mettre à jour un avis
-                    string req = "UPDATE AVIS SET commentaire = @newCommentaire WHERE idAvis = @idAvis;";
-                    cmd.CommandText = req;
-                    cmd.Parameters.AddWithValue("@newCommentaire", newCommentaire);
-                    cmd.Parameters.AddWithValue("@idAvis", idAvis);
-                    cmd.Prepare();
-
-                    // Exécution de la commande
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    // Vérifier si au moins une ligne a été mise à jour avec succès
-                    if (rowsAffected > 0)
-                    {
-                        return true; // Retourner true si la mise à jour a réussi
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
-                    return false; // Retourner false en cas d'erreur
-                }
-            }
-
-            return false; // Retourner false si la connexion avec la base de données a échoué
-        }
-
-        // --------------------------------------------------------- AUTRE(S) METHODE(S) ---------------------------------------------------------
-
         /// <summary>
-        /// Fonction utilisée pour afficher le copyright avec l'année actuelle.
+        /// Fonction utilisée pour récupérer l'ensemble des articles souhaités en fonction des options de filtrage.
         /// </summary>
-        /// <returns>Une chaîne de caractères, soit le copyright.</returns>
-        // CG0003 - Affichage du copyright
-        public static string ToStringCopyright() {
-            return "@VVA - " + DateTime.Today.Year;
-        }
-
-        public static List<Article> GetLesArticlesParSemaine(string saisieAuteurArticle = null, int? saisieIdRubrique = null, bool? avecAvis = null)
+        /// <param name="saisieAuteurArticle">Le nom de l'auteur recherché.</param>
+        /// <param name="saisieIdRubrique">La rubrique souhaité.</param>
+        /// <param name="avecAvis">Si les articles doivent avoir ou pas des avis.</param>
+        /// <returns>Une liste d'articles, soit la liste des articles souhaités.</returns>
+        // CG0010D - Récupération des articles en fonction du type de filtrage
+        public static List<Article> GetLesArticles(string saisieAuteurArticle = null, int? saisieIdRubrique = null, bool? avecAvis = null)
         {
             List<Article> lesArticles = new List<Article>();
 
@@ -1375,7 +1437,7 @@ namespace PresseRESA
                 try
                 {
                     MySqlCommand cmd = conn.CreateCommand();
-                    
+
                     // Requête SQL de base pour récupérer les articles de la semaine actuelle
                     string req = "SELECT idArticle, titreArticle, descriptionArticle, dateArticleCreation, COMPTE.adrMailCompte, ETAT_VALID.nomValid " +
                                  "FROM ARTICLE INNER JOIN ETAT_VALID ON ARTICLE.idValid = ETAT_VALID.idValid " +
@@ -1385,7 +1447,7 @@ namespace PresseRESA
                     // Ajout des conditions de filtrage selon les critères choisis par l'utilisateur
                     if (!string.IsNullOrEmpty(saisieAuteurArticle))
                     {
-                        req += " AND COMPTE.nomCompte LIKE @auteurArticle";
+                        req += " AND COMPTE.adrMailCompte LIKE @auteurArticle";
                         cmd.Parameters.AddWithValue("@auteurArticle", "%" + saisieAuteurArticle + "%");
                     }
 
@@ -1440,5 +1502,15 @@ namespace PresseRESA
             return lesArticles;
         }
 
+        // --------------------------------------------------------- AUTRE(S) METHODE(S) ---------------------------------------------------------
+
+        /// <summary>
+        /// Fonction utilisée pour afficher le copyright avec l'année actuelle.
+        /// </summary>
+        /// <returns>Une chaîne de caractères, soit le copyright.</returns>
+        // CG0003 - Affichage du copyright
+        public static string ToStringCopyright() {
+            return "@VVA - " + DateTime.Today.Year;
+        }
     }
 }

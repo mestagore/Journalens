@@ -28,18 +28,9 @@ namespace PresseRESA
             AfficherOngletAccueil();
         }
 
-        private void btnDecoAdmin_Click(object sender, EventArgs e)
-        {
-            DialogResult dr = MessageBox.Show(" Voulez-vous vraiment vous déconnecter  ? ", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (dr == DialogResult.Yes)
-            {
-                Session.GetFormConnexion().Show();
-                Session.GetFormConnexion().Focus();
-                Close();
-            }
-        }
-        
+        // --------------------------------------------------------- PARTIE CONNEXION ET DECONNEXION ---------------------------------------------------------
 
+        // CG0009 - Gestion des choix de l'utilisateur
         private void comboBOnglet_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (comboBOnglet.SelectedIndex)
@@ -63,10 +54,10 @@ namespace PresseRESA
         {
             tabControlUser.TabPages.Clear();
             tabControlUser.TabPages.Add(tabPAccueil);
-            
-            InitializeArticlesSemaineList();
+
+            InitializeArticlesList();
             InitializeRubriqueList();
-            
+
             this.Text = "Journalens - Home";
         }
 
@@ -96,7 +87,7 @@ namespace PresseRESA
             labPrenomUser.Text = user.GetPrenom();
             labDateInscriptionUser.Text = user.GetDateInscription().ToLongDateString();
             labNbAvertissementUser.Text = user.GetNbAvertissement().ToString();
-            switch(labNbAvertissementUser.Text)
+            switch (labNbAvertissementUser.Text)
             {
                 case "0":
                     labStatusAvertissement.Text = "Super !";
@@ -115,13 +106,30 @@ namespace PresseRESA
             labNumPortUser.Text = !string.IsNullOrEmpty(user.GetPortable()) ? user.GetPortable() : "Non renseigné";
 
             btnModifInfosProfil.Text = "Modifier mes informations";
+            btnModifMDPProfil.Text = "Modifier mon mot de passe";
             groupBModifInfosProfil.Hide();
+            groupBModifMDPProfil.Hide();
             this.Text = "Journalens - Profil";
         }
 
+        // CG0002C - Déconnexion de l'utilisateur
+        private void btnDecoAdmin_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show(" Voulez-vous vraiment vous déconnecter  ? ", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dr == DialogResult.Yes)
+            {
+                Session.GetFormConnexion().Show();
+                Session.GetFormConnexion().Focus();
+                Close();
+            }
+        }
+
+        // --------------------------------------------------------- PARTIE CONSULTATION DU PROFIL ---------------------------------------------------------
+
+        // CG0012B - Affichage du groupBox pour modifier ses informations personnelles
         private void btnModifRubrique_Click(object sender, EventArgs e)
         {
-            switch(btnModifInfosProfil.Text)
+            switch (btnModifInfosProfil.Text)
             {
                 case "Annuler":
                     btnModifInfosProfil.Text = "Modifier mes informations";
@@ -137,6 +145,7 @@ namespace PresseRESA
             }
         }
 
+        // CGCG0012B - Vérification des numéros de téléphone et  mobile
         private void btnAjoutUser_Click(object sender, EventArgs e)
         {
             string saisieTelephone = txtBTelephoneUser.Text;
@@ -189,36 +198,69 @@ namespace PresseRESA
             }
         }
 
-        private void listBArticles_DoubleClick(object sender, EventArgs e)
+        // CG0012C - Affichage du groupBox pour modifier son mot de passe
+        private void brnModifMDP_Click(object sender, EventArgs e)
         {
-            if (listBMesArticles.SelectedItem != null)
+            switch (btnModifMDPProfil.Text)
             {
-                Article articleSelectionne = (Article)listBMesArticles.SelectedItem;
+                case "Annuler":
+                    btnModifMDPProfil.Text = "Modifier mon mot de passe";
+                    txtBNewMDP.Clear();
+                    txtBMDP.Clear();
+                    groupBModifMDPProfil.Hide();
+                    break;
 
-                FormDetailsArticle articleInfoForm = new FormDetailsArticle(articleSelectionne, Session.GetTypeUtilisateur());
-
-                articleInfoForm.AfficherInfosArticle();
-
-                articleInfoForm.Owner = this;
-                articleInfoForm.Show();
+                case "Modifier mon mot de passe":
+                    btnModifMDPProfil.Text = "Annuler";
+                    groupBModifMDPProfil.Show();
+                    break;
             }
         }
 
-        private void listBAvis_DoubleClick(object sender, EventArgs e)
+        // CG0012C - Vérification de la saisie des mots de passe
+        private void btnModifMDP_Click(object sender, EventArgs e)
         {
-            if (listBAvis.SelectedItem != null)
+            string saisieNewMDP = txtBNewMDP.Text;
+            string saisieMDP = txtBMDP.Text;
+
+            try
             {
-                Avis avisSelectionne = (Avis)listBAvis.SelectedItem;
+                if (string.IsNullOrEmpty(saisieNewMDP) || string.IsNullOrEmpty(saisieMDP))
+                {
+                    throw new Exception("Les champs ne peuvent pas être vides mots de passe sont identiques.");
+                }
 
-                FormDetailsAvis avisInfoForm = new FormDetailsAvis(avisSelectionne, Session.GetTypeUtilisateur());
+                if (saisieMDP == saisieNewMDP)
+                {
+                    throw new Exception("Les mots de passe sont identiques.");
+                }
 
-                avisInfoForm.AfficherInfosAvis();
-
-                avisInfoForm.Owner = this;
-                avisInfoForm.Show();
+                int etatInsertion = AppliBD.UpdateMotDePasse(Session.GetIdUtilisateur(), saisieNewMDP, saisieMDP);
+                verifModifMDPProfil(etatInsertion);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erreur lors de la modification de votre mot de passe", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        private void verifModifMDPProfil(int nbInsertion)
+        {
+            switch (nbInsertion)
+            {
+                case 0: // Cas : Opération échouée
+                    MessageBox.Show("Votre mot de passe semble incorrect, veuillez réessayez. Si le problème persiste, contactez l'administrateur.", "Echec de la modification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+
+                case 1: // Cas : Insertion réussie
+                    MessageBox.Show("Succès de la modification. Votre nouveau mot de passe a bien été enregistré.", "Changement sur vos informations personnelles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+            }
+        }
+
+        // --------------------------------------------------------- PARTIE TABLEAU DE BORD ---------------------------------------------------------
+
+        // CG0010A - Permettre l'intégrité des informations des articles de l'utilisateur de la liste
         public void InitializeMesArticleList()
         {
             listBMesArticles.Items.Clear();
@@ -226,20 +268,7 @@ namespace PresseRESA
             listBMesArticles.Items.AddRange(lesArticles.ToArray());
         }
 
-        public void InitializeArticlesSemaineList()
-        {
-            listBArticles.Items.Clear();
-            List<Article> lesArticles = AppliBD.GetLesArticlesParSemaine();
-            listBArticles.Items.AddRange(lesArticles.ToArray());
-        }
-
-        public void InitializeRubriqueList()
-        {
-            comboBRubriques.Items.Clear();
-            List<Rubrique> lesRubriques = AppliBD.GetLesRubriques();
-            comboBRubriques.Items.AddRange(lesRubriques.ToArray());
-        }
-
+        // CG0011A - Permettre l'intégrité des avis de l'utilisateur dans la liste
         public void InitializeMesAvisList()
         {
             listBMesAvis.Items.Clear();
@@ -247,75 +276,11 @@ namespace PresseRESA
             listBMesAvis.Items.AddRange(lesAvis.ToArray());
         }
 
-        public void InitializeLesAvisList(int idArticle)
-        {
-            listBLesAvis.Items.Clear();
-            List<Avis> avis = AppliBD.GetAvisParArticle(idArticle);
-            listBLesAvis.Items.AddRange(avis.ToArray());
-        }
-
-        private void labWarning_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabPProfil_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBInfoProfil_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBModifInfoProfil_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBAvis_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labCopyright_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FormPresseUser_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBMesArticles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listBMesArticles.SelectedItem != null)
-            {
-                Article articleSelectionne = (Article)listBMesArticles.SelectedItem;
-                List<Avis> avis = AppliBD.GetAvisParArticle(articleSelectionne.GetId());
-
-                // Effacer la liste des avis précédentes
-                listBAvis.Items.Clear();
-
-                foreach (Avis unAvis in avis)
-                {
-                    listBAvis.Items.Add(unAvis);
-                }
-            }
-        }
-
+        // CG0010B / CG0010C / CG0010E / CG0011B / CG0011D - Gestion des options de Création, Modification et Suppression de ses articles et avis
         private void button1_Click(object sender, EventArgs e)
         {
             if (radioBCreateArticle.Checked)
             {
-                // A vérifier
                 FormCreateArticle articleCreateForm = new FormCreateArticle();
 
                 articleCreateForm.Owner = this;
@@ -366,7 +331,7 @@ namespace PresseRESA
                 }
             }
 
-            if(radioBModifAvis.Checked)
+            if (radioBModifAvis.Checked)
             {
                 if (listBMesAvis.SelectedItem != null)
                 {
@@ -385,7 +350,7 @@ namespace PresseRESA
                 }
             }
 
-            if( radioBDeleteAvis.Checked)
+            if (radioBDeleteAvis.Checked)
             {
                 if (listBMesAvis.SelectedItem != null)
                 {
@@ -412,6 +377,75 @@ namespace PresseRESA
             }
         }
 
+        // CG0010B / CG0010C - Ajout ou Modification d'un article dans un nouveau Formulaire
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (listBArticles.SelectedItem != null)
+            {
+                Article article = (Article)listBArticles.SelectedItem;
+
+                FormCreateAvis avisModifForm = new FormCreateAvis(article.GetId());
+
+                avisModifForm.Owner = this;
+                avisModifForm.Show();
+            }
+            else
+            {
+                MessageBox.Show("Aucun article n'est selectionné.", "Absence de sélection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // CG0007A - Affichage des avis associées à l'article
+        private void listBMesArticles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBMesArticles.SelectedItem != null)
+            {
+                Article articleSelectionne = (Article)listBMesArticles.SelectedItem;
+                List<Avis> avis = AppliBD.GetAvisParArticle(articleSelectionne.GetId());
+
+                // Effacer la liste des avis précédentes
+                listBAvis.Items.Clear();
+
+                foreach (Avis unAvis in avis)
+                {
+                    listBAvis.Items.Add(unAvis);
+                }
+            }
+        }
+
+        // CG0006E - (Double-Click) Consulter les informations de mon article dans une nouvelle fenêtre
+        private void listBArticles_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBMesArticles.SelectedItem != null)
+            {
+                Article articleSelectionne = (Article)listBMesArticles.SelectedItem;
+
+                FormDetailsArticle articleInfoForm = new FormDetailsArticle(articleSelectionne, Session.GetTypeUtilisateur());
+
+                articleInfoForm.AfficherInfosArticle();
+
+                articleInfoForm.Owner = this;
+                articleInfoForm.Show();
+            }
+        }
+
+        // CG0007B - (Double-Click) Consulter les informations d'un avis dans une nouvelle fenêtre
+        private void listBAvis_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBAvis.SelectedItem != null)
+            {
+                Avis avisSelectionne = (Avis)listBAvis.SelectedItem;
+
+                FormDetailsAvis avisInfoForm = new FormDetailsAvis(avisSelectionne, Session.GetTypeUtilisateur());
+
+                avisInfoForm.AfficherInfosAvis();
+
+                avisInfoForm.Owner = this;
+                avisInfoForm.Show();
+            }
+        }
+
+        // CG0007B - (Double-Click) Consulter les informations de mon avis dans une nouvelle fenêtre
         private void listBMesAvis_DoubleClick(object sender, EventArgs e)
         {
             if (listBMesAvis.SelectedItem != null)
@@ -427,28 +461,38 @@ namespace PresseRESA
             }
         }
 
-        private void label10_Click(object sender, EventArgs e)
-        {
+        // --------------------------------------------------------- PARTIE CONSULTATION ---------------------------------------------------------
 
+        // CG0010D - Permettre l'intégrité des informations des articles de la liste
+        public void InitializeArticlesList()
+        {
+            listBArticles.Items.Clear();
+            List<Article> lesArticles = AppliBD.GetLesArticles();
+            listBArticles.Items.AddRange(lesArticles.ToArray());
         }
 
-        private void btnResetFiltrage_Click(object sender, EventArgs e)
+        // CG0008A - Permettre l'intégrité des informations des rubriques de la liste
+        public void InitializeRubriqueList()
         {
-            txtBAuteurArticle.Clear();
-            comboBRubriques.SelectedItem = null;
-            radioBArticleAvecAvis.Checked = false;
-            radioBArticleSansAvis.Checked = false;
-            
-            InitializeArticlesSemaineList();
+            comboBRubriques.Items.Clear();
+            List<Rubrique> lesRubriques = AppliBD.GetLesRubriques();
+            comboBRubriques.Items.AddRange(lesRubriques.ToArray());
         }
 
+        // CG0007A - Permettre l'intégrité des avis de l'article dans la liste
+        public void InitializeLesAvisList(int idArticle)
+        {
+            listBLesAvis.Items.Clear();
+            List<Avis> avis = AppliBD.GetAvisParArticle(idArticle);
+            listBLesAvis.Items.AddRange(avis.ToArray());
+        }
+
+        // CG0006A - Affichage des articles en fonction des options de filtrage
         private void btnFiltrage_Click(object sender, EventArgs e)
         {
-            // Si la saisie de l'auteur est renseignée, alors on valorise...
             string saisieAuteurArticle = txtBAuteurArticle.Text;
-
-            // Si une rubrique est selectionnée, alors on récupère l'identifiant de la rubrique...
             int? saisieIdRubrique = null;
+
             if (comboBRubriques.SelectedItem != null)
             {
                 Rubrique rubrique = (Rubrique)comboBRubriques.SelectedItem;
@@ -458,10 +502,22 @@ namespace PresseRESA
             bool? avecAvis = radioBArticleAvecAvis.Checked ? true : radioBArticleSansAvis.Checked ? false : (bool?)null;
 
             listBArticles.Items.Clear();
-            List<Article> articlesFiltres = AppliBD.GetLesArticlesParSemaine(saisieAuteurArticle, saisieIdRubrique, avecAvis);
+            List<Article> articlesFiltres = AppliBD.GetLesArticles(saisieAuteurArticle, saisieIdRubrique, avecAvis);
             listBArticles.Items.AddRange(articlesFiltres.ToArray());
         }
 
+        // CG0006A - Affichage de tous les articles
+        private void btnResetFiltrage_Click(object sender, EventArgs e)
+        {
+            txtBAuteurArticle.Clear();
+            comboBRubriques.SelectedItem = null;
+            radioBArticleAvecAvis.Checked = false;
+            radioBArticleSansAvis.Checked = false;
+
+            InitializeArticlesList();
+        }
+
+        // CG0006E - (Double-Click) Consulter les informations d'un article, crée par un utilisateur, dans une nouvelle fenêtre
         private void listBArticles_DoubleClick_1(object sender, EventArgs e)
         {
             if (listBArticles.SelectedItem != null)
@@ -477,6 +533,7 @@ namespace PresseRESA
             }
         }
 
+        // CG0007B - (Double-Click) Consulter les informations d'un avis d'un artilce, dans une nouvelle fenêtre
         private void listBLesAvis_DoubleClick(object sender, EventArgs e)
         {
             if (listBLesAvis.SelectedItem != null)
@@ -492,42 +549,67 @@ namespace PresseRESA
             }
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            if (radioBCreateArticle.Checked)
-            {
-                // A vérifier
-                FormCreateArticle articleCreateForm = new FormCreateArticle();
-
-                articleCreateForm.Owner = this;
-                articleCreateForm.Show();
-            }
-
-            if (listBArticles.SelectedItem != null)
-            {
-                Article article = (Article)listBArticles.SelectedItem;
-
-                FormCreateAvis avisModifForm = new FormCreateAvis(article.GetId());
-
-                avisModifForm.Owner = this;
-                avisModifForm.Show();
-            }
-            else
-            {
-                MessageBox.Show("Aucun avis n'est selectionné.", "Absence de sélection", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        // CG0007A - Affichage des avis associées à l'article
         private void listBArticles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBArticles.SelectedItem != null)
             {
                 Article articleSelectionne = (Article)listBArticles.SelectedItem;
-                
+
                 listBLesAvis.Items.Clear();
                 List<Avis> avis = AppliBD.GetAvisParArticle(articleSelectionne.GetId());
                 listBLesAvis.Items.AddRange(avis.ToArray());
             }
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labTitleProfil_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labWarning_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPProfil_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBInfoProfil_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBModifInfoProfil_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBAvis_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labCopyright_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormPresseUser_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

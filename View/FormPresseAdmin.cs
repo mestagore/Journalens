@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf.WellKnownTypes;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -29,7 +30,7 @@ namespace PresseRESA
 
         // --------------------------------------------------------- PARTIE CONNEXION ET DECONNEXION ---------------------------------------------------------
 
-        // CG0004 - Gestion des choix de l'utilisateur
+        // CG0004 - Gestion des choix du gesttionnaire
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             tabControlAdmin.Show();
@@ -67,7 +68,6 @@ namespace PresseRESA
             tabControlAdmin.TabPages.Add(tabPArticle);
 
             InitializeArticleList();
-
             InitializeRubriqueDispoList();
 
             this.Text = "Journalens - Gestion des articles";
@@ -84,20 +84,7 @@ namespace PresseRESA
             InitializeRubriqueList();
         }
 
-        // CG0007A - Permettre l'intégrité des avis dans la liste
-        public void ResetListeAvis()
-        {
-            if (listBArticles.SelectedItem != null)
-            {
-                Article articleSelectionne = (Article)listBArticles.SelectedItem;
-                listBAvis.Items.Clear();
-
-                List<Avis> lesAvis = AppliBD.GetAvisParArticle(articleSelectionne.GetId());
-                listBArticles.Items.AddRange(lesAvis.ToArray());
-            }
-        }
-
-        // CG0002C - Déconnexion de l'utilisateur
+        // CG0002C - Déconnexion du gestionnaire
         private void btnDecoAdmin_Click(object sender, EventArgs e)
         {
             DialogResult dr = MessageBox.Show(" Voulez-vous vraiment vous déconnecter  ? ", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -115,8 +102,60 @@ namespace PresseRESA
         public void InitializeUserList()
         {
             listBUsers.Items.Clear();
-            List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(viewUsers);
+            List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(viewUsers, null);
             listBUsers.Items.AddRange(lesUsers.ToArray());
+        }
+
+        // CG0005A - Affichage filtré des utilisateurs
+        private void btnFiltrageUser_Click(object sender, EventArgs e)
+        {
+            switch (btnFiltrageUser.Text)
+            {
+                case "Filtrer":
+                    {
+                        string saisieNomUtilisateur = txtBFiltreMelUser.Text;
+
+                        // L'utilisateur sélectionne l'option "Tous les utilisateurs"
+                        if (radioBAllUsers.Checked)
+                        {
+                            viewUsers = "ALL";
+                        }
+
+                        // L'utilisateur sélectionne l'option "Utilisateurs conformes"
+                        if (radioBGoodUsers.Checked)
+                        {
+                            viewUsers = "GOOD";
+                        }
+
+                        // L'utilisateur sélectionne l'option "Utilisateurs ayant un nombre d'avertissement égal à 3"
+                        if (radioBUsersAvertissement.Checked)
+                        {
+                            viewUsers = "AVERTISSEMENT";
+                        }
+
+                        // L'utilisateur sélectionne l'option "Utilisateurs ayant un compte fermé"
+                        if (radioBUsersBloque.Checked)
+                        {
+                            viewUsers = "BLOQUE";
+                        }
+
+                        listBUsers.Items.Clear();
+                        List<Utilisateur> lesUsers = AppliBD.GetLesUtilisateurs(viewUsers, saisieNomUtilisateur);
+                        listBUsers.Items.AddRange(lesUsers.ToArray());
+
+                        btnFiltrageUser.Text = "Annuler";
+                        break;
+                    }
+
+                default:
+                    {
+                        viewUsers = "ALL";
+                        InitializeUserList();
+
+                        btnFiltrageUser.Text = "Filtrer";
+                        break;
+                    }
+            }
         }
 
         // CG0005B - Vérification des informations saisies pour ajouter l'utilisateur
@@ -124,7 +163,7 @@ namespace PresseRESA
         {
             string saisieAdresseMel = txtBAdrMailUser.Text.ToLower();
             string saisieNom = txtBNomUser.Text.ToUpper();
-            string saisiePrenom = txtBPrenomUser.Text;
+            string saisiePrenom = txtBPrenomUser.Text.ToLower();
             string saisieTelephone = txtBTelephoneUser.Text;
             string saisiePortable = txtBPortableUser.Text;
 
@@ -198,50 +237,6 @@ namespace PresseRESA
             }
         }
 
-        // Événement déclenché lorsque l'utilisateur sélectionne l'option "Tous les utilisateurs"
-        // CG0004 - Gestion des choix de l'utilisateur
-        private void radioBAllUsers_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioBAllUsers.Checked)
-            {
-                viewUsers = "ALL";
-                InitializeUserList();
-            }
-        }
-
-        // Événement déclenché lorsque l'utilisateur sélectionne l'option "Utilisateurs conformes"
-        // CG0004 - Gestion des choix de l'utilisateur
-        private void radioBGoodUsers_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioBGoodUsers.Checked)
-            {
-                viewUsers = "GOOD";
-                InitializeUserList();
-            }
-        }
-
-        // Événement déclenché lorsque l'utilisateur sélectionne l'option "Utilisateurs ayant un nombre d'avertissement égal à 3"
-        // CG0004 - Gestion des choix de l'utilisateur
-        private void radioBUsersAvertissement_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioBUsersAvertissement.Checked)
-            {
-                viewUsers = "AVERTISSEMENT";
-                InitializeUserList();
-            }
-        }
-
-        // Événement déclenché lorsque l'utilisateur sélectionne l'option "Utilisateurs ayant un compte fermé"
-        // CG0004 - Gestion des choix de l'utilisateur
-        private void radioButton2_CheckedChanged_1(object sender, EventArgs e)
-        {
-            if (radioBUsersBloque.Checked)
-            {
-                viewUsers = "BLOQUE";
-                InitializeUserList();
-            }
-        }
-
         // CG0005G - Affichage des informations d'un utilisateur dans un nouveau formulaire (FormDetailsUtilisateur)
         private void ListBUsers_DoubleClick(object sender, EventArgs e)
         {
@@ -264,8 +259,21 @@ namespace PresseRESA
         public void InitializeArticleList()
         {
             listBArticles.Items.Clear();
-            List<Article> lesArticles = AppliBD.GetLesArticles(viewArticles);
+            List<Article> lesArticles = AppliBD.GetArticles(viewArticles);
             listBArticles.Items.AddRange(lesArticles.ToArray());
+        }
+
+        // CG0007A - Permettre l'intégrité des avis dans la liste
+        public void InitializeAvisList()
+        {
+            if (listBArticles.SelectedItem != null)
+            {
+                Article articleSelectionne = (Article)listBArticles.SelectedItem;
+                listBAvis.Items.Clear();
+
+                List<Avis> lesAvis = AppliBD.GetAvisParArticle(articleSelectionne.GetId());
+                listBArticles.Items.AddRange(lesAvis.ToArray());
+            }
         }
 
         // CG0008A - Permettre l'intégrité des rubriques de notre base de données
@@ -276,43 +284,57 @@ namespace PresseRESA
             listBRubriquesDispo.Items.AddRange(lesRubriquesDispo.ToArray());
         }
 
-        // CG0006A - Événement déclenché lorsque l'utilisateur sélectionne l'option "Tous les articles"
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        // CG0006A - Consulter l'ensemble des articles en fonction du type de filtrage
+        private void button2_Click_1(object sender, EventArgs e)
         {
-            if (radioBAllArticle.Checked)
+            listBAvis.Items.Clear();
+            switch (btnFiltrageArticle.Text)
             {
-                viewArticles = "ALL";
-                InitializeArticleList();
-            }
-        }
+                case "Filtrer":
+                    {
+                        string saisieIdArticle = txtBIdArticle.Text;
+                        string saisieAuteurArticle = txtBAuteurArticle.Text;
 
-        // CG0006A - Événement déclenché lorsque l'utilisateur sélectionne l'option "Articles en attente"
-        private void radioBArticleEnAttente_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioBArticleEnAttente.Checked)
-            {
-                viewArticles = "EN_ATTENTE";
-                InitializeArticleList();
-            }
-        }
+                        // L'utilisateur sélectionne l'option "Tous les articles"
+                        if (radioBAllArticle.Checked)
+                        {
+                            viewArticles = "ALL";
+                        }
 
-        // CG0006A - Événement déclenché lorsque l'utilisateur sélectionne l'option "Articles validés"
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioBArticleValide.Checked)
-            {
-                viewArticles = "VALIDE";
-                InitializeArticleList();
-            }
-        }
+                        // L'utilisateur sélectionne l'option "Articles en attente"
+                        if (radioBArticleEnAttente.Checked)
+                        {
+                            viewArticles = "EN_ATTENTE";
+                        }
 
-        // CG0006A - Événement déclenché lorsque l'utilisateur sélectionne l'option "Articles refusés"
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioBArticleRefus.Checked)
-            {
-                viewArticles = "REJET";
-                InitializeArticleList();
+                        // L'utilisateur sélectionne l'option "Articles validés"
+                        if (radioBArticleValide.Checked)
+                        {
+                            viewArticles = "VALIDE";
+                        }
+
+                        // L'utilisateur sélectionne l'option "Articles refusés"
+                        if (radioBArticleRefus.Checked)
+                        {
+                            viewArticles = "REJET";
+                        }
+
+                        listBArticles.Items.Clear();
+                        List<Article> lesArticles = AppliBD.GetArticles(viewArticles, saisieIdArticle, saisieAuteurArticle);
+                        listBArticles.Items.AddRange(lesArticles.ToArray());
+
+                        btnFiltrageArticle.Text = "Annuler";
+                        break;
+                    }
+
+                default:
+                    {
+                        viewArticles = "ALL";
+                        InitializeArticleList();
+
+                        btnFiltrageArticle.Text = "Filtrer";
+                        break;
+                    }
             }
         }
 
@@ -332,7 +354,7 @@ namespace PresseRESA
             }
         }
 
-        // CG0006G - Affichage des rubriques déjà ssociées à l'article
+        // CG0006G - Affichage des rubriques et des avis associés à l'article
         private void listBArticles_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (listBArticles.SelectedItem != null)
@@ -407,36 +429,6 @@ namespace PresseRESA
             }
         }
 
-        // CG0006A - Consulter l'ensemble des articles en fonction du type de filtrage
-        private void button2_Click_1(object sender, EventArgs e)
-        {
-            listBAvis.Items.Clear();
-            switch (btnFiltrageArticle.Text)
-            {
-                case "Filtrer":
-                    {
-                        string saisieIdArticle = txtBIdArticle.Text;
-                        string saisieAuteurArticle = txtBAuteurArticle.Text;
-
-                        listBArticles.Items.Clear();
-                        List<Article> lesArticles = AppliBD.GetRechercheArticle(saisieIdArticle, saisieAuteurArticle);
-                        listBArticles.Items.AddRange(lesArticles.ToArray());
-
-                        btnFiltrageArticle.Text = "Annuler";
-                        break;
-                    }
-
-                default:
-                    {
-
-                        InitializeArticleList();
-
-                        btnFiltrageArticle.Text = "Filtrer";
-                        break;
-                    }
-            }
-        }
-
         // CG0008A - Consulter l'ensemble des rubriques en fonction du type de filtrage
         private void btnRecherche_Click(object sender, EventArgs e)
         {
@@ -444,20 +436,19 @@ namespace PresseRESA
             {
                 case "Rechercher":
                     {
+                        btnRecherche.Text = "Annuler";
                         string saisieNom = txtBNomRechercheRubrique.Text.ToUpper();
+
                         listBRubriquesDispo.Items.Clear();
                         List<Rubrique> lesRubriques = AppliBD.GetRechercheRubrique(saisieNom);
                         listBRubriquesDispo.Items.AddRange(lesRubriques.ToArray());
-
-                        btnRecherche.Text = "Tout afficher";
                         break;
                     }
 
                 default:
                     {
-                        InitializeRubriqueList();
-
                         btnRecherche.Text = "Rechercher";
+                        InitializeRubriqueDispoList();
                         break;
                     }
             }
@@ -481,7 +472,7 @@ namespace PresseRESA
 
         // --------------------------------------------------------- PARTIE GESTION DES RUBRIQUES ---------------------------------------------------------
 
-        // CG0008A - Initialisation de la listeBox des rubriques
+        // CG0008A - Permettre l'intégrité des informations des rubriques de la liste
         public void InitializeRubriqueList()
         {
             listBRubriques.Items.Clear();
@@ -598,7 +589,7 @@ namespace PresseRESA
             {
                 case "Rechercher":
                     {
-                        btnRechercheRubrique.Text = "Afficher toutes les rubriques";
+                        btnRechercheRubrique.Text = "Annuler";
                         string saisieNom = txtBNomRubrique.Text.ToUpper();
 
                         listBRubriques.Items.Clear();
@@ -647,6 +638,59 @@ namespace PresseRESA
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtBAuteurArticle_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labAuteurArticle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtBNameUser_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void radioBArticleEnAttente_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioBGoodUsers_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioBUsersAvertissement_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton2_CheckedChanged_1(object sender, EventArgs e)
         {
 
         }

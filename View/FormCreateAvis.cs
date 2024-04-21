@@ -23,6 +23,7 @@ namespace PresseRESA
             this.idArticleConcerne = idArticleConcerne;
         }
 
+        // CG0011B / CG0011C - Modification ou Création d'un avis
         private void btnAjoutUser_Click(object sender, EventArgs e)
         {
             if (txtBCommentaire != null)
@@ -34,7 +35,7 @@ namespace PresseRESA
                 }
                 else
                 {
-                    verif = AppliBD.AddAvis(txtBCommentaire.Text, idArticleConcerne);
+                    verif = AppliBD.AddAvis(idArticleConcerne, txtBCommentaire.Text);
                 }
 
                 if (verif && (avis != null))
@@ -54,6 +55,11 @@ namespace PresseRESA
             }
         }
 
+        /// <summary>
+        /// Méthode utilisée pour afficher les informations d'un avis sur le formulaire.
+        /// </summary>
+        /// <param name="avisSelectionne">L'avis selectionné.</param>
+        // CG0007B - Afficher les informations d'un avis
         public void AfficherInfosAvis(Avis avisSelectionne)
         {
             // Si nous avons des informations à afficher, on en conclue qu'il existe un avis et que l'on veut modifier son contenu.
@@ -68,6 +74,9 @@ namespace PresseRESA
             FermetureFen();
         }
 
+        /// <summary>
+        /// Méthode utilisée pour fermer le formulaire et nettoyer la saisie.
+        /// </summary>
         public void FermetureFen()
         {
             txtBCommentaire.Clear();
