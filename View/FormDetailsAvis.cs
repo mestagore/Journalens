@@ -13,22 +13,32 @@ namespace PresseRESA
     public partial class FormDetailsAvis : Form
     {
         private Avis avis;
+        private string typeCpte;
 
-        public FormDetailsAvis()
+        public FormDetailsAvis(Avis avis, string typeCpte)
         {
             InitializeComponent();
+
+            this.avis = avis;
+            this.typeCpte = typeCpte;
+            if (typeCpte == "ADMIN")
+            {
+                btnDeleteAvis.Show();
+            }
+            else
+            {
+                btnDeleteAvis.Hide();
+            }
         }
 
         // CG0007B - Consulter les informations d'un avis
-        public void AfficherInfosAvis(Avis avis)
+        public void AfficherInfosAvis()
         {
-            this.avis = avis;
-
             // Affichez les informations de l'utilisateur dans les labels du formulaire
-            labIdAvis.Text = avis.GetId().ToString();
-            labCreaAvis.Text = avis.GetDateCreation().ToLongDateString();
-            labAuteurAvis.Text = avis.GetAuteur();
-            labCommentaireAvis.Text = avis.GetCommentaire();
+            labIdAvis.Text = this.avis.GetId().ToString();
+            labCreaAvis.Text = this.avis.GetDateCreation().ToLongDateString();
+            labAuteurAvis.Text = this.avis.GetAuteur();
+            labCommentaireAvis.Text = this.avis.GetCommentaire();
         }
 
         // CG0005D - Ajouter un avertissement en fonction de l'avis frauduleux
@@ -54,7 +64,14 @@ namespace PresseRESA
         // CG0007A - Préserver l'intégrité des avis d'un article
         private void FormDetailsAvis_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ((FormPresseAdmin)this.Owner).ResetListeAvis();
+            if (typeCpte == "ADMIN")
+            {
+                ((FormPresseAdmin)this.Owner).ResetListeAvis();
+            }
+            else
+            {
+                ((FormPresseUtilisateur)this.Owner).InitializeMesAvisList();
+            }
         }
 
         private void FormDetailsAvis_Load(object sender, EventArgs e)

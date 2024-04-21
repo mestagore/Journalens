@@ -10,8 +10,9 @@ namespace PresseRESA
     {
         // Déclaration des variables
         private static int idUtilisateur;
+        private static string typeUtilisateur;
         private static FormConnexion fcon;
-        private static FormPresseUser fuser;
+        private static FormPresseUtilisateur fuser;
         private static FormPresseAdmin fadmin;
 
         public static FormConnexion GetFormConnexion() {
@@ -22,11 +23,11 @@ namespace PresseRESA
             fcon = f;
         }
 
-        public static FormPresseUser GetFormUser() {
+        public static FormPresseUtilisateur GetFormUser() {
             return fuser;
         }
 
-        public static void SetFormUser(FormPresseUser f) {
+        public static void SetFormUser(FormPresseUtilisateur f) {
             fuser = f;
         }
 
@@ -43,8 +44,18 @@ namespace PresseRESA
             return idUtilisateur;
         }
 
+        public static string GetTypeUtilisateur()
+        {
+            return typeUtilisateur;
+        }
+
         public static void SetIdUtilisateur(int id) {
             idUtilisateur = id;
+        }
+
+        public static void SetTypeCpteUtilisateur(string type)
+        {
+            typeUtilisateur = type;
         }
     }
 }

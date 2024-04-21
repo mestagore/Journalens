@@ -187,7 +187,7 @@
             // 
             // btnDeleteRubrique
             // 
-            this.btnDeleteRubrique.Location = new System.Drawing.Point(350, 74);
+            this.btnDeleteRubrique.Location = new System.Drawing.Point(276, 74);
             this.btnDeleteRubrique.Name = "btnDeleteRubrique";
             this.btnDeleteRubrique.Size = new System.Drawing.Size(122, 23);
             this.btnDeleteRubrique.TabIndex = 16;
@@ -197,7 +197,7 @@
             // 
             // btnModifRubrique
             // 
-            this.btnModifRubrique.Location = new System.Drawing.Point(206, 74);
+            this.btnModifRubrique.Location = new System.Drawing.Point(276, 103);
             this.btnModifRubrique.Name = "btnModifRubrique";
             this.btnModifRubrique.Size = new System.Drawing.Size(122, 23);
             this.btnModifRubrique.TabIndex = 14;
@@ -225,9 +225,9 @@
             // 
             // btnRechercheRubrique
             // 
-            this.btnRechercheRubrique.Location = new System.Drawing.Point(170, 103);
+            this.btnRechercheRubrique.Location = new System.Drawing.Point(138, 74);
             this.btnRechercheRubrique.Name = "btnRechercheRubrique";
-            this.btnRechercheRubrique.Size = new System.Drawing.Size(202, 23);
+            this.btnRechercheRubrique.Size = new System.Drawing.Size(122, 23);
             this.btnRechercheRubrique.TabIndex = 0;
             this.btnRechercheRubrique.Text = "Rechercher";
             this.btnRechercheRubrique.UseVisualStyleBackColor = true;
@@ -244,7 +244,7 @@
             // 
             // btnAddRubrique
             // 
-            this.btnAddRubrique.Location = new System.Drawing.Point(62, 74);
+            this.btnAddRubrique.Location = new System.Drawing.Point(138, 103);
             this.btnAddRubrique.Name = "btnAddRubrique";
             this.btnAddRubrique.Size = new System.Drawing.Size(122, 23);
             this.btnAddRubrique.TabIndex = 0;
@@ -852,7 +852,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FormPresseAdmin";
-            this.Text = "Journal - Tableau de bord";
+            this.Text = "Journalens - Tableau de bord administrateur";
             this.tabPRubrique.ResumeLayout(false);
             this.tabPRubrique.PerformLayout();
             this.groupBRubriques.ResumeLayout(false);

@@ -11,15 +11,12 @@ using System.Windows.Forms;
 
 namespace PresseRESA
 {
-    public partial class FormPresseUser : Form
+    public partial class FormPresseUtilisateur : Form
     {
-        // Déclaration des variables
-        public string viewArticles;
 
-        public FormPresseUser()
+        public FormPresseUtilisateur()
         {
             InitializeComponent();
-            viewArticles = "ALL";
             labCopyright.Text = AppliBD.ToStringCopyright();
 
             // CG0009 - Non affichage du tabControl lors du démarrage du Form
@@ -27,8 +24,8 @@ namespace PresseRESA
             tabControlUser.TabPages.Remove(tabPAccueil);
             tabControlUser.TabPages.Remove(tabPProfil);
 
-            comboBOnglet.SelectedIndex = 2;
-            AfficherOngletMonProfil();
+            comboBOnglet.SelectedIndex = 0;
+            AfficherOngletAccueil();
         }
 
         private void btnDecoAdmin_Click(object sender, EventArgs e)
@@ -66,6 +63,11 @@ namespace PresseRESA
         {
             tabControlUser.TabPages.Clear();
             tabControlUser.TabPages.Add(tabPAccueil);
+            
+            InitializeArticlesSemaineList();
+            InitializeRubriqueList();
+            
+            this.Text = "Journalens - Home";
         }
 
         // CG0004 - Choix : Gestion des articles
@@ -74,8 +76,10 @@ namespace PresseRESA
             tabControlUser.TabPages.Clear();
             tabControlUser.TabPages.Add(tabPDashboard);
 
-            InitializeArticleList();
-            InitializeAvisList();
+            InitializeMesArticleList();
+            InitializeMesAvisList();
+
+            this.Text = "Journalens - Tableau de bord";
         }
 
         // CG0004 - Choix : Gestion des rubriques
@@ -110,24 +114,25 @@ namespace PresseRESA
             labNumTelUser.Text = !string.IsNullOrEmpty(user.GetTelephone()) ? user.GetTelephone() : "Non renseigné";
             labNumPortUser.Text = !string.IsNullOrEmpty(user.GetPortable()) ? user.GetPortable() : "Non renseigné";
 
-            btnModifRubrique.Text = "Modifier mes informations";
-            groupBModifInfoProfil.Hide();
+            btnModifInfosProfil.Text = "Modifier mes informations";
+            groupBModifInfosProfil.Hide();
+            this.Text = "Journalens - Profil";
         }
 
         private void btnModifRubrique_Click(object sender, EventArgs e)
         {
-            switch(btnModifRubrique.Text)
+            switch(btnModifInfosProfil.Text)
             {
                 case "Annuler":
-                    btnModifRubrique.Text = "Modifier mes informations";
+                    btnModifInfosProfil.Text = "Modifier mes informations";
                     txtBTelephoneUser.Clear();
                     txtBPortableUser.Clear();
-                    groupBModifInfoProfil.Hide();
+                    groupBModifInfosProfil.Hide();
                     break;
 
                 case "Modifier mes informations":
-                    btnModifRubrique.Text = "Annuler";
-                    groupBModifInfoProfil.Show();
+                    btnModifInfosProfil.Text = "Annuler";
+                    groupBModifInfosProfil.Show();
                     break;
             }
         }
@@ -186,13 +191,13 @@ namespace PresseRESA
 
         private void listBArticles_DoubleClick(object sender, EventArgs e)
         {
-            if (listBArticles.SelectedItem != null)
+            if (listBMesArticles.SelectedItem != null)
             {
-                Article articleSelectionne = (Article)listBArticles.SelectedItem;
+                Article articleSelectionne = (Article)listBMesArticles.SelectedItem;
 
-                FormDetailsArticle articleInfoForm = new FormDetailsArticle(articleSelectionne);
+                FormDetailsArticle articleInfoForm = new FormDetailsArticle(articleSelectionne, Session.GetTypeUtilisateur());
 
-                articleInfoForm.AfficherInfosArticle(articleSelectionne);
+                articleInfoForm.AfficherInfosArticle();
 
                 articleInfoForm.Owner = this;
                 articleInfoForm.Show();
@@ -205,27 +210,48 @@ namespace PresseRESA
             {
                 Avis avisSelectionne = (Avis)listBAvis.SelectedItem;
 
-                FormDetailsAvis avisInfoForm = new FormDetailsAvis();
+                FormDetailsAvis avisInfoForm = new FormDetailsAvis(avisSelectionne, Session.GetTypeUtilisateur());
 
-                avisInfoForm.AfficherInfosAvis(avisSelectionne);
+                avisInfoForm.AfficherInfosAvis();
 
                 avisInfoForm.Owner = this;
                 avisInfoForm.Show();
             }
         }
 
-        public void InitializeArticleList()
+        public void InitializeMesArticleList()
+        {
+            listBMesArticles.Items.Clear();
+            List<Article> lesArticles = AppliBD.GetSesArticles(Session.GetIdUtilisateur());
+            listBMesArticles.Items.AddRange(lesArticles.ToArray());
+        }
+
+        public void InitializeArticlesSemaineList()
         {
             listBArticles.Items.Clear();
-            List<Article> lesArticles = AppliBD.GetSesArticles(Session.GetIdUtilisateur());
+            List<Article> lesArticles = AppliBD.GetLesArticlesParSemaine();
             listBArticles.Items.AddRange(lesArticles.ToArray());
         }
 
-        public void InitializeAvisList()
+        public void InitializeRubriqueList()
         {
-            listBAvis.Items.Clear();
+            comboBRubriques.Items.Clear();
+            List<Rubrique> lesRubriques = AppliBD.GetLesRubriques();
+            comboBRubriques.Items.AddRange(lesRubriques.ToArray());
+        }
+
+        public void InitializeMesAvisList()
+        {
+            listBMesAvis.Items.Clear();
             List<Avis> lesAvis = AppliBD.GetSesAvis(Session.GetIdUtilisateur());
-            listBAvis.Items.AddRange(lesAvis.ToArray());
+            listBMesAvis.Items.AddRange(lesAvis.ToArray());
+        }
+
+        public void InitializeLesAvisList(int idArticle)
+        {
+            listBLesAvis.Items.Clear();
+            List<Avis> avis = AppliBD.GetAvisParArticle(idArticle);
+            listBLesAvis.Items.AddRange(avis.ToArray());
         }
 
         private void labWarning_Click(object sender, EventArgs e)
@@ -266,6 +292,242 @@ namespace PresseRESA
         private void FormPresseUser_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void listBMesArticles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBMesArticles.SelectedItem != null)
+            {
+                Article articleSelectionne = (Article)listBMesArticles.SelectedItem;
+                List<Avis> avis = AppliBD.GetAvisParArticle(articleSelectionne.GetId());
+
+                // Effacer la liste des avis précédentes
+                listBAvis.Items.Clear();
+
+                foreach (Avis unAvis in avis)
+                {
+                    listBAvis.Items.Add(unAvis);
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (radioBCreateArticle.Checked)
+            {
+                // A vérifier
+                FormCreateArticle articleCreateForm = new FormCreateArticle();
+
+                articleCreateForm.Owner = this;
+                articleCreateForm.Show();
+            }
+
+            if (radioBModifArticle.Checked)
+            {
+                if (listBMesArticles.SelectedItem != null)
+                {
+                    FormCreateArticle articleModifForm = new FormCreateArticle();
+                    Article articleSelectionne = (Article)listBMesArticles.SelectedItem;
+
+                    articleModifForm.AfficherInfosArticle(articleSelectionne);
+
+                    articleModifForm.Owner = this;
+                    articleModifForm.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Aucun article n'est selectionné.", "Absence de sélection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if (radioBDeleteArticle.Checked)
+            {
+                if (listBMesArticles.SelectedItem != null)
+                {
+                    Article articleSelectionne = (Article)listBMesArticles.SelectedItem;
+
+                    DialogResult dr = MessageBox.Show(" Voulez-vous vraiment supprimer l'article ayant pour titre : " + articleSelectionne.GetTitre() + " ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (dr == DialogResult.Yes)
+                    {
+                        bool verif = AppliBD.DeleteArticle(articleSelectionne);
+                        if (!verif)
+                        {
+                            MessageBox.Show("Erreur lors de la suppression de l'article, veuillez réessayez.", "Echec de la Suppression", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            InitializeMesArticleList();
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Aucun article n'est selectionné.", "Absence de sélection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if(radioBModifAvis.Checked)
+            {
+                if (listBMesAvis.SelectedItem != null)
+                {
+                    Avis avisSelectionne = (Avis)listBMesAvis.SelectedItem;
+
+                    FormCreateAvis avisModifForm = new FormCreateAvis(avisSelectionne.GetArticleConcerne());
+
+                    avisModifForm.AfficherInfosAvis(avisSelectionne);
+
+                    avisModifForm.Owner = this;
+                    avisModifForm.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Aucun avis n'est selectionné.", "Absence de sélection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if( radioBDeleteAvis.Checked)
+            {
+                if (listBMesAvis.SelectedItem != null)
+                {
+                    Avis avisSelectionne = (Avis)listBMesAvis.SelectedItem;
+
+                    DialogResult dr = MessageBox.Show(" Voulez-vous vraiment supprimer l'avis n° : " + avisSelectionne.GetId() + " ?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (dr == DialogResult.Yes)
+                    {
+                        bool verif = AppliBD.DeleteAvis(avisSelectionne.GetId());
+                        if (!verif)
+                        {
+                            MessageBox.Show("Erreur lors de la suppression de l'article, veuillez réessayez.", "Echec de la Suppression", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            InitializeMesAvisList();
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Aucun avis n'est selectionné.", "Absence de sélection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void listBMesAvis_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBMesAvis.SelectedItem != null)
+            {
+                Avis avisSelectionne = (Avis)listBMesAvis.SelectedItem;
+
+                FormDetailsAvis avisInfoForm = new FormDetailsAvis(avisSelectionne, Session.GetTypeUtilisateur());
+
+                avisInfoForm.AfficherInfosAvis();
+
+                avisInfoForm.Owner = this;
+                avisInfoForm.Show();
+            }
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnResetFiltrage_Click(object sender, EventArgs e)
+        {
+            txtBAuteurArticle.Clear();
+            comboBRubriques.SelectedItem = null;
+            radioBArticleAvecAvis.Checked = false;
+            radioBArticleSansAvis.Checked = false;
+            
+            InitializeArticlesSemaineList();
+        }
+
+        private void btnFiltrage_Click(object sender, EventArgs e)
+        {
+            // Si la saisie de l'auteur est renseignée, alors on valorise...
+            string saisieAuteurArticle = txtBAuteurArticle.Text;
+
+            // Si une rubrique est selectionnée, alors on récupère l'identifiant de la rubrique...
+            int? saisieIdRubrique = null;
+            if (comboBRubriques.SelectedItem != null)
+            {
+                Rubrique rubrique = (Rubrique)comboBRubriques.SelectedItem;
+                saisieIdRubrique = rubrique.GetId();
+            }
+
+            bool? avecAvis = radioBArticleAvecAvis.Checked ? true : radioBArticleSansAvis.Checked ? false : (bool?)null;
+
+            listBArticles.Items.Clear();
+            List<Article> articlesFiltres = AppliBD.GetLesArticlesParSemaine(saisieAuteurArticle, saisieIdRubrique, avecAvis);
+            listBArticles.Items.AddRange(articlesFiltres.ToArray());
+        }
+
+        private void listBArticles_DoubleClick_1(object sender, EventArgs e)
+        {
+            if (listBArticles.SelectedItem != null)
+            {
+                Article articleSelectionne = (Article)listBArticles.SelectedItem;
+
+                FormDetailsArticle articleInfoForm = new FormDetailsArticle(articleSelectionne, Session.GetTypeUtilisateur());
+
+                articleInfoForm.AfficherInfosArticle();
+
+                articleInfoForm.Owner = this;
+                articleInfoForm.Show();
+            }
+        }
+
+        private void listBLesAvis_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBLesAvis.SelectedItem != null)
+            {
+                Avis avisSelectionne = (Avis)listBLesAvis.SelectedItem;
+
+                FormDetailsAvis avisInfoForm = new FormDetailsAvis(avisSelectionne, Session.GetTypeUtilisateur());
+
+                avisInfoForm.AfficherInfosAvis();
+
+                avisInfoForm.Owner = this;
+                avisInfoForm.Show();
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (radioBCreateArticle.Checked)
+            {
+                // A vérifier
+                FormCreateArticle articleCreateForm = new FormCreateArticle();
+
+                articleCreateForm.Owner = this;
+                articleCreateForm.Show();
+            }
+
+            if (listBArticles.SelectedItem != null)
+            {
+                Article article = (Article)listBArticles.SelectedItem;
+
+                FormCreateAvis avisModifForm = new FormCreateAvis(article.GetId());
+
+                avisModifForm.Owner = this;
+                avisModifForm.Show();
+            }
+            else
+            {
+                MessageBox.Show("Aucun avis n'est selectionné.", "Absence de sélection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void listBArticles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBArticles.SelectedItem != null)
+            {
+                Article articleSelectionne = (Article)listBArticles.SelectedItem;
+                
+                listBLesAvis.Items.Clear();
+                List<Avis> avis = AppliBD.GetAvisParArticle(articleSelectionne.GetId());
+                listBLesAvis.Items.AddRange(avis.ToArray());
+            }
         }
     }
 }

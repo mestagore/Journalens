@@ -63,7 +63,7 @@ namespace PresseRESA
                                 // Affichage de la forme appropriée en fonction du type de compte de l'utilisateur
                                 if (typeU == "USER")
                                 {
-                                    new FormPresseUser().Show();
+                                    new FormPresseUtilisateur().Show();
                                 }
                                 else
                                 {

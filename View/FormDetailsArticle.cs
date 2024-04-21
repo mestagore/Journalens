@@ -14,16 +14,31 @@ namespace PresseRESA
     public partial class FormDetailsArticle : Form
     {
         private Article article;
+        private string typeCpte;
 
-        public FormDetailsArticle(Article articleSelectionne)
+        public FormDetailsArticle(Article articleSelectionne, string typeCpte)
         {
             InitializeComponent();
             article = articleSelectionne;
+            this.typeCpte = typeCpte;
 
-            // CG0006D - Initialisation de la listeBox des états
-            comboBEtatArticle.Items.Clear();
-            List<string> lesEtats = new List<string> { "EN ATTENTE", "VALIDE", "REJET" };
-            comboBEtatArticle.Items.AddRange(lesEtats.ToArray());
+            if(typeCpte == "ADMIN" ) {
+                labEtatArticle.Hide();
+                comboBEtatArticle.Show();
+                btnAddAvertissement.Show();
+
+                // CG0006D - Initialisation de la listeBox des états
+                comboBEtatArticle.Items.Clear();
+                List<string> lesEtats = new List<string> { "EN ATTENTE", "VALIDE", "REJET" };
+                comboBEtatArticle.Items.AddRange(lesEtats.ToArray());
+            } else
+            {
+                labEtatArticle.Show();
+                btnAddAvertissement.Hide();
+                comboBEtatArticle.Hide();
+
+                labEtatArticle.Text = "Non renseigné";
+            }
         }
 
         /// <summary>
@@ -31,7 +46,7 @@ namespace PresseRESA
         /// </summary>
         /// <param name="article">L'article selectionné.</param>
         // CG0006F - Afficher les informations d'un article
-        public void AfficherInfosArticle(Article article)
+        public void AfficherInfosArticle()
         {
             // Affichez les informations de l'utilisateur dans les labels du formulaire
             labIdArticle.Text = article.GetId().ToString();
@@ -39,18 +54,40 @@ namespace PresseRESA
             labAuteurArticle.Text = article.GetAuteur();
             labTitreArticle.Text = article.GetTitre();
             labDescriptionArticle.Text = article.GetDescription();
-            switch (article.GetEtat())
+            
+            if(typeCpte == "ADMIN")
             {
-                case "EN ATTENTE":
-                    comboBEtatArticle.SelectedIndex = 0;
-                    break;
-                case "VALIDE":
-                    comboBEtatArticle.SelectedIndex = 1;
-                    break;
-                case "REJET":
-                    comboBEtatArticle.SelectedIndex = 2;
-                    break;
+                switch (article.GetEtat())
+                {
+                    case "EN ATTENTE":
+                        comboBEtatArticle.SelectedIndex = 0;
+                        break;
+                    case "VALIDE":
+                        comboBEtatArticle.SelectedIndex = 1;
+                        break;
+                    case "REJET":
+                        comboBEtatArticle.SelectedIndex = 2;
+                        break;
+                }
+            } else
+            {
+                switch (article.GetEtat())
+                {
+                    case "EN ATTENTE":
+                        labEtatArticle.Text = "EN ATTENTE";
+                        labEtatArticle.ForeColor = Color.Gray;
+                        break;
+                    case "VALIDE":
+                        labEtatArticle.Text = "VALIDÉ";
+                        labEtatArticle.ForeColor = Color.Green;
+                        break;
+                    case "REJET":
+                        labEtatArticle.Text = "REJETÉ";
+                        labEtatArticle.ForeColor = Color.Red; 
+                        break;
+                }
             }
+            
         }
 
         // CG0006D - Modification de l'état d'un article
@@ -75,7 +112,13 @@ namespace PresseRESA
         // CG0006E - Préserver l'intégrité des informations liés à l'article    
         private void FormDetailsArticle_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ((FormPresseAdmin)this.Owner).InitializeArticleList();
+            if(typeCpte == "ADMIN")
+            {
+                ((FormPresseAdmin)this.Owner).InitializeArticleList();
+            } else
+            {
+                ((FormPresseUtilisateur)this.Owner).InitializeMesArticleList();
+            }
         }
 
         // CG0005D - Ajout d'un avertissement si l'article est frauduleux

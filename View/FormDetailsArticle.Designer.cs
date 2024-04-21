@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDetailsArticle));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.labEtatArticle = new System.Windows.Forms.Label();
             this.btnAddAvertissement = new System.Windows.Forms.Button();
             this.comboBEtatArticle = new System.Windows.Forms.ComboBox();
             this.labAuteurArticle = new System.Windows.Forms.Label();
@@ -40,7 +41,7 @@
             this.labAuteur = new System.Windows.Forms.Label();
             this.labCrea = new System.Windows.Forms.Label();
             this.labDescription = new System.Windows.Forms.Label();
-            this.labEtatArticle = new System.Windows.Forms.Label();
+            this.labEtat = new System.Windows.Forms.Label();
             this.labTitre = new System.Windows.Forms.Label();
             this.labId = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
@@ -48,6 +49,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.labEtatArticle);
             this.groupBox1.Controls.Add(this.btnAddAvertissement);
             this.groupBox1.Controls.Add(this.comboBEtatArticle);
             this.groupBox1.Controls.Add(this.labAuteurArticle);
@@ -58,7 +60,7 @@
             this.groupBox1.Controls.Add(this.labAuteur);
             this.groupBox1.Controls.Add(this.labCrea);
             this.groupBox1.Controls.Add(this.labDescription);
-            this.groupBox1.Controls.Add(this.labEtatArticle);
+            this.groupBox1.Controls.Add(this.labEtat);
             this.groupBox1.Controls.Add(this.labTitre);
             this.groupBox1.Controls.Add(this.labId);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
@@ -68,6 +70,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // labEtatArticle
+            // 
+            this.labEtatArticle.AutoSize = true;
+            this.labEtatArticle.Font = new System.Drawing.Font("Constantia", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labEtatArticle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labEtatArticle.Location = new System.Drawing.Point(51, 338);
+            this.labEtatArticle.Name = "labEtatArticle";
+            this.labEtatArticle.Size = new System.Drawing.Size(103, 18);
+            this.labEtatArticle.TabIndex = 26;
+            this.labEtatArticle.Text = "Non renseigné";
             // 
             // btnAddAvertissement
             // 
@@ -177,16 +190,16 @@
             this.labDescription.TabIndex = 9;
             this.labDescription.Text = "Description :";
             // 
-            // labEtatArticle
+            // labEtat
             // 
-            this.labEtatArticle.AutoSize = true;
-            this.labEtatArticle.Font = new System.Drawing.Font("Constantia", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labEtatArticle.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.labEtatArticle.Location = new System.Drawing.Point(9, 338);
-            this.labEtatArticle.Name = "labEtatArticle";
-            this.labEtatArticle.Size = new System.Drawing.Size(42, 18);
-            this.labEtatArticle.TabIndex = 8;
-            this.labEtatArticle.Text = "Etat :";
+            this.labEtat.AutoSize = true;
+            this.labEtat.Font = new System.Drawing.Font("Constantia", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labEtat.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.labEtat.Location = new System.Drawing.Point(9, 338);
+            this.labEtat.Name = "labEtat";
+            this.labEtat.Size = new System.Drawing.Size(42, 18);
+            this.labEtat.TabIndex = 8;
+            this.labEtat.Text = "Etat :";
             // 
             // labTitre
             // 
@@ -238,12 +251,13 @@
         private System.Windows.Forms.Label labIdArticle;
         private System.Windows.Forms.Label labCrea;
         private System.Windows.Forms.Label labDescription;
-        private System.Windows.Forms.Label labEtatArticle;
+        private System.Windows.Forms.Label labEtat;
         private System.Windows.Forms.Label labTitre;
         private System.Windows.Forms.Label labId;
         private System.Windows.Forms.ComboBox comboBEtatArticle;
         private System.Windows.Forms.Label labAuteurArticle;
         private System.Windows.Forms.Label labAuteur;
         private System.Windows.Forms.Button btnAddAvertissement;
+        private System.Windows.Forms.Label labEtatArticle;
     }
 }

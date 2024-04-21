@@ -3,28 +3,44 @@
   "WorkspaceRootPath": "C:\\Users\\mesta\\Giovanni\\Journalens\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formconnexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formconnexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\controller\\applibd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:controller\\applibd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formpresseuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formpresseuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\controller\\applibd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:controller\\applibd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formcreateavis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formcreateavis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formcreateavis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formcreateavis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formdetailsavis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formdetailsavis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formcreatearticle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formcreatearticle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formpresseuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formpresseuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formdetailsarticle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formdetailsarticle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formdetailsarticle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formdetailsarticle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|c:\\users\\mesta\\giovanni\\journalens\\view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8F1D28B5-67F8-4E8D-A1C3-DB4BD67D4FA7}|Journalens.csproj|solutionrelative:view\\formpresseadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,79 +62,130 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AppliBD.cs",
-              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\Controller\\AppliBD.cs",
-              "RelativeDocumentMoniker": "Controller\\AppliBD.cs",
-              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\Controller\\AppliBD.cs",
-              "RelativeToolTip": "Controller\\AppliBD.cs",
-              "ViewState": "AQIAACwEAAAAAAAAAAAUwCcEAABbAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T18:01:30.746Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "FormConnexion.cs",
-              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormConnexion.cs",
-              "RelativeDocumentMoniker": "View\\FormConnexion.cs",
-              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormConnexion.cs",
-              "RelativeToolTip": "View\\FormConnexion.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAjAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T16:46:41.922Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FormPresseAdmin.cs",
-              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs",
-              "RelativeDocumentMoniker": "View\\FormPresseAdmin.cs",
-              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs",
-              "RelativeToolTip": "View\\FormPresseAdmin.cs",
-              "ViewState": "AQIAAC4BAAAAAAAAAAAmwDoBAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T17:14:28.827Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "FormPresseAdmin.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs",
-              "RelativeDocumentMoniker": "View\\FormPresseAdmin.cs",
-              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs [Design]",
-              "RelativeToolTip": "View\\FormPresseAdmin.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T17:13:53.673Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "FormPresseUser.cs",
-              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseUser.cs",
-              "RelativeDocumentMoniker": "View\\FormPresseUser.cs",
-              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseUser.cs",
-              "RelativeToolTip": "View\\FormPresseUser.cs",
-              "ViewState": "AQIAADgAAAAAAAAAAAAUwE0AAAAaAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T16:40:08.405Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "FormPresseUser.cs [Design]",
               "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseUser.cs",
               "RelativeDocumentMoniker": "View\\FormPresseUser.cs",
               "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseUser.cs [Design]",
               "RelativeToolTip": "View\\FormPresseUser.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T16:39:46.438Z",
+              "WhenOpened": "2024-04-21T01:51:28.368Z",
               "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FormCreateArticle.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormCreateArticle.cs",
+              "RelativeDocumentMoniker": "View\\FormCreateArticle.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormCreateArticle.cs",
+              "RelativeToolTip": "View\\FormCreateArticle.cs",
+              "ViewState": "AQIAADkAAAAAAAAAAAAWwE4AAAA9AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T03:16:45.881Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FormDetailsAvis.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormDetailsAvis.cs",
+              "RelativeDocumentMoniker": "View\\FormDetailsAvis.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormDetailsAvis.cs",
+              "RelativeToolTip": "View\\FormDetailsAvis.cs",
+              "ViewState": "AQIAADQAAAAAAAAAAAD4v0gAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T01:50:24.643Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FormPresseUser.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseUser.cs",
+              "RelativeDocumentMoniker": "View\\FormPresseUser.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseUser.cs",
+              "RelativeToolTip": "View\\FormPresseUser.cs",
+              "ViewState": "AQIAAOYAAAAAAAAAAAAlwPwAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T01:28:44.891Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FormCreateAvis.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormCreateAvis.cs",
+              "RelativeDocumentMoniker": "View\\FormCreateAvis.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormCreateAvis.cs",
+              "RelativeToolTip": "View\\FormCreateAvis.cs",
+              "ViewState": "AQIAADUAAAAAAAAAAAAuwE4AAABFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T03:17:15.056Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FormCreateAvis.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormCreateAvis.cs",
+              "RelativeDocumentMoniker": "View\\FormCreateAvis.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormCreateAvis.cs [Design]",
+              "RelativeToolTip": "View\\FormCreateAvis.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T03:46:49.332Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AppliBD.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\Controller\\AppliBD.cs",
+              "RelativeDocumentMoniker": "Controller\\AppliBD.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\Controller\\AppliBD.cs",
+              "RelativeToolTip": "Controller\\AppliBD.cs",
+              "ViewState": "AQIAAJwCAAAAAAAAAAD4v7ACAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T01:28:39.661Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "FormDetailsArticle.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormDetailsArticle.cs",
+              "RelativeDocumentMoniker": "View\\FormDetailsArticle.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormDetailsArticle.cs [Design]",
+              "RelativeToolTip": "View\\FormDetailsArticle.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T02:10:23.214Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FormDetailsArticle.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormDetailsArticle.cs",
+              "RelativeDocumentMoniker": "View\\FormDetailsArticle.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormDetailsArticle.cs",
+              "RelativeToolTip": "View\\FormDetailsArticle.cs",
+              "ViewState": "AQIAAGIAAAAAAAAAAAAWwHcAAABBAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T03:16:56.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "FormPresseAdmin.cs",
+              "DocumentMoniker": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs",
+              "RelativeDocumentMoniker": "View\\FormPresseAdmin.cs",
+              "ToolTip": "C:\\Users\\mesta\\Giovanni\\Journalens\\View\\FormPresseAdmin.cs",
+              "RelativeToolTip": "View\\FormPresseAdmin.cs",
+              "ViewState": "AQIAAN4BAAAAAAAAAAAQwOQBAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T02:26:54.972Z",
+              "EditorCaption": ""
             }
           ]
         }

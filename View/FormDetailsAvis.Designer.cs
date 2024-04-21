@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDetailsAvis));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnAddAvertissement = new System.Windows.Forms.Button();
+            this.btnDeleteAvis = new System.Windows.Forms.Button();
             this.labAuteurAvis = new System.Windows.Forms.Label();
             this.labCommentaireAvis = new System.Windows.Forms.Label();
             this.labCreaAvis = new System.Windows.Forms.Label();
@@ -44,7 +44,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btnAddAvertissement);
+            this.groupBox1.Controls.Add(this.btnDeleteAvis);
             this.groupBox1.Controls.Add(this.labAuteurAvis);
             this.groupBox1.Controls.Add(this.labCommentaireAvis);
             this.groupBox1.Controls.Add(this.labCreaAvis);
@@ -60,15 +60,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
             // 
-            // btnAddAvertissement
+            // btnDeleteAvis
             // 
-            this.btnAddAvertissement.Location = new System.Drawing.Point(593, 321);
-            this.btnAddAvertissement.Name = "btnAddAvertissement";
-            this.btnAddAvertissement.Size = new System.Drawing.Size(141, 23);
-            this.btnAddAvertissement.TabIndex = 21;
-            this.btnAddAvertissement.Text = "Supprimer l\'avis";
-            this.btnAddAvertissement.UseVisualStyleBackColor = true;
-            this.btnAddAvertissement.Click += new System.EventHandler(this.btnAddAvertissement_Click);
+            this.btnDeleteAvis.Location = new System.Drawing.Point(593, 321);
+            this.btnDeleteAvis.Name = "btnDeleteAvis";
+            this.btnDeleteAvis.Size = new System.Drawing.Size(141, 23);
+            this.btnDeleteAvis.TabIndex = 21;
+            this.btnDeleteAvis.Text = "Supprimer l\'avis";
+            this.btnDeleteAvis.UseVisualStyleBackColor = true;
+            this.btnDeleteAvis.Click += new System.EventHandler(this.btnAddAvertissement_Click);
             // 
             // labAuteurAvis
             // 
@@ -190,6 +190,6 @@
         private System.Windows.Forms.Label labCrea;
         private System.Windows.Forms.Label labCommentaire;
         private System.Windows.Forms.Label labId;
-        private System.Windows.Forms.Button btnAddAvertissement;
+        private System.Windows.Forms.Button btnDeleteAvis;
     }
 }

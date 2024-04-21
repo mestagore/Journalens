@@ -98,6 +98,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="View\FormCreateArticle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\FormCreateArticle.Designer.cs">
+      <DependentUpon>FormCreateArticle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\FormCreateAvis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\FormCreateAvis.Designer.cs">
+      <DependentUpon>FormCreateAvis.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\FormDetailsAvis.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +154,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controller\Session.cs" />
+    <EmbeddedResource Include="View\FormCreateArticle.resx">
+      <DependentUpon>FormCreateArticle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\FormCreateAvis.resx">
+      <DependentUpon>FormCreateAvis.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\FormDetailsArticle.resx">
       <DependentUpon>FormDetailsArticle.cs</DependentUpon>
       <SubType>Designer</SubType>

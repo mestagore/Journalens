@@ -56,6 +56,7 @@ namespace PresseRESA
             tabControlAdmin.TabPages.Clear();
             tabControlAdmin.TabPages.Add(tabPUtilisateur);
 
+            this.Text = "Journalens - Gestion des utilisateurs";
             InitializeUserList();
         }
 
@@ -69,6 +70,7 @@ namespace PresseRESA
 
             InitializeRubriqueDispoList();
 
+            this.Text = "Journalens - Gestion des articles";
             listBAvis.Items.Clear();
         }
 
@@ -78,6 +80,7 @@ namespace PresseRESA
             tabControlAdmin.TabPages.Clear();
             tabControlAdmin.TabPages.Add(tabPRubrique);
 
+            this.Text = "Journalens - Gestion des rubriques";
             InitializeRubriqueList();
         }
 
@@ -320,9 +323,9 @@ namespace PresseRESA
             {
                 Article articleSelectionne = (Article)listBArticles.SelectedItem;
 
-                FormDetailsArticle articleInfoForm = new FormDetailsArticle(articleSelectionne);
+                FormDetailsArticle articleInfoForm = new FormDetailsArticle(articleSelectionne, Session.GetTypeUtilisateur());
 
-                articleInfoForm.AfficherInfosArticle(articleSelectionne);
+                articleInfoForm.AfficherInfosArticle();
 
                 articleInfoForm.Owner = this;
                 articleInfoForm.Show();
@@ -467,9 +470,9 @@ namespace PresseRESA
             {
                 Avis avisSelectionne = (Avis)listBAvis.SelectedItem;
 
-                FormDetailsAvis avisInfoForm = new FormDetailsAvis();
+                FormDetailsAvis avisInfoForm = new FormDetailsAvis(avisSelectionne, Session.GetTypeUtilisateur());
 
-                avisInfoForm.AfficherInfosAvis(avisSelectionne);
+                avisInfoForm.AfficherInfosAvis();
 
                 avisInfoForm.Owner = this;
                 avisInfoForm.Show();

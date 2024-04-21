@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
+using Org.BouncyCastle.Asn1.X500;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Ocsp;
@@ -81,6 +82,7 @@ namespace PresseRESA
                     if (rdr.Read())
                     {
                         Session.SetIdUtilisateur(rdr.GetInt32("numAdherent")); // On enregistre son ID dans la Session
+                        Session.SetTypeCpteUtilisateur(rdr.GetString("nomTypeCpte")); // On enregistre son type de compte dans la Session
                         typeU = rdr.GetString("nomTypeCpte");
                     }
                     rdr.Close();
@@ -1144,6 +1146,212 @@ namespace PresseRESA
             return lesAvis;
         }
 
+        // Essayez de comprendre comment fonctionne cette méthode
+        public static bool DeleteArticle(Article articleSelectionne)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Si la connexion avec la base de données a réussi, on exécute les étapes pour supprimer l'article et ses données associées.
+            if (connValidBD)
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+                MySqlTransaction transaction = conn.BeginTransaction(); // Démarrez une transaction pour garantir la cohérence des données.
+
+                try
+                {
+                    // Supprimer les avis associés à l'article
+                    string reqDeleteAvis = "DELETE FROM AVIS WHERE idArticle = @idArticle;";
+                    cmd.CommandText = reqDeleteAvis;
+                    cmd.Parameters.AddWithValue("@idArticle", articleSelectionne.GetId());
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+
+                    // Supprimer les rubriques associées à l'article
+                    string reqDeleteRubriquesArticle = "DELETE FROM ARTICLE_RUBRIQUE WHERE idArticle = @idArticle;";
+                    cmd.CommandText = reqDeleteRubriquesArticle;
+                    cmd.ExecuteNonQuery();
+
+                    // Supprimer l'article lui-même
+                    string reqDeleteArticle = "DELETE FROM ARTICLE WHERE idArticle = @idArticle;";
+                    cmd.CommandText = reqDeleteArticle;
+                    cmd.ExecuteNonQuery();
+
+                    transaction.Commit(); // Validez la transaction si tout s'est bien passé.
+                    return true; // Retournez true si l'opération s'est déroulée avec succès.
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                    transaction.Rollback(); // Annulez la transaction en cas d'erreur.
+                    return false; // Retournez false en cas d'erreur.
+                }
+                finally
+                {
+                    transaction.Dispose(); // Libérez les ressources de la transaction.
+                }
+            }
+            return false; // Si quelque chose s'est mal passé avec la connexion à la base de données, retournez false.
+        }
+
+        public static bool AddArticle(string titre, string description)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+            string dateDuJour = DateTime.Now.ToString("yyyy-MM-dd"); // Date du jour sous format 'yyyy-MM-dd'
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    // Requête préparée pour insérer un nouvel article
+                    string req = "INSERT INTO ARTICLE (titreArticle, descriptionArticle, dateArticleCreation, auteurArticle, idValid) VALUES (@titre, @description, @dateCreation, @idAuteur, @idValid);";
+
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@titre", titre);
+                    cmd.Parameters.AddWithValue("@description", description);
+                    cmd.Parameters.AddWithValue("@dateCreation", dateDuJour); // Date du jour
+                    cmd.Parameters.AddWithValue("@idAuteur", Session.GetIdUtilisateur()); // Identifiant : Id de l'utilisateur de connecté
+                    cmd.Parameters.AddWithValue("@idValid", 1); // Etat : En attente
+                    cmd.Prepare();
+
+                    // Exécution de la commande
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si au moins une ligne a été insérée avec succès
+                    if (rowsAffected > 0)
+                    {
+                        return true; // Retourner true si l'ajout a réussi
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                    return false; // Retourner false en cas d'erreur
+                }
+            }
+
+            return false; // Retourner false si la connexion avec la base de données a échoué
+        }
+
+        public static bool UpdateArticle(int idArticle, string newTitle, string newDescription)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    // Requête préparée pour mettre à jour un article
+                    string req = "UPDATE ARTICLE SET titreArticle = @newTitle, descriptionArticle = @newDescription, idValid = 1 WHERE idArticle = @idArticle;";
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@newTitle", newTitle);
+                    cmd.Parameters.AddWithValue("@newDescription", newDescription);
+                    cmd.Parameters.AddWithValue("@idArticle", idArticle);
+                    cmd.Prepare();
+
+                    // Exécution de la commande
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si au moins une ligne a été mise à jour avec succès
+                    if (rowsAffected > 0)
+                    {
+                        return true; // Retourner true si la mise à jour a réussi
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                    return false; // Retourner false en cas d'erreur
+                }
+            }
+
+            return false; // Retourner false si la connexion avec la base de données a échoué
+        }
+
+        // --------------------------------------------------------- PARTIE CONSULTATION DES ARTICLES ---------------------------------------------------------
+
+        public static bool AddAvis(string commentaire, int idArticle)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+            string dateDuJour = DateTime.Now.ToString("yyyy-MM-dd"); // Date du jour sous format 'yyyy-MM-dd'
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    // Requête préparée pour insérer un nouvel avis
+                    string req = "INSERT INTO AVIS (dateAvisCreation, commentaire, idArticle, idAdherent) VALUES (@dateCreation, @commentaire, @idArticle, @idAdherent);";
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@dateCreation", dateDuJour); // Date du jour
+                    cmd.Parameters.AddWithValue("@commentaire", commentaire);
+                    cmd.Parameters.AddWithValue("@idArticle", idArticle);
+                    cmd.Parameters.AddWithValue("@idAdherent", Session.GetIdUtilisateur());
+                    cmd.Prepare();
+
+                    // Exécution de la commande
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si au moins une ligne a été insérée avec succès
+                    if (rowsAffected > 0)
+                    {
+                        return true; // Retourner true si l'ajout a réussi
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                    return false; // Retourner false en cas d'erreur
+                }
+            }
+
+            return false; // Retourner false si la connexion avec la base de données a échoué
+        }
+
+        public static bool UpdateAvis(int idAvis, string newCommentaire)
+        {
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+
+                    // Requête préparée pour mettre à jour un avis
+                    string req = "UPDATE AVIS SET commentaire = @newCommentaire WHERE idAvis = @idAvis;";
+                    cmd.CommandText = req;
+                    cmd.Parameters.AddWithValue("@newCommentaire", newCommentaire);
+                    cmd.Parameters.AddWithValue("@idAvis", idAvis);
+                    cmd.Prepare();
+
+                    // Exécution de la commande
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Vérifier si au moins une ligne a été mise à jour avec succès
+                    if (rowsAffected > 0)
+                    {
+                        return true; // Retourner true si la mise à jour a réussi
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                    return false; // Retourner false en cas d'erreur
+                }
+            }
+
+            return false; // Retourner false si la connexion avec la base de données a échoué
+        }
+
         // --------------------------------------------------------- AUTRE(S) METHODE(S) ---------------------------------------------------------
 
         /// <summary>
@@ -1154,5 +1362,83 @@ namespace PresseRESA
         public static string ToStringCopyright() {
             return "@VVA - " + DateTime.Today.Year;
         }
+
+        public static List<Article> GetLesArticlesParSemaine(string saisieAuteurArticle = null, int? saisieIdRubrique = null, bool? avecAvis = null)
+        {
+            List<Article> lesArticles = new List<Article>();
+
+            bool connValidBD = AppliBD.ConnexionBD();
+
+            // Vérifier si la connexion avec la base de données est valide
+            if (connValidBD)
+            {
+                try
+                {
+                    MySqlCommand cmd = conn.CreateCommand();
+                    
+                    // Requête SQL de base pour récupérer les articles de la semaine actuelle
+                    string req = "SELECT idArticle, titreArticle, descriptionArticle, dateArticleCreation, COMPTE.adrMailCompte, ETAT_VALID.nomValid " +
+                                 "FROM ARTICLE INNER JOIN ETAT_VALID ON ARTICLE.idValid = ETAT_VALID.idValid " +
+                                 "INNER JOIN COMPTE ON ARTICLE.auteurArticle = COMPTE.numAdherent " +
+                                 "WHERE ARTICLE.idValid = 2";
+
+                    // Ajout des conditions de filtrage selon les critères choisis par l'utilisateur
+                    if (!string.IsNullOrEmpty(saisieAuteurArticle))
+                    {
+                        req += " AND COMPTE.nomCompte LIKE @auteurArticle";
+                        cmd.Parameters.AddWithValue("@auteurArticle", "%" + saisieAuteurArticle + "%");
+                    }
+
+                    if (saisieIdRubrique.HasValue)
+                    {
+                        req += " AND idArticle IN (SELECT idArticle FROM ARTICLE_RUBRIQUE WHERE idRubrique = @idRubrique)";
+                        cmd.Parameters.AddWithValue("@idRubrique", saisieIdRubrique.Value);
+                    }
+
+                    if (avecAvis.HasValue)
+                    {
+                        if (avecAvis.Value)
+                        {
+                            req += " AND idArticle IN (SELECT idArticle FROM AVIS)";
+                        }
+                        else
+                        {
+                            req += " AND idArticle NOT IN (SELECT idArticle FROM AVIS)";
+                        }
+                    }
+
+                    // Clause ORDER BY pour trier les articles par date de création (du plus récent au plus ancien)
+                    req += " ORDER BY dateArticleCreation DESC;";
+
+                    cmd.CommandText = req;
+                    cmd.Prepare();
+
+                    // Exécution de la commande et lecture des résultats
+                    using (MySqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            Article article;
+                            int id = rdr.GetInt32("idArticle");
+                            string titre = rdr.IsDBNull(rdr.GetOrdinal("titreArticle")) ? "Titre" : rdr.GetString("titreArticle");
+                            string description = rdr.IsDBNull(rdr.GetOrdinal("descriptionArticle")) ? "Description de l'article" : rdr.GetString("descriptionArticle");
+                            string auteur = rdr.GetString("adrMailCompte");
+                            DateTime dateCreation = rdr.GetDateTime("dateArticleCreation");
+                            string etat = rdr.GetString("nomValid");
+
+                            article = new Article(id, titre, description, auteur, dateCreation, etat);
+                            lesArticles.Add(article);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                }
+            }
+
+            return lesArticles;
+        }
+
     }
 }
